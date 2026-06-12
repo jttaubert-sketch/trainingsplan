@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Training — Jan</title>
+<meta name="theme-color" content="#212A25">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Training">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E7E5DD; --panel:#FBFAF6; --ink:#212A25; --ink-soft:#5C665F;
+    --line:#D3D0C5; --accent:#D14B1F;
+    --z2:#3E6F8E; --lang:#2E5746; --kraft:#8A7141; --intens:#C2401C;
+    --ruhe:#9AA09A; --dienst:#7A3E8F;
+    --cond:'Barlow Condensed',-apple-system,system-ui,sans-serif;
+    --body:'Barlow',-apple-system,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px}
+  button{font-family:inherit;cursor:pointer}
+  header{background:var(--ink);color:#EFEDE5;padding:calc(env(safe-area-inset-top) + 18px) 16px 18px}
+  .wrap{max-width:920px;margin:0 auto;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+  .eyebrow{font-family:var(--cond);font-weight:600;letter-spacing:.18em;font-size:11px;color:var(--accent);text-transform:uppercase}
+  h1{font-family:var(--cond);font-weight:700;font-size:32px;margin:4px 0 0;line-height:1;text-transform:uppercase}
+  .head-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+  .pct{font-family:var(--cond);font-weight:700;font-size:34px;line-height:1;text-align:right}
+  .pct small{font-size:17px}
+  .pct-sub{font-size:11px;color:#A9B0A8}
+  .bar{margin-top:12px;height:6px;background:#3A453F;border-radius:3px;overflow:hidden}
+  .bar > div{height:100%;background:var(--accent);transition:width .4s ease}
+  .stats{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-size:12px;color:#C7CCC4}
+  .stats strong{color:#EFEDE5}
+  .vol{display:flex;gap:5px;align-items:flex-end;margin-top:16px;height:54px}
+  .vol .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .vol .stack{width:100%;height:38px;display:flex;align-items:flex-end}
+  .vol .b{width:100%;border-radius:3px 3px 0 0;position:relative;overflow:hidden}
+  .vol .fill{position:absolute;bottom:0;left:0;right:0;background:rgba(239,237,229,.45)}
+  .vol .lbl{font-size:9px;color:#A9B0A8;font-family:var(--cond);white-space:nowrap}
+  main{max-width:920px;margin:0 auto;padding:12px 14px calc(env(safe-area-inset-bottom) + 40px)}
+  .legend{display:flex;gap:11px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--ink-soft);padding:2px 2px 10px}
+  .legend .sw{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:-1px}
+  .legend button{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 9px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+  .card.current{border-color:var(--accent)}
+  .card.dashed{border-style:dashed}
+  .whead{width:100%;display:flex;align-items:center;gap:8px;padding:11px 12px;background:transparent;border:none;text-align:left;flex-wrap:wrap}
+  .wid{font-family:var(--cond);font-weight:700;font-size:19px;min-width:34px}
+  .wrange{font-family:var(--cond);font-weight:600;font-size:16px}
+  .pill{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:999px;background:#E8ECEF;color:var(--ink-soft)}
+  .pill.entlastung{background:#E4E9E2}.pill.volumen{background:#F6E3D8;color:var(--accent)}
+  .badge-now{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:var(--accent);padding:2px 6px;border-radius:4px}
+  .wnote{font-size:11px;color:var(--ink-soft);flex:1 1 100%;order:9;padding-left:42px}
+  .wmeta{font-size:11px;color:var(--ink-soft);white-space:nowrap;margin-left:auto}
+  .chev{font-size:10px;color:var(--ink-soft);width:12px;text-align:center}
+  .days{border-top:1px solid var(--line)}
+  .day{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid rgba(211,208,197,.35)}
+  .day:first-child{border-top:none}
+  .day.rest{opacity:.65}
+  .stripe{width:4px;align-self:stretch;border-radius:2px;flex-shrink:0}
+  .dd{font-family:var(--cond);font-weight:600;font-size:15px;min-width:48px;flex-shrink:0}
+  .dtxt{flex:1;min-width:0}
+  .dtitle{font-weight:600;font-size:13px}
+  .dtitle.done{font-weight:400;text-decoration:line-through;color:var(--ink-soft)}
+  .dsub{font-size:11px;color:var(--ink-soft);display:block}
+  .shift{font-size:9.5px;font-weight:600;color:#fff;background:var(--dienst);padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+  .chk{width:26px;height:26px;border-radius:7px;border:2px solid var(--line);background:transparent;color:#fff;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+  .chk.on{border-color:var(--lang);background:var(--lang)}
+  .detail{padding:8px 12px 11px 73px;font-size:12px;line-height:1.55;color:var(--ink-soft);background:#F5F3EC;border-top:1px dashed var(--line)}
+  .sechead{width:100%;display:flex;align-items:center;gap:8px;padding:11px 12px;background:transparent;border:none;text-align:left}
+  .sechead .t{font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+  .sechead .s{font-size:10px;color:var(--ink-soft);flex:1}
+  .row{display:flex;gap:10px;padding:9px 12px;border-top:1px solid rgba(211,208,197,.35);font-size:12px;line-height:1.5}
+  .row:first-child{border-top:none}
+  .row .k{font-family:var(--cond);font-weight:600;font-size:12px;min-width:70px;flex-shrink:0;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+  .row .k.dienste{color:var(--dienst)}.row .k.training{color:var(--z2)}
+  .zones{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;font-size:12px;padding:10px 12px;border-top:1px solid var(--line)}
+  .zones .h{font-weight:600;color:var(--ink-soft);font-size:10px;text-transform:uppercase}
+  .foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:14px}
+  .reset{margin-top:16px;font-size:11px;color:var(--ink-soft);background:transparent;border:1px solid var(--line);border-radius:6px;padding:6px 11px}
+  @media(min-width:640px){.wnote{flex:1;order:0;padding-left:0}h1{font-size:40px}}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+// ————— Daten (Stand 11.06.2026, Plan v5) —————
+const Dz2="Ziel: 125–170 W · Puls 128–158. Locker genug, um durch die Nase zu atmen / Sätze sprechen zu können.";
+const Dsprint="Sprints: 5×15″ maximaler Antritt aus dem Rollen, hohe Trittfrequenz, alle 10–12 min · dazwischen Z2. Kein Pacing — voll.";
+const Dkraft1="Maximalkraft-Basis: Kniebeuge + Kreuzheben (oder Beinpresse) 4×5–6 schwer · Bankdrücken/Rudern 3×6–8 · Rumpf 10 min. 3 min Satzpause.";
+const Dkraft2="Zweite Krafteinheit: Ausfallschritte 3×8/Seite · Hip Thrust 3×8 · Zugübung 3×8 · Rumpf/Stabi 10–15 min. Etwas leichter als Kraft 1.";
+const DlangFuel="Verpflegung: 60–80 g KH/h ab Stunde 1 · 500–750 ml/h trinken · Pacing strikt Z2, am Berg notfalls schalten statt drücken.";
+const Dretest="Protokoll: 20′ einrollen mit 3×1′ zügig → 5′ locker → 20 min all-out (gleichmäßig!) → FTP = Ø-Watt × 0,95. Alternativ Ramp-Test. Ausgeruht, vormittags, gut gefrühstückt.";
+
+const TYPE={lang:{label:"Lange Gravel",c:"var(--lang)"},z2:{label:"Z2 Grundlage",c:"var(--z2)"},kraft:{label:"Kraft",c:"var(--kraft)"},intens:{label:"Test / Intensität",c:"var(--intens)"},ruhe:{label:"Ruhe",c:"var(--ruhe)"}};
+
+const WEEK_DATES={W1:["2026-06-12","2026-06-14"],W2:["2026-06-15","2026-06-21"],W3:["2026-06-22","2026-06-28"],W4:["2026-06-29","2026-07-05"],W5:["2026-07-06","2026-07-12"],W6:["2026-07-13","2026-07-19"],W7:["2026-07-20","2026-07-26"],W8:["2026-07-27","2026-08-02"]};
+
+const WEEKS=[
+ {id:"W1",range:"12.–14. Jun",tag:"Einstieg",note:"Kurzwoche · Sommerfest Fr",days:[
+  {d:"Fr 12.",type:"ruhe",title:"Ruhetag",sub:"Sommerfest",h:0},
+  {d:"Sa 13.",type:"lang",title:"Lange Gravel 2,5–3 h",sub:"Z2",h:3,detail:"Erster langer Block der Phase — bewusst ruhig. "+Dz2+" "+DlangFuel},
+  {d:"So 14.",type:"kraft",title:"Kraft 1",sub:"opt. + 60′ Z2 locker",h:1.5,detail:Dkraft1}]},
+ {id:"W2",range:"15.–21. Jun",tag:"Basis",note:"2 Nachtdienste · Fortbildung Fr/Sa",days:[
+  {d:"Mo 15.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends nach BMW-Abholung ~17:30",h:1.25,detail:"15′ einrollen → Hauptteil Z2 mit eingestreuten Sprints → 10′ ausrollen. "+Dsprint},
+  {d:"Di 16.",type:"z2",title:"Z2 60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dz2+" Spätestens 12 Uhr fertig, danach Beine hoch bis Dienstbeginn."},
+  {d:"Mi 17.",type:"ruhe",title:"Post-Call · Ruhe",sub:"ausnahmslos",h:0,detail:"2–3 h Schlaf in der Nacht — heute zählt nur Regeneration: nachschlafen, essen, Spaziergang ok."},
+  {d:"Do 18.",type:"kraft",title:"Kraft 1 vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dkraft1},
+  {d:"Fr 19.",type:"ruhe",title:"Post-Call · Ruhe",sub:"Fortbildung ganztägig",h:0},
+  {d:"Sa 20.",type:"ruhe",title:"Ruhe",sub:"Fortbildung ganztägig",h:0},
+  {d:"So 21.",type:"lang",title:"Lange Gravel 3 h",sub:"Z2",h:3,detail:Dz2+" "+DlangFuel+" Nach 2 Ruhetagen sollten sich die Beine gut anfühlen — trotzdem nicht überpacen."}]},
+ {id:"W3",range:"22.–28. Jun",tag:"Entlastung",note:"Spätdienstwoche · Slot 9–11 Uhr · FTP-RETEST Di",days:[
+  {d:"Mo 22.",type:"kraft",title:"Kraft 1 · 9–11 Uhr",sub:"",shift:"Spätdienst",h:1,detail:Dkraft1},
+  {d:"Di 23.",type:"intens",title:"FTP-RETEST",sub:"vormittags, ausgeruht",shift:"Spätdienst",h:1,detail:Dretest},
+  {d:"Mi 24.",type:"ruhe",title:"Ruhe",sub:"",shift:"Spätdienst",h:0},
+  {d:"Do 25.",type:"z2",title:"Z2 75′ · 9–11 Uhr",sub:"neue Zonen ab heute",shift:"Spätdienst",h:1.25,detail:"Erste Einheit mit den frischen Zonen aus dem Retest — bewusst ans untere Z2-Ende halten und Gefühl kalibrieren."},
+  {d:"Fr 26.",type:"kraft",title:"Kraft 2 oder Ruhe",sub:"nach Gefühl",shift:"Spätdienst",h:1,detail:Dkraft2},
+  {d:"Sa 27.",type:"z2",title:"Z2 90′ · vormittags",sub:"",shift:"Spätdienst",h:1.5,detail:Dz2},
+  {d:"So 28.",type:"ruhe",title:"Ruhe",sub:"",shift:"Spätdienst",h:0}]},
+ {id:"W4",range:"29. Jun – 5. Jul",tag:"Basis",note:"Mo frei · So Tagdienst 7:30–15:30",days:[
+  {d:"Mo 29.",type:"z2",title:"Z2 105–120′ + Sprints",sub:"freier Tag — Hauptchance der Woche",h:2,detail:"Längste Wocheneinheit unter der Woche. "+Dz2+" "+Dsprint},
+  {d:"Di 30.",type:"kraft",title:"Kraft 1",sub:"abends ab ~17 Uhr",h:1,detail:Dkraft1},
+  {d:"Mi 1.7.",type:"z2",title:"Z2 60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dz2},
+  {d:"Do 2.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
+  {d:"Fr 3.",type:"z2",title:"Z2 60′ locker",sub:"abends",h:1,detail:Dz2+" Bewusst kurz und leicht — morgen ist die lange Ausfahrt."},
+  {d:"Sa 4.",type:"lang",title:"Lange Gravel 3–3,5 h",sub:"Z2",h:3.5,detail:Dz2+" "+DlangFuel},
+  {d:"So 5.",type:"ruhe",title:"Ruhe",sub:"Tagdienst 7:30–15:30",shift:"Tagdienst",h:0}]},
+ {id:"W5",range:"6.–12. Jul",tag:"Basis",note:"Nachtdienst Mi · Wochenende frei",days:[
+  {d:"Mo 6.",type:"z2",title:"Z2 75′",sub:"abends",h:1.25,detail:Dz2},
+  {d:"Di 7.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
+  {d:"Mi 8.",type:"z2",title:"Z2 60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dz2},
+  {d:"Do 9.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
+  {d:"Fr 10.",type:"z2",title:"Z2 60′ + Sprints",sub:"abends",h:1,detail:Dz2+" "+Dsprint},
+  {d:"Sa 11.",type:"lang",title:"Lange Gravel 4 h",sub:"erste 4-h-Ausfahrt",h:4,detail:"Sprung auf 4 h. "+DlangFuel+" Route mit Abkürzungsoption planen, falls die Beine nach 3 h zumachen."},
+  {d:"So 12.",type:"z2",title:"Z2 60–75′ ganz locker",sub:"Recovery-Spin nach der 4-h-Ausfahrt",h:1.25,detail:"Unteres Z2 oder Z1, flache Runde. Optional kurz Kraft 2 dranhängen — oder komplett frei, wenn die Beine schwer sind."}]},
+ {id:"W6",range:"13.–19. Jul",tag:"Basis",note:"dienstfreie Woche · freies Wochenende",days:[
+  {d:"Mo 13.",type:"ruhe",title:"Ruhetag",sub:"nach dem Wochenendblock",h:0,detail:"Kein Dienst mehr — bleibt trotzdem Ruhetag: Sa 4 h + So-Spin sind genug Reiz, Anpassung passiert in der Pause."},
+  {d:"Di 14.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends",h:1.25,detail:Dz2+" "+Dsprint},
+  {d:"Mi 15.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
+  {d:"Do 16.",type:"z2",title:"Z2 90′",sub:"abends",h:1.5,detail:Dz2},
+  {d:"Fr 17.",type:"kraft",title:"Kraft 2 kurz oder Ruhe",sub:"vor dem langen Samstag",h:1,detail:Dkraft2},
+  {d:"Sa 18.",type:"lang",title:"Lange Gravel 4 h",sub:"Z2",h:4,detail:Dz2+" "+DlangFuel},
+  {d:"So 19.",type:"z2",title:"Z2 60′ locker oder frei",sub:"",h:1,detail:"Reine Fettstoffwechsel-/Regenerationsfahrt am unteren Z2-Rand. Wenn müde: streichen, nicht quälen."}]},
+ {id:"W7",range:"20.–26. Jul",tag:"Volumen",note:"dienstfrei — größte Woche der Phase (~9 h)",days:[
+  {d:"Mo 20.",type:"z2",title:"Z2 90′",sub:"",h:1.5,detail:Dz2},
+  {d:"Di 21.",type:"kraft",title:"Kraft 1",sub:"",h:1,detail:Dkraft1},
+  {d:"Mi 22.",type:"z2",title:"Z2 90′ + Sprints",sub:"",h:1.5,detail:Dz2+" "+Dsprint},
+  {d:"Do 23.",type:"z2",title:"Z2 60′ ganz locker",sub:"",h:1,detail:"Aktive Erholung mitten in der großen Woche — unteres Z2 oder Z1."},
+  {d:"Fr 24.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
+  {d:"Sa 25.",type:"lang",title:"Lange Gravel 4 h",sub:"Race-Setup fahren",h:4,detail:"Komplettes Race-Setup testen: Reifendruck, Taschen, Verpflegung am Rad. "+DlangFuel},
+  {d:"So 26.",type:"z2",title:"Z2 90–120′ locker",sub:"sanfter Back-to-back-Test",h:2,detail:"Müde Beine sind hier Absicht — Vorgeschmack auf Phase 4. Tempo egal, Zeit im Sattel zählt."}]},
+ {id:"W8",range:"27. Jul – 2. Aug",tag:"Entlastung",note:"Zahnarzt Mo · Nachtdienst Fr→Sa",days:[
+  {d:"Mo 27.",type:"ruhe",title:"Ruhe",sub:"Zahnarzt",h:0},
+  {d:"Di 28.",type:"z2",title:"Z2 60′",sub:"abends",h:1,detail:Dz2},
+  {d:"Mi 29.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
+  {d:"Do 30.",type:"z2",title:"Z2 60′ + Sprints",sub:"abends",h:1,detail:Dz2+" "+Dsprint},
+  {d:"Fr 31.",type:"z2",title:"Z2 45–60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:0.75,detail:"Entlastungswoche: ganz locker rollen, optional streichen."},
+  {d:"Sa 1.8.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
+  {d:"So 2.",type:"z2",title:"Z2 90′ locker",sub:"August-Plan folgt",h:1.5,detail:Dz2}]}
+];
+
+const RULES=[
+ {cat:"Dienste",text:"Nachtdienst 14:45 → ~9:00 Folgetag (2–3 h Schlaf). Post-Call = Ruhetag, ausnahmslos."},
+ {cat:"Dienste",text:"Vor einem Nachtdienst ist der Vormittag frei und trainierbar — aber nur max. Z2 + kurze Sprints, spätestens 12 Uhr fertig."},
+ {cat:"Dienste",text:"1 blockierter Wochenendtag im Kalender = Tagdienst 7:30–15:30. 2 zusammenhängende Tage = Nachtdienst."},
+ {cat:"Dienste",text:"Spätdienst 13:00–21:30 (oft bis 23 Uhr): Trainingsslot 9–11 Uhr, reduzierter Umfang. Spätdienstwochen zählen als Entlastung."},
+ {cat:"Dienste",text:"Reguläre Arbeitstage 6:45–16:30: Einheiten abends ab ~17 Uhr."},
+ {cat:"Training",text:"Lange Ausfahrten nur an freien Wochenendtagen."},
+ {cat:"Training",text:"Jede 4. Woche Entlastung (−30–40 % Umfang)."},
+ {cat:"Training",text:"Wenn der Dienstplan eine Woche zerschießt: Einheiten streichen, nicht nachholen."},
+ {cat:"Training",text:"Z2 heißt Z2: 125–170 W / Puls 128–158 (bis Retest). Nasenatmung bzw. Sprechen muss möglich sein."},
+ {cat:"Training",text:"Lange Ausfahrten: 60–80 g KH/h ab Stunde 1, 500–750 ml/h trinken. Kette frisch gewachst vor jedem Rennen."},
+ {cat:"Bedienung",text:"Woche antippen = auf-/zuklappen · Tag antippen = Einheits-Details · Häkchen wird lokal auf dem Gerät gespeichert."}
+];
+
+const CHANGELOG=[
+ {date:"11.06.2026",text:"v6: Eigenständige Web-App (PWA) — offline-fähig, Daten lokal auf dem iPhone, unabhängig von Claude."},
+ {date:"11.06.2026",text:"v5: Regeln-Reiter eingeführt (alle Dienst- und Trainingsregeln gesammelt), Header und Fußbereich entschlackt."},
+ {date:"11.06.2026",text:"Dienst 12.→13.7. gestrichen: So 12.7. jetzt Recovery-Spin Z2 60–75′, Mo 13.7. regulärer Ruhetag. W5/W6 damit am Wochenende dienstfrei."},
+ {date:"11.06.2026",text:"Bestätigt: Vor Nachtdiensten ist der Vormittag frei → Vormittagseinheiten 16.6., 18.6., 1.7., 8.7. fest; Fr 31.7. neu mit Z2 45–60′ locker statt Ruhe."},
+ {date:"11.06.2026",text:"Dienstplan-Korrekturen: So 5.7. = Tagdienst (1 blockierter Wochenendtag = Tagdienst) → Ruhetag, lange Ausfahrt Sa 4.7. · Mo 29.6. frei → Z2 105–120′ + Sprints · Fortbildung 19./20.6. → Ruhe · BMW Mo 15.6. → Einheit ab ~17:30."},
+ {date:"11.06.2026",text:"Dashboard v3: Einheits-Details, Wochenvolumen-Chart, Zonentabelle, Traka-Countdown. Zwift-Workouts Jan 1–7 (.zwo, FTP-relativ) erstellt."},
+ {date:"11.06.2026",text:"Plan erstellt: Mikroplan W1–W8 (12.06.–02.08.), FTP-Retest Di 23.06., Volumenwoche W7, Entlastung W3 + W8. Offen: August-Dienstplan, Herbstrennen."}
+];
+
+const ZONES=[["Z1 Regeneration","< 125 W","< 128"],["Z2 Grundlage","125–170 W","128–158"],["Z3 Tempo","171–203 W","159–174"],["Sweet Spot","199–210 W","165–175"],["Z4 Schwelle","204–237 W","175–189"],["Z5 VO2max","238–271 W","190+"]];
+
+// ————— State & Speicher —————
+const KEY="jan-training-progress";
+let mem={};
+const store={
+ get(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return mem}},
+ set(v){mem=v;try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}
+};
+let done=store.get();
+const today=new Date().toISOString().slice(0,10);
+const currentWeek=Object.entries(WEEK_DATES).find(([,r])=>today>=r[0]&&today<=r[1]);
+let openWeeks={}; if(currentWeek) openWeeks[currentWeek[0]]=true;
+let openDay=null, showZones=false, showLog=false, showRules=false;
+
+// ————— Render —————
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function stats(){let t=0,dc=0,hp=0,hd=0;WEEKS.forEach(w=>w.days.forEach((d,i)=>{if(d.type==="ruhe")return;t++;hp+=d.h;if(done[w.id+"-"+i]){dc++;hd+=d.h}}));return{t,dc,hp,hd}}
+const fmtH=h=>h.toFixed(1).replace(".0","");
+
+function render(){
+ const s=stats(), pct=s.t?Math.round(s.dc/s.t*100):0;
+ const wTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/(7*864e5)));
+ const maxH=Math.max(...WEEKS.map(w=>w.days.reduce((a,d)=>a+d.h,0)));
+ let html=`<header><div class="wrap">
+  <div class="head-top"><div>
+   <div class="eyebrow">Phase 1 · Basis · noch ~${wTraka} Wochen bis The Traka</div>
+   <h1>Mikroplan 12.06 – 02.08</h1></div>
+   <div><div class="pct">${pct}<small>%</small></div>
+   <div class="pct-sub">${s.dc}/${s.t} Einheiten · ${s.hd.toFixed(1)} / ~${s.hp.toFixed(0)} h</div></div></div>
+  <div class="bar"><div style="width:${pct}%"></div></div>
+  <div class="stats"><span><strong>FTP:</strong> 226 W (Retest 23.06.)</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
+  <div class="vol">`;
+ WEEKS.forEach(w=>{
+  const h=w.days.reduce((a,d)=>a+d.h,0);
+  const hd=w.days.reduce((a,d,i)=>a+(d.type!=="ruhe"&&done[w.id+"-"+i]?d.h:0),0);
+  const c=w.tag==="Entlastung"?"#5A6B62":w.tag==="Volumen"?"var(--accent)":"#7A98AB";
+  html+=`<div class="col"><div class="stack"><div class="b" style="height:${h/maxH*100}%;background:${c}"><div class="fill" style="height:${h?hd/h*100:0}%"></div></div></div><span class="lbl">${w.id} · ${fmtH(h)}h</span></div>`;
+ });
+ html+=`</div></div></header><main><div class="legend">`;
+ Object.values(TYPE).forEach(m=>{html+=`<span><span class="sw" style="background:${m.c}"></span>${m.label}</span>`});
+ html+=`<span><span class="sw" style="background:var(--dienst)"></span>Dienst</span><button data-a="zones">${showZones?"Zonen ausblenden":"Zonen anzeigen"}</button></div>`;
+ if(showZones){
+  html+=`<div class="card"><div class="zones"><span class="h">Zone</span><span class="h">Watt</span><span class="h">Puls</span>`;
+  ZONES.forEach(z=>{html+=`<span>${z[0]}</span><span>${z[1]}</span><span>${z[2]}</span>`});
+  html+=`</div></div>`;
+ }
+ WEEKS.forEach(w=>{
+  const wd=w.days.filter(d=>d.type!=="ruhe");
+  const dc=w.days.reduce((a,d,i)=>a+(d.type!=="ruhe"&&done[w.id+"-"+i]?1:0),0);
+  const h=w.days.reduce((a,d)=>a+d.h,0);
+  const open=!!openWeeks[w.id];
+  const [ws,we]=WEEK_DATES[w.id];
+  const cur=today>=ws&&today<=we;
+  html+=`<div class="card${cur?" current":""}"><button class="whead" data-a="week" data-w="${w.id}">
+   <span class="wid">${w.id}</span><span class="wrange">${w.range}</span>
+   <span class="pill ${w.tag.toLowerCase()}">${w.tag}</span>
+   ${cur?'<span class="badge-now">Aktuell</span>':""}
+   <span class="wmeta">${dc}/${wd.length} · ~${fmtH(h)} h</span><span class="chev">${open?"▲":"▼"}</span>
+   <span class="wnote">${esc(w.note)}</span></button>`;
+  if(open){
+   html+=`<div class="days">`;
+   w.days.forEach((d,i)=>{
+    const key=w.id+"-"+i, rest=d.type==="ruhe", chk=!!done[key], dOpen=openDay===key;
+    html+=`<div class="day${rest?" rest":""}" data-a="${d.detail?"day":""}" data-k="${key}">
+     <span class="stripe" style="background:${TYPE[d.type].c}"></span>
+     <span class="dd">${d.d}</span>
+     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}</span>
+     ${d.shift?`<span class="shift">${d.shift}</span>`:""}
+     ${rest?"":`<button class="chk${chk?" on":""}" data-a="chk" data-k="${key}" aria-label="abhaken">${chk?"✓":""}</button>`}</div>`;
+    if(dOpen&&d.detail) html+=`<div class="detail">${esc(d.detail)}</div>`;
+   });
+   html+=`</div>`;
+  }
+  html+=`</div>`;
+ });
+ // Updates
+ html+=`<div class="card dashed"><button class="sechead" data-a="log"><span class="t">Updates &amp; Änderungen</span><span class="s">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</span><span class="chev">${showLog?"▲":"▼"}</span></button>`;
+ if(showLog){CHANGELOG.forEach(c=>{html+=`<div class="row"><span class="k">${c.date}</span><span>${esc(c.text)}</span></div>`})}
+ html+=`</div>`;
+ // Regeln
+ html+=`<div class="card dashed"><button class="sechead" data-a="rules"><span class="t">Regeln</span><span class="s">Dienstplan, Training &amp; Bedienung</span><span class="chev">${showRules?"▲":"▼"}</span></button>`;
+ if(showRules){RULES.forEach(r=>{html+=`<div class="row"><span class="k ${r.cat.toLowerCase()}">${r.cat}</span><span>${esc(r.text)}</span></div>`})}
+ html+=`</div>`;
+ html+=`<p class="foot">ⓘ Diese App läuft lokal auf deinem Gerät und offline. Plan-Updates: neue index.html von Claude generieren lassen und auf dein Hosting hochladen — Häkchen bleiben erhalten, da sie lokal gespeichert sind.</p>
+ <button class="reset" data-a="reset">Fortschritt zurücksetzen</button></main>`;
+ document.getElementById("app").innerHTML=html;
+}
+
+document.getElementById("app").addEventListener("click",e=>{
+ const el=e.target.closest("[data-a]"); if(!el)return;
+ const a=el.dataset.a;
+ if(a==="chk"){e.stopPropagation();const k=el.dataset.k;done[k]=!done[k];store.set(done)}
+ else if(a==="week"){const w=el.dataset.w;openWeeks[w]=!openWeeks[w]}
+ else if(a==="day"){const k=el.dataset.k;openDay=openDay===k?null:k}
+ else if(a==="zones")showZones=!showZones;
+ else if(a==="log")showLog=!showLog;
+ else if(a==="rules")showRules=!showRules;
+ else if(a==="reset"){if(confirm("Wirklich allen Fortschritt löschen?")){done={};store.set(done)}}
+ render();
+});
+
+render();
+if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){
+ navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
