@@ -4,95 +4,151 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Training — Jan</title>
-<meta name="theme-color" content="#212A25">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#20261F">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#14181A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Training">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ————————————————————————————————————————————
+   Design-System v8 — Roadbook
+   Shape-Lock: Karten 12px · interaktive Flächen 8px · Tags = Pill (dokumentierte Regel)
+   Ein Akzent: Streckenmarkierungs-Orange. Zonenfarben sind Datenfarben, kein Dekor.
+   ———————————————————————————————————————————— */
+:root{
+  --bg:#E9E7DF; --panel:#FCFBF7; --panel2:#F2F0E8;
+  --ink:#20261F; --ink-soft:#5B655C; --line:#D6D3C7;
+  --accent:#D14B1F; --accent-ink:#FFFFFF;
+  --z2:#3E6F8E; --lang:#2E5746; --kraft:#8A7141; --intens:#C2401C;
+  --ruhe:#A8ADA6; --dienst:#7A3E8F;
+  --done:#2E5746;
+  --cond:'Barlow Condensed',-apple-system,system-ui,sans-serif;
+  --body:'Barlow',-apple-system,system-ui,sans-serif;
+  --r-card:12px; --r-int:8px;
+}
+@media (prefers-color-scheme: dark){
   :root{
-    --bg:#E7E5DD; --panel:#FBFAF6; --ink:#212A25; --ink-soft:#5C665F;
-    --line:#D3D0C5; --accent:#D14B1F;
-    --z2:#3E6F8E; --lang:#2E5746; --kraft:#8A7141; --intens:#C2401C;
-    --ruhe:#9AA09A; --dienst:#7A3E8F;
-    --cond:'Barlow Condensed',-apple-system,system-ui,sans-serif;
-    --body:'Barlow',-apple-system,system-ui,sans-serif;
+    --bg:#14181A; --panel:#1D2321; --panel2:#232A27;
+    --ink:#E9E7DD; --ink-soft:#9AA39A; --line:#323A35;
+    --accent:#E8642F; --accent-ink:#16100C;
+    --z2:#6FA3C4; --lang:#5E9C82; --kraft:#C0A36E; --intens:#E8642F;
+    --ruhe:#5C645D; --dienst:#B07CC4;
+    --done:#5E9C82;
   }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px}
-  button{font-family:inherit;cursor:pointer}
-  header{background:var(--ink);color:#EFEDE5;padding:calc(env(safe-area-inset-top) + 18px) 16px 18px}
-  .wrap{max-width:920px;margin:0 auto;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
-  .eyebrow{font-family:var(--cond);font-weight:600;letter-spacing:.18em;font-size:11px;color:var(--accent);text-transform:uppercase}
-  h1{font-family:var(--cond);font-weight:700;font-size:32px;margin:4px 0 0;line-height:1;text-transform:uppercase}
-  .head-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
-  .pct{font-family:var(--cond);font-weight:700;font-size:34px;line-height:1;text-align:right}
-  .pct small{font-size:17px}
-  .pct-sub{font-size:11px;color:#A9B0A8}
-  .bar{margin-top:12px;height:6px;background:#3A453F;border-radius:3px;overflow:hidden}
-  .bar > div{height:100%;background:var(--accent);transition:width .4s ease}
-  .stats{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;font-size:12px;color:#C7CCC4}
-  .stats strong{color:#EFEDE5}
-  .vol{display:flex;gap:5px;align-items:flex-end;margin-top:16px;height:54px}
-  .vol .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
-  .vol .stack{width:100%;height:38px;display:flex;align-items:flex-end}
-  .vol .b{width:100%;border-radius:3px 3px 0 0;position:relative;overflow:hidden}
-  .vol .fill{position:absolute;bottom:0;left:0;right:0;background:rgba(239,237,229,.45)}
-  .vol .lbl{font-size:9px;color:#A9B0A8;font-family:var(--cond);white-space:nowrap}
-  main{max-width:920px;margin:0 auto;padding:12px 14px calc(env(safe-area-inset-bottom) + 40px)}
-  .legend{display:flex;gap:11px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--ink-soft);padding:2px 2px 10px}
-  .legend .sw{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:-1px}
-  .legend button{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 9px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
-  .card.current{border-color:var(--accent)}
-  .card.dashed{border-style:dashed}
-  .whead{width:100%;display:flex;align-items:center;gap:8px;padding:11px 12px;background:transparent;border:none;text-align:left;flex-wrap:wrap}
-  .wid{font-family:var(--cond);font-weight:700;font-size:19px;min-width:34px}
-  .wrange{font-family:var(--cond);font-weight:600;font-size:16px}
-  .pill{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:999px;background:#E8ECEF;color:var(--ink-soft)}
-  .pill.entlastung{background:#E4E9E2}.pill.volumen{background:#F6E3D8;color:var(--accent)}
-  .badge-now{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:var(--accent);padding:2px 6px;border-radius:4px}
-  .wnote{font-size:11px;color:var(--ink-soft);flex:1 1 100%;order:9;padding-left:42px}
-  .wmeta{font-size:11px;color:var(--ink-soft);white-space:nowrap;margin-left:auto}
-  .chev{font-size:10px;color:var(--ink-soft);width:12px;text-align:center}
-  .days{border-top:1px solid var(--line)}
-  .day{display:flex;align-items:center;gap:9px;padding:9px 12px;border-top:1px solid rgba(211,208,197,.35)}
-  .day:first-child{border-top:none}
-  .day.rest{opacity:.65}
-  .stripe{width:4px;align-self:stretch;border-radius:2px;flex-shrink:0}
-  .dd{font-family:var(--cond);font-weight:600;font-size:15px;min-width:48px;flex-shrink:0}
-  .dtxt{flex:1;min-width:0}
-  .dtitle{font-weight:600;font-size:13px}
-  .dtitle.done{font-weight:400;text-decoration:line-through;color:var(--ink-soft)}
-  .dsub{font-size:11px;color:var(--ink-soft);display:block}
-  .shift{font-size:9.5px;font-weight:600;color:#fff;background:var(--dienst);padding:2px 6px;border-radius:4px;white-space:nowrap;flex-shrink:0}
-  .chk{width:26px;height:26px;border-radius:7px;border:2px solid var(--line);background:transparent;color:#fff;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
-  .chk.on{border-color:var(--lang);background:var(--lang)}
-  .detail{padding:8px 12px 11px 73px;font-size:12px;line-height:1.55;color:var(--ink-soft);background:#F5F3EC;border-top:1px dashed var(--line)}
-  .sechead{width:100%;display:flex;align-items:center;gap:8px;padding:11px 12px;background:transparent;border:none;text-align:left}
-  .sechead .t{font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
-  .sechead .s{font-size:10px;color:var(--ink-soft);flex:1}
-  .row{display:flex;gap:10px;padding:9px 12px;border-top:1px solid rgba(211,208,197,.35);font-size:12px;line-height:1.5}
-  .row:first-child{border-top:none}
-  .row .k{font-family:var(--cond);font-weight:600;font-size:12px;min-width:70px;flex-shrink:0;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
-  .row .k.dienste{color:var(--dienst)}.row .k.training{color:var(--z2)}
-  .zones{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;font-size:12px;padding:10px 12px;border-top:1px solid var(--line)}
-  .zones .h{font-weight:600;color:var(--ink-soft);font-size:10px;text-transform:uppercase}
-  .notewrap{margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
-  .rpelbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:5px}
-  .rperow{display:flex;gap:4px;flex-wrap:wrap}
-  .rpe{width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--panel);font-size:12px;font-weight:600;color:var(--ink);padding:0}
-  .rpe.on{background:var(--accent);border-color:var(--accent);color:#fff}
-  .noterow{display:flex;gap:6px;margin-top:8px}
-  .noterow input{flex:1;min-width:0;font-family:var(--body);font-size:12px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
-  .noterow button{font-size:11px;font-weight:600;padding:7px 11px;border:1px solid var(--line);border-radius:6px;background:var(--ink);color:#EFEDE5}
-  .foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:14px}
-  .reset{margin-top:16px;font-size:11px;color:var(--ink-soft);background:transparent;border:1px solid var(--line);border-radius:6px;padding:6px 11px}
-  @media(min-width:640px){.wnote{flex:1;order:0;padding-left:0}h1{font-size:40px}}
-  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{color-scheme:light dark}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45}
+button{font-family:inherit;cursor:pointer;color:inherit}
+button:active{transform:scale(.98)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+
+/* ——— Kopf ——— */
+header{background:linear-gradient(180deg,#242B23,#20261F);color:#EFEDE3;padding:calc(env(safe-area-inset-top) + 20px) 18px 18px}
+@media (prefers-color-scheme: dark){header{background:linear-gradient(180deg,#1A201D,#14181A);border-bottom:1px solid var(--line)}}
+.wrap{max-width:920px;margin:0 auto;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+.eyebrow{font-family:var(--cond);font-weight:600;letter-spacing:.2em;font-size:11px;color:var(--accent);text-transform:uppercase}
+h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,9vw,46px);margin:2px 0 0;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
+.head-top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px}
+.pct{font-family:var(--cond);font-weight:700;font-size:clamp(30px,8vw,40px);line-height:.9;text-align:right}
+.pct small{font-size:.5em;font-weight:600}
+.pct-sub{font-size:11px;color:#A9B0A4;margin-top:3px;white-space:nowrap}
+.bar{margin-top:14px;height:5px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+.bar>div{height:100%;background:var(--accent)}
+.stats{display:flex;gap:8px 16px;margin-top:12px;flex-wrap:wrap;font-size:12px;color:#B9BFB2}
+.stats strong{color:#EFEDE3;font-weight:600}
+
+/* Wochenvolumen */
+.vol{display:flex;gap:5px;align-items:flex-end;margin-top:16px;height:62px}
+.vol .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.vol .stack{width:100%;height:42px;display:flex;align-items:flex-end}
+.vol .b{width:100%;border-radius:4px 4px 0 0;position:relative;overflow:hidden;background:rgba(255,255,255,.14)}
+.vol .b.vol-big{background:var(--accent)}
+.vol .fill{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.5)}
+.vol .lbl{font-family:var(--cond);font-weight:600;font-size:10px;color:#A9B0A4;white-space:nowrap}
+
+/* ——— Inhalt ——— */
+main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bottom) + 44px)}
+.legend{display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--ink-soft);padding:2px 2px 12px}
+.legend .sw{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:-1px}
+.legend button{margin-left:auto;font-size:12px;font-weight:600;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-int);padding:8px 12px;min-height:36px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-card);margin-bottom:10px;overflow:hidden}
+.card.current{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.card.dashed{border-style:dashed;background:transparent}
+
+/* Wochenkopf + Tagesband (Signature) */
+.whead{width:100%;display:block;padding:12px 14px 11px;background:transparent;border:none;text-align:left}
+.wrow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.wid{font-family:var(--cond);font-weight:700;font-size:20px;color:var(--accent)}
+.wrange{font-family:var(--cond);font-weight:600;font-size:17px;letter-spacing:.02em}
+.pill{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:3px 9px;border-radius:999px;background:var(--panel2);color:var(--ink-soft)}
+.pill.volumen{background:var(--accent);color:var(--accent-ink)}
+.badge-now{font-family:var(--cond);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
+.wmeta{font-size:12px;color:var(--ink-soft);margin-left:auto;white-space:nowrap}
+.dayband{display:flex;gap:3px;margin-top:9px;height:7px}
+.dayband span{flex:1;border-radius:2px;background:var(--seg);opacity:.32}
+.dayband span.don{opacity:1}
+.dayband span.rst{opacity:.15}
+.wnote{font-size:11.5px;color:var(--ink-soft);margin-top:7px}
+
+/* Tage */
+.days{border-top:1px solid var(--line)}
+.day{display:flex;align-items:center;gap:10px;padding:11px 14px;border-top:1px solid var(--line);min-height:48px}
+.day:first-child{border-top:none}
+.day.rest{opacity:.6}
+.stripe{width:4px;align-self:stretch;border-radius:2px;flex-shrink:0}
+.dd{font-family:var(--cond);font-weight:600;font-size:15px;min-width:50px;flex-shrink:0}
+.dtxt{flex:1;min-width:0}
+.dtitle{font-weight:600;font-size:13.5px}
+.dtitle.done{font-weight:400;text-decoration:line-through;color:var(--ink-soft)}
+.dsub{font-size:11.5px;color:var(--ink-soft);display:block;margin-top:1px}
+.shift{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.04em;color:#fff;background:var(--dienst);padding:3px 8px;border-radius:999px;white-space:nowrap;flex-shrink:0}
+@media (prefers-color-scheme: dark){.shift{color:#16100C}}
+.chk{width:30px;height:30px;border-radius:var(--r-int);border:2px solid var(--line);background:transparent;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;color:transparent}
+.chk.on{border-color:var(--done);background:var(--done);color:#fff}
+@media (prefers-color-scheme: dark){.chk.on{color:#14181A}}
+
+/* Detail + Notizen */
+.detail{padding:10px 14px 13px 78px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);background:var(--panel2);border-top:1px dashed var(--line)}
+.notewrap{margin-top:11px;padding-top:10px;border-top:1px dashed var(--line)}
+.rpelbl{font-family:var(--cond);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:6px}
+.rperow{display:flex;gap:4px;flex-wrap:wrap}
+.rpe{width:32px;height:32px;border-radius:var(--r-int);border:1px solid var(--line);background:var(--panel);font-size:12.5px;font-weight:600;padding:0}
+.rpe.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.noterow{display:flex;gap:6px;margin-top:9px}
+.noterow input{flex:1;min-width:0;font-family:var(--body);font-size:13px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-int);background:var(--panel);color:var(--ink)}
+.noterow input::placeholder{color:var(--ink-soft)}
+.noterow button{font-size:12px;font-weight:600;padding:9px 14px;border:none;border-radius:var(--r-int);background:var(--accent);color:var(--accent-ink)}
+
+/* Sektionen unten */
+.sechead{width:100%;display:flex;align-items:center;gap:10px;padding:13px 14px;background:transparent;border:none;text-align:left;min-height:46px}
+.sechead .t{font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.sechead .s{font-size:11px;color:var(--ink-soft);flex:1}
+.row{display:flex;gap:10px;padding:10px 14px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.5}
+.row .k{font-family:var(--cond);font-weight:600;font-size:12.5px;min-width:74px;flex-shrink:0;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+.row .k.dienste{color:var(--dienst)}.row .k.training{color:var(--z2)}.row .k.material{color:var(--accent)}
+.zones{display:grid;grid-template-columns:1fr auto auto;gap:5px 16px;font-size:12.5px;padding:11px 14px;border-top:1px solid var(--line)}
+.zones .h{font-family:var(--cond);font-weight:600;color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.chev{font-size:10px;color:var(--ink-soft);width:12px;text-align:center;flex-shrink:0}
+.foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:16px}
+.reset{margin-top:18px;font-size:12px;color:var(--ink-soft);background:transparent;border:1px solid var(--line);border-radius:var(--r-int);padding:9px 14px;min-height:38px}
+
+@media(min-width:640px){
+  .whead{padding:13px 16px}
+  .day{padding:11px 16px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .bar>div{transition:width .45s cubic-bezier(.16,1,.3,1)}
+  .chk,.rpe,button{transition:transform .12s ease,background .15s ease,border-color .15s ease}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
@@ -191,6 +247,7 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"12.06.2026",text:"v8: Design-Überarbeitung — Dark Mode (folgt Systemeinstellung), Tagesband pro Woche im zugeklappten Zustand (Typ + Erledigt-Status aller 7 Tage auf einen Blick), größere Touch-Ziele, konsistentes Form- und Typo-System, sanfteres Bewegungsverhalten."},
  {date:"12.06.2026",text:"v7: Notizfeld pro Einheit (RPE 1–10 + Stichwort, lokal gespeichert). Material-Tests eingeplant: 50-mm-Front Sa 18.7., Inserts + Race-Sealant bis Sa 25.7., Spacer-Reduktion als laufende Regel. Strava-Wochenabgleich als Ritual gestartet."},
  {date:"12.06.2026",text:"Strava-Analyse Sella Ronda (6.6.): 20-min-Best 197 W, 1-h-Best 179 W → reale FTP ~190–200 W, hinterlegte 226 W zu hoch. Bis zum Retest am 23.6.: Z2 nach PULS fahren (128–158), Watt eher 110–150 W statt 125–170 W."},
  {date:"12.06.2026",text:"Herbstrennen-Kandidaten: Gravel-Event Bühlertal So 4.10. (55/86/120 km — Empfehlung: 86 km/1.800 hm, ~1 h Anfahrt) · Schwarzwald Bike Marathon Gravel Furtwangen So 13.9. (46 km/700 hm, Zeitmessung, Anmeldung offen) · Niederrhein Gravel Sa 3.10. (110/160 km flach). Entscheidung nach September-Dienstplan."},
@@ -235,25 +292,25 @@ function render(){
  const wTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/(7*864e5)));
  const maxH=Math.max(...WEEKS.map(w=>w.days.reduce((a,d)=>a+d.h,0)));
  let html=`<header><div class="wrap">
-  <div class="head-top"><div>
-   <div class="eyebrow">Phase 1 · Basis · noch ~${wTraka} Wochen bis The Traka</div>
-   <h1>Mikroplan 12.06 – 02.08</h1></div>
-   <div><div class="pct">${pct}<small>%</small></div>
-   <div class="pct-sub">${s.dc}/${s.t} Einheiten · ${s.hd.toFixed(1)} / ~${s.hp.toFixed(0)} h</div></div></div>
+  <div class="eyebrow">Phase 1 · Basis · ~${wTraka} Wochen bis The Traka</div>
+  <div class="head-top">
+   <h1>Mikroplan<br>12.06–02.08</h1>
+   <div><div class="pct num">${pct}<small>%</small></div>
+   <div class="pct-sub num">${s.dc}/${s.t} Einheiten · ${s.hd.toFixed(1)} / ~${s.hp.toFixed(0)} h</div></div>
+  </div>
   <div class="bar"><div style="width:${pct}%"></div></div>
-  <div class="stats"><span><strong>FTP:</strong> 226 W hinterlegt — real ~190–200 W → bis Retest 23.06. Z2 nach Puls (128–158) fahren</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
+  <div class="stats"><span><strong>FTP:</strong> 226 W hinterlegt · real ~190–200 W → Z2 bis Retest 23.06. nach Puls (128–158)</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
   <div class="vol">`;
  WEEKS.forEach(w=>{
   const h=w.days.reduce((a,d)=>a+d.h,0);
   const hd=w.days.reduce((a,d,i)=>a+(d.type!=="ruhe"&&done[w.id+"-"+i]?d.h:0),0);
-  const c=w.tag==="Entlastung"?"#5A6B62":w.tag==="Volumen"?"var(--accent)":"#7A98AB";
-  html+=`<div class="col"><div class="stack"><div class="b" style="height:${h/maxH*100}%;background:${c}"><div class="fill" style="height:${h?hd/h*100:0}%"></div></div></div><span class="lbl">${w.id} · ${fmtH(h)}h</span></div>`;
+  html+=`<div class="col"><div class="stack"><div class="b${w.tag==="Volumen"?" vol-big":""}" style="height:${h/maxH*100}%"><div class="fill" style="height:${h?hd/h*100:0}%"></div></div></div><span class="lbl num">${w.id}·${fmtH(h)}h</span></div>`;
  });
  html+=`</div></div></header><main><div class="legend">`;
  Object.values(TYPE).forEach(m=>{html+=`<span><span class="sw" style="background:${m.c}"></span>${m.label}</span>`});
  html+=`<span><span class="sw" style="background:var(--dienst)"></span>Dienst</span><button data-a="zones">${showZones?"Zonen ausblenden":"Zonen anzeigen"}</button></div>`;
  if(showZones){
-  html+=`<div class="card"><div class="zones"><span class="h">Zone</span><span class="h">Watt</span><span class="h">Puls</span>`;
+  html+=`<div class="card"><div class="zones num"><span class="h">Zone</span><span class="h">Watt</span><span class="h">Puls</span>`;
   ZONES.forEach(z=>{html+=`<span>${z[0]}</span><span>${z[1]}</span><span>${z[2]}</span>`});
   html+=`</div></div>`;
  }
@@ -264,12 +321,19 @@ function render(){
   const open=!!openWeeks[w.id];
   const [ws,we]=WEEK_DATES[w.id];
   const cur=today>=ws&&today<=we;
-  html+=`<div class="card${cur?" current":""}"><button class="whead" data-a="week" data-w="${w.id}">
-   <span class="wid">${w.id}</span><span class="wrange">${w.range}</span>
-   <span class="pill ${w.tag.toLowerCase()}">${w.tag}</span>
-   ${cur?'<span class="badge-now">Aktuell</span>':""}
-   <span class="wmeta">${dc}/${wd.length} · ~${fmtH(h)} h</span><span class="chev">${open?"▲":"▼"}</span>
-   <span class="wnote">${esc(w.note)}</span></button>`;
+  // Tagesband: 7 Segmente, Farbe = Typ, voll = erledigt, blass = offen, fast unsichtbar = Ruhe
+  let band="";
+  w.days.forEach((d,i)=>{
+   const cls=d.type==="ruhe"?"rst":(done[w.id+"-"+i]?"don":"");
+   band+=`<span class="${cls}" style="--seg:${TYPE[d.type].c}"></span>`;
+  });
+  html+=`<div class="card${cur?" current":""}"><button class="whead" data-a="week" data-w="${w.id}" aria-expanded="${open}">
+   <span class="wrow"><span class="wid">${w.id}</span><span class="wrange">${w.range}</span>
+   <span class="pill${w.tag==="Volumen"?" volumen":""}">${w.tag}</span>
+   ${cur?'<span class="badge-now">● Aktuell</span>':""}
+   <span class="wmeta num">${dc}/${wd.length} · ~${fmtH(h)} h <span class="chev">${open?"▲":"▼"}</span></span></span>
+   <span class="dayband">${band}</span>
+   ${open?`<span class="wnote">${esc(w.note)}</span>`:""}</button>`;
   if(open){
    html+=`<div class="days">`;
    w.days.forEach((d,i)=>{
@@ -277,34 +341,32 @@ function render(){
     html+=`<div class="day${rest?" rest":""}" data-a="${d.detail?"day":""}" data-k="${key}">
      <span class="stripe" style="background:${TYPE[d.type].c}"></span>
      <span class="dd">${d.d}</span>
-     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${notes[key]?`<span class="dsub" style="color:var(--kraft)">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}</span>
+     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${notes[key]?`<span class="dsub" style="color:${TYPE.kraft.c}">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}</span>
      ${d.shift?`<span class="shift">${d.shift}</span>`:""}
-     ${rest?"":`<button class="chk${chk?" on":""}" data-a="chk" data-k="${key}" aria-label="abhaken">${chk?"✓":""}</button>`}</div>`;
+     ${rest?"":`<button class="chk${chk?" on":""}" data-a="chk" data-k="${key}" aria-label="${esc(d.d)} abhaken">✓</button>`}</div>`;
     if(dOpen&&d.detail){
      const nv=notes[key]||{};
      let rpeBtns="";
-     for(let r=1;r<=10;r++){rpeBtns+=`<button class="rpe${nv.rpe===r?" on":""}" data-a="rpe" data-k="${key}" data-r="${r}">${r}</button>`}
+     for(let r=1;r<=10;r++){rpeBtns+=`<button class="rpe num${nv.rpe===r?" on":""}" data-a="rpe" data-k="${key}" data-r="${r}">${r}</button>`}
      html+=`<div class="detail">${esc(d.detail)}
-      <div class="notewrap" data-stop="1">
+      <div class="notewrap">
        <div class="rpelbl">Anstrengung (RPE)</div>
        <div class="rperow">${rpeBtns}</div>
        <div class="noterow"><input type="text" id="note-${key}" placeholder="Stichwort, z. B. Beine schwer nach Spätdienst" value="${esc(nv.n||"").replace(/"/g,"&quot;")}" maxlength="120"><button data-a="savenote" data-k="${key}">Speichern</button></div>
       </div></div>`;
-   }
+    }
    });
    html+=`</div>`;
   }
   html+=`</div>`;
  });
- // Updates
- html+=`<div class="card dashed"><button class="sechead" data-a="log"><span class="t">Updates &amp; Änderungen</span><span class="s">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</span><span class="chev">${showLog?"▲":"▼"}</span></button>`;
- if(showLog){CHANGELOG.forEach(c=>{html+=`<div class="row"><span class="k">${c.date}</span><span>${esc(c.text)}</span></div>`})}
+ html+=`<div class="card dashed"><button class="sechead" data-a="log" aria-expanded="${showLog}"><span class="t">Updates &amp; Änderungen</span><span class="s num">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</span><span class="chev">${showLog?"▲":"▼"}</span></button>`;
+ if(showLog){CHANGELOG.forEach(c=>{html+=`<div class="row"><span class="k num">${c.date}</span><span>${esc(c.text)}</span></div>`})}
  html+=`</div>`;
- // Regeln
- html+=`<div class="card dashed"><button class="sechead" data-a="rules"><span class="t">Regeln</span><span class="s">Dienstplan, Training &amp; Bedienung</span><span class="chev">${showRules?"▲":"▼"}</span></button>`;
+ html+=`<div class="card dashed"><button class="sechead" data-a="rules" aria-expanded="${showRules}"><span class="t">Regeln</span><span class="s">Dienstplan, Training, Material &amp; Bedienung</span><span class="chev">${showRules?"▲":"▼"}</span></button>`;
  if(showRules){RULES.forEach(r=>{html+=`<div class="row"><span class="k ${r.cat.toLowerCase()}">${r.cat}</span><span>${esc(r.text)}</span></div>`})}
  html+=`</div>`;
- html+=`<p class="foot">ⓘ Diese App läuft lokal auf deinem Gerät und offline. Plan-Updates: neue index.html von Claude generieren lassen und auf dein Hosting hochladen — Häkchen bleiben erhalten, da sie lokal gespeichert sind.</p>
+ html+=`<p class="foot">ⓘ Diese App läuft lokal und offline. Plan-Updates: neue index.html von Claude generieren lassen und im Hosting ersetzen — Häkchen und Notizen bleiben erhalten. Hell/Dunkel folgt der Systemeinstellung.</p>
  <button class="reset" data-a="reset">Fortschritt zurücksetzen</button></main>`;
  document.getElementById("app").innerHTML=html;
 }
