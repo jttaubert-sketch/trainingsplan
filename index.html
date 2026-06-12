@@ -81,6 +81,14 @@
   .row .k.dienste{color:var(--dienst)}.row .k.training{color:var(--z2)}
   .zones{display:grid;grid-template-columns:1fr auto auto;gap:4px 14px;font-size:12px;padding:10px 12px;border-top:1px solid var(--line)}
   .zones .h{font-weight:600;color:var(--ink-soft);font-size:10px;text-transform:uppercase}
+  .notewrap{margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)}
+  .rpelbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:5px}
+  .rperow{display:flex;gap:4px;flex-wrap:wrap}
+  .rpe{width:28px;height:28px;border-radius:6px;border:1px solid var(--line);background:var(--panel);font-size:12px;font-weight:600;color:var(--ink);padding:0}
+  .rpe.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .noterow{display:flex;gap:6px;margin-top:8px}
+  .noterow input{flex:1;min-width:0;font-family:var(--body);font-size:12px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
+  .noterow button{font-size:11px;font-weight:600;padding:7px 11px;border:1px solid var(--line);border-radius:6px;background:var(--ink);color:#EFEDE5}
   .foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:14px}
   .reset{margin-top:16px;font-size:11px;color:var(--ink-soft);background:transparent;border:1px solid var(--line);border-radius:6px;padding:6px 11px}
   @media(min-width:640px){.wnote{flex:1;order:0;padding-left:0}h1{font-size:40px}}
@@ -146,7 +154,7 @@ const WEEKS=[
   {d:"Mi 15.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
   {d:"Do 16.",type:"z2",title:"Z2 90′",sub:"abends",h:1.5,detail:Dz2},
   {d:"Fr 17.",type:"kraft",title:"Kraft 2 kurz oder Ruhe",sub:"vor dem langen Samstag",h:1,detail:Dkraft2},
-  {d:"Sa 18.",type:"lang",title:"Lange Gravel 4 h",sub:"Z2",h:4,detail:Dz2+" "+DlangFuel},
+  {d:"Sa 18.",type:"lang",title:"Lange Gravel 4 h",sub:"Material-Test: 50-mm-Frontreifen",h:4,detail:Dz2+" "+DlangFuel+" MATERIAL-TEST: 50-mm-Frontreifen (G-One RS 50 oder Cinturato Gravel RC 50) vorher montieren, Druck vorne ~1,5–1,7 bar antesten und Fahrgefühl notieren."},
   {d:"So 19.",type:"z2",title:"Z2 60′ locker oder frei",sub:"",h:1,detail:"Reine Fettstoffwechsel-/Regenerationsfahrt am unteren Z2-Rand. Wenn müde: streichen, nicht quälen."}]},
  {id:"W7",range:"20.–26. Jul",tag:"Volumen",note:"dienstfrei — größte Woche der Phase (~9 h)",days:[
   {d:"Mo 20.",type:"z2",title:"Z2 90′",sub:"",h:1.5,detail:Dz2},
@@ -154,7 +162,7 @@ const WEEKS=[
   {d:"Mi 22.",type:"z2",title:"Z2 90′ + Sprints",sub:"",h:1.5,detail:Dz2+" "+Dsprint},
   {d:"Do 23.",type:"z2",title:"Z2 60′ ganz locker",sub:"",h:1,detail:"Aktive Erholung mitten in der großen Woche — unteres Z2 oder Z1."},
   {d:"Fr 24.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
-  {d:"Sa 25.",type:"lang",title:"Lange Gravel 4 h",sub:"Race-Setup fahren",h:4,detail:"Komplettes Race-Setup testen: Reifendruck, Taschen, Verpflegung am Rad. "+DlangFuel},
+  {d:"Sa 25.",type:"lang",title:"Lange Gravel 4 h",sub:"Race-Setup fahren",h:4,detail:"Komplettes Race-Setup testen: 50er-Front + Tire Inserts (Vittoria Air-Liner Light / Tannus) + Race-Sealant vorher montieren. Finale Reifendrücke v/h notieren, Taschen und Verpflegung am Rad wie im Rennen. "+DlangFuel},
   {d:"So 26.",type:"z2",title:"Z2 90–120′ locker",sub:"sanfter Back-to-back-Test",h:2,detail:"Müde Beine sind hier Absicht — Vorgeschmack auf Phase 4. Tempo egal, Zeit im Sattel zählt."}]},
  {id:"W8",range:"27. Jul – 2. Aug",tag:"Entlastung",note:"Zahnarzt Mo · Nachtdienst Fr→Sa",days:[
   {d:"Mo 27.",type:"ruhe",title:"Ruhe",sub:"Zahnarzt",h:0},
@@ -177,10 +185,15 @@ const RULES=[
  {cat:"Training",text:"Wenn der Dienstplan eine Woche zerschießt: Einheiten streichen, nicht nachholen."},
  {cat:"Training",text:"Z2 heißt Z2: 125–170 W / Puls 128–158 (bis Retest). Nasenatmung bzw. Sprechen muss möglich sein."},
  {cat:"Training",text:"Lange Ausfahrten: 60–80 g KH/h ab Stunde 1, 500–750 ml/h trinken. Kette frisch gewachst vor jedem Rennen."},
- {cat:"Bedienung",text:"Woche antippen = auf-/zuklappen · Tag antippen = Einheits-Details · Häkchen wird lokal auf dem Gerät gespeichert."}
+ {cat:"Material",text:"Spacer ab sofort schrittweise raus: 5 mm alle 2–3 Wochen, Nacken/Rücken beobachten — gratis Aero-Gewinn Nr. 1."},
+ {cat:"Material",text:"50-mm-Frontreifen am 18.7. testen, Tire Inserts + Race-Sealant bis 25.7. montieren (Race-Setup-Fahrt). Kette frisch gewachst vor jedem Rennen."},
+ {cat:"Bedienung",text:"Woche antippen = auf-/zuklappen · Tag antippen = Einheits-Details · Häkchen und Notizen werden lokal auf dem Gerät gespeichert."}
 ];
 
 const CHANGELOG=[
+ {date:"12.06.2026",text:"v7: Notizfeld pro Einheit (RPE 1–10 + Stichwort, lokal gespeichert). Material-Tests eingeplant: 50-mm-Front Sa 18.7., Inserts + Race-Sealant bis Sa 25.7., Spacer-Reduktion als laufende Regel. Strava-Wochenabgleich als Ritual gestartet."},
+ {date:"12.06.2026",text:"Strava-Analyse Sella Ronda (6.6.): 20-min-Best 197 W, 1-h-Best 179 W → reale FTP ~190–200 W, hinterlegte 226 W zu hoch. Bis zum Retest am 23.6.: Z2 nach PULS fahren (128–158), Watt eher 110–150 W statt 125–170 W."},
+ {date:"12.06.2026",text:"Herbstrennen-Kandidaten: Gravel-Event Bühlertal So 4.10. (55/86/120 km — Empfehlung: 86 km/1.800 hm, ~1 h Anfahrt) · Schwarzwald Bike Marathon Gravel Furtwangen So 13.9. (46 km/700 hm, Zeitmessung, Anmeldung offen) · Niederrhein Gravel Sa 3.10. (110/160 km flach). Entscheidung nach September-Dienstplan."},
  {date:"11.06.2026",text:"v6: Eigenständige Web-App (PWA) — offline-fähig, Daten lokal auf dem iPhone, unabhängig von Claude."},
  {date:"11.06.2026",text:"v5: Regeln-Reiter eingeführt (alle Dienst- und Trainingsregeln gesammelt), Header und Fußbereich entschlackt."},
  {date:"11.06.2026",text:"Dienst 12.→13.7. gestrichen: So 12.7. jetzt Recovery-Spin Z2 60–75′, Mo 13.7. regulärer Ruhetag. W5/W6 damit am Wochenende dienstfrei."},
@@ -200,6 +213,13 @@ const store={
  set(v){mem=v;try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}
 };
 let done=store.get();
+const NKEY="jan-training-notes";
+let notesMem={};
+const nstore={
+ get(){try{return JSON.parse(localStorage.getItem(NKEY)||"{}")}catch(e){return notesMem}},
+ set(v){notesMem=v;try{localStorage.setItem(NKEY,JSON.stringify(v))}catch(e){}}
+};
+let notes=nstore.get();
 const today=new Date().toISOString().slice(0,10);
 const currentWeek=Object.entries(WEEK_DATES).find(([,r])=>today>=r[0]&&today<=r[1]);
 let openWeeks={}; if(currentWeek) openWeeks[currentWeek[0]]=true;
@@ -221,7 +241,7 @@ function render(){
    <div><div class="pct">${pct}<small>%</small></div>
    <div class="pct-sub">${s.dc}/${s.t} Einheiten · ${s.hd.toFixed(1)} / ~${s.hp.toFixed(0)} h</div></div></div>
   <div class="bar"><div style="width:${pct}%"></div></div>
-  <div class="stats"><span><strong>FTP:</strong> 226 W (Retest 23.06.)</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
+  <div class="stats"><span><strong>FTP:</strong> 226 W hinterlegt — real ~190–200 W → bis Retest 23.06. Z2 nach Puls (128–158) fahren</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
   <div class="vol">`;
  WEEKS.forEach(w=>{
   const h=w.days.reduce((a,d)=>a+d.h,0);
@@ -257,10 +277,20 @@ function render(){
     html+=`<div class="day${rest?" rest":""}" data-a="${d.detail?"day":""}" data-k="${key}">
      <span class="stripe" style="background:${TYPE[d.type].c}"></span>
      <span class="dd">${d.d}</span>
-     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}</span>
+     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${notes[key]?`<span class="dsub" style="color:var(--kraft)">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}</span>
      ${d.shift?`<span class="shift">${d.shift}</span>`:""}
      ${rest?"":`<button class="chk${chk?" on":""}" data-a="chk" data-k="${key}" aria-label="abhaken">${chk?"✓":""}</button>`}</div>`;
-    if(dOpen&&d.detail) html+=`<div class="detail">${esc(d.detail)}</div>`;
+    if(dOpen&&d.detail){
+     const nv=notes[key]||{};
+     let rpeBtns="";
+     for(let r=1;r<=10;r++){rpeBtns+=`<button class="rpe${nv.rpe===r?" on":""}" data-a="rpe" data-k="${key}" data-r="${r}">${r}</button>`}
+     html+=`<div class="detail">${esc(d.detail)}
+      <div class="notewrap" data-stop="1">
+       <div class="rpelbl">Anstrengung (RPE)</div>
+       <div class="rperow">${rpeBtns}</div>
+       <div class="noterow"><input type="text" id="note-${key}" placeholder="Stichwort, z. B. Beine schwer nach Spätdienst" value="${esc(nv.n||"").replace(/"/g,"&quot;")}" maxlength="120"><button data-a="savenote" data-k="${key}">Speichern</button></div>
+      </div></div>`;
+   }
    });
    html+=`</div>`;
   }
@@ -280,11 +310,14 @@ function render(){
 }
 
 document.getElementById("app").addEventListener("click",e=>{
+ if(e.target.tagName==="INPUT")return;
  const el=e.target.closest("[data-a]"); if(!el)return;
  const a=el.dataset.a;
- if(a==="chk"){e.stopPropagation();const k=el.dataset.k;done[k]=!done[k];store.set(done)}
+ if(a==="rpe"){const k=el.dataset.k,r=parseInt(el.dataset.r);notes[k]=notes[k]||{};notes[k].rpe=notes[k].rpe===r?undefined:r;nstore.set(notes)}
+ else if(a==="savenote"){const k=el.dataset.k;const inp=document.getElementById("note-"+k);notes[k]=notes[k]||{};notes[k].n=(inp&&inp.value.trim())||undefined;if(!notes[k].n&&!notes[k].rpe)delete notes[k];nstore.set(notes)}
+ else if(a==="chk"){e.stopPropagation();const k=el.dataset.k;done[k]=!done[k];store.set(done)}
  else if(a==="week"){const w=el.dataset.w;openWeeks[w]=!openWeeks[w]}
- else if(a==="day"){const k=el.dataset.k;openDay=openDay===k?null:k}
+ else if(a==="day"){if(e.target.closest(".notewrap"))return;const k=el.dataset.k;openDay=openDay===k?null:k}
  else if(a==="zones")showZones=!showZones;
  else if(a==="log")showLog=!showLog;
  else if(a==="rules")showRules=!showRules;
