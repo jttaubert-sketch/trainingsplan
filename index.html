@@ -27,6 +27,7 @@
   --z2:#3E6F8E; --lang:#2E5746; --kraft:#8A7141; --intens:#C2401C;
   --ruhe:#A8ADA6; --dienst:#7A3E8F;
   --done:#2E5746;
+  --bonus:#1F8A8A;
   --cond:'Barlow Condensed',-apple-system,system-ui,sans-serif;
   --body:'Barlow',-apple-system,system-ui,sans-serif;
   --r-card:12px; --r-int:8px;
@@ -39,6 +40,7 @@
     --z2:#6FA3C4; --lang:#5E9C82; --kraft:#C0A36E; --intens:#E8642F;
     --ruhe:#5C645D; --dienst:#B07CC4;
     --done:#5E9C82;
+    --bonus:#4FC4C4;
   }
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -143,6 +145,12 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
   .gdot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px;vertical-align:-1px}
   .gnote{margin-left:auto;font-style:italic}
   .gcap{font-size:11px;color:var(--ink-soft);line-height:1.5;margin-top:7px}
+  .review{padding:11px 14px;border-top:1px solid var(--line)}
+  .rev-head{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:7px}
+  .rev-wk{font-family:var(--cond);font-weight:700;font-size:17px;color:var(--accent)}
+  .rev-kpi{font-size:11px;color:var(--ink-soft);background:var(--panel2);padding:3px 8px;border-radius:999px;white-space:nowrap}
+  .rev-txt{font-size:12.5px;line-height:1.55;color:var(--ink);margin-top:4px}
+  .rev-txt strong{color:var(--ink-soft);font-weight:600}
   .foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:16px}
 .reset{margin-top:18px;font-size:12px;color:var(--ink-soft);background:transparent;border:1px solid var(--line);border-radius:var(--r-int);padding:9px 14px;min-height:38px}
 
@@ -169,7 +177,7 @@ const Dkraft2="Zweite Krafteinheit: Ausfallschritte 3×8/Seite · Hip Thrust 3×
 const DlangFuel="Verpflegung: 60–80 g KH/h ab Stunde 1 · 500–750 ml/h trinken · Pacing strikt Z2, am Berg notfalls schalten statt drücken.";
 const Dretest="Protokoll: 20′ einrollen mit 3×1′ zügig → 5′ locker → 20 min all-out (gleichmäßig!) → FTP = Ø-Watt × 0,95. Alternativ Ramp-Test. Ausgeruht, vormittags, gut gefrühstückt.";
 
-const TYPE={lang:{label:"Lange Gravel",c:"var(--lang)"},z2:{label:"Z2 Grundlage",c:"var(--z2)"},kraft:{label:"Kraft",c:"var(--kraft)"},intens:{label:"Test / Intensität",c:"var(--intens)"},ruhe:{label:"Ruhe",c:"var(--ruhe)"}};
+const TYPE={lang:{label:"Lange Gravel",c:"var(--lang)"},z2:{label:"Z2 Grundlage",c:"var(--z2)"},kraft:{label:"Kraft",c:"var(--kraft)"},intens:{label:"Test / Intensität",c:"var(--intens)"},ruhe:{label:"Ruhe",c:"var(--ruhe)"},bonus:{label:"Zusatz/Bonus",c:"var(--bonus)"}};
 
 const WEEK_DATES={W1:["2026-06-08","2026-06-14"],W2:["2026-06-15","2026-06-21"],W3:["2026-06-22","2026-06-28"],W4:["2026-06-29","2026-07-05"],W5:["2026-07-06","2026-07-12"],W6:["2026-07-13","2026-07-19"],W7:["2026-07-20","2026-07-26"],W8:["2026-07-27","2026-08-02"]};
 
@@ -254,11 +262,13 @@ const RULES=[
  {cat:"Training",text:"Lange Ausfahrten: 60–80 g KH/h ab Stunde 1, 500–750 ml/h trinken. Kette frisch gewachst vor jedem Rennen."},
  {cat:"Material",text:"Spacer ab sofort schrittweise raus: 5 mm alle 2–3 Wochen, Nacken/Rücken beobachten — gratis Aero-Gewinn Nr. 1."},
  {cat:"Material",text:"50-mm-Frontreifen am 18.7. testen, Tire Inserts + Race-Sealant bis 25.7. montieren (Race-Setup-Fahrt). Kette frisch gewachst vor jedem Rennen."},
+ {cat:"Abgleich",text:"Am Ende jeder Woche eine kurze Soll-Ist-Analyse ziehen: Radumfang Ist/Soll, lange Ausfahrt erfüllt?, Z2-Qualität (Puls wirklich <158?), Kraft erfüllt, 1–2 Sätze Fazit + konkrete Ableitung für die Folgewoche. Maßstab ist nicht reine Planerfüllung, sondern der Dienstplan-Kontext. Erscheint im Reiter „Wochenanalyse“; Essenz wandert ins Changelog."},
  {cat:"Abgleich",text:"Jeden Sonntag (oder nach Bedarf) Plan-Soll mit den tatsächlich geleisteten Strava-Einheiten abgleichen. Echte Werte und Zeiten (Dauer, Ø-Puls, Ø-Watt, km, hm) werden in die Einheit übernommen und ersetzen das Soll. ALLE Sportarten zählen (Rad, Kraft, Lauf, Schwimmen, Wandern); ungeplante Einheiten zählen als Bonus auf die Ist-Stunden."},
  {cat:"Bedienung",text:"Woche antippen = auf-/zuklappen · Tag antippen = Einheits-Details · Häkchen und Notizen werden lokal auf dem Gerät gespeichert."}
 ];
 
 const CHANGELOG=[
+ {date:"14.06.2026",text:"v15: Wochenanalyse als festes Ritual ab W1 — neuer Reiter mit Soll-Ist je Woche (Radumfang, lange Ausfahrt, Z2-Qualität, Kraft, Fazit + Ableitung). Bonus-/Zusatzeinheiten farbcodiert (Teal) inkl. Anzeige unter der Woche und Zähler im Wochenkopf. Fehlendes 3. Krafttraining am Mi 10.6. ergänzt."},
  {date:"14.06.2026",text:"v13: W1 auf volle Woche Mo 8.–So 14.6. erweitert und mit echten Strava-Einheiten gefüllt: Mo+Di Kraft (82/85 min), Mi Lauf 36′ (5,1 km, Bonus), Sa Z2-Ausfahrt 123 min, So Aubachtal-Trail 111 min. Krafttag von So auf Mo/Di vorgezogen → 3 Krafteinheiten in W1."},
  {date:"14.06.2026",text:"v12: Neue Regel — Plan wird laufend mit den tatsächlich geleisteten Strava-Einheiten abgeglichen; echte Werte (Dauer, Ø-Puls, Ø-Watt, km, hm) werden je Einheit angezeigt (grüne ▸-Zeile) und ersetzen das Soll in der Stundenbilanz. Alle Sportarten zählen, ungeplante Einheiten als Bonus. W1 mit Ist-Werten hinterlegt; ab W2 (15.6.) laufend."},
  {date:"14.06.2026",text:"v11: Krafttraining wird jetzt separat geführt (eigener Wochen- und Gesamtzähler 🏋, fließt nicht in die Rad-Stunden). Neuer Bereich „Fortschritt & Kurven“: FTP-Entwicklung (20-min- und 1-h-Power aus Strava, mit Ziel-Linie 226 W) und Rad-Wochenumfang (Plan vs. Ist). Datenpunkte werden beim Sonntags-Abgleich gepflegt."},
@@ -301,12 +311,21 @@ const RIDE_LOG=[
 const ACTUAL={
  "W1-0":{min:82,sport:"WeightTraining",note:"Krafttraining"},
  "W1-1":{min:85,sport:"WeightTraining",note:"Krafttraining"},
+ "W1-2":{min:71,sport:"WeightTraining",note:"Krafttraining (+ Lauf morgens)"},
  "W1-5":{min:123,hr:119,w:88,km:41,hm:207,sport:"Ride",note:"Z1–Z2, sauber ruhig"},
  "W1-6":{min:111,hr:159,w:166,km:42,hm:456,sport:"Ride",note:"Aubachtal-Trail statt Kraft, RPE ~7"}
 };
 // BONUS: gefahren, aber nicht im Plan (z. B. Lauf, Schwimmen, Extra-Ausfahrt). Zählt als Ist-Bonus.
 const BONUS=[
- {date:"10.06",sport:"Run",min:36,km:5.1,note:"Lauf Z2 — aerober Bonus"}
+ {wk:"W1",date:"10.06",sport:"Run",min:36,km:5.1,note:"Z2-Lauf morgens"}
+];
+
+
+// ————— Wochenanalysen (Soll-Ist, je Sonntag beim Abgleich) —————
+const REVIEWS=[
+ {wk:"W1", radH:"3,9 / 5 h", lang:true, z2:"sauber (Sa Ø119 bpm)", kraft:"3/3 (+ Lauf Bonus)",
+  fazit:"Starker Trainingsstart: 3× Kraft sitzt, Samstag mustergültig ruhig (Z1–Z2). Sonntag wurde aus dem Krafttag eine Trail-Tempofahrt (Ø159 bpm, Z3) — kein Problem, da Kraftreiz schon gesetzt. Power-Profil bestätigt: kräftige Beine (5s 678 W), aerobe Dauerleistung noch schwach (1h 94–147 W).",
+  ableitung:"W2 ruhig angehen, Z2 strikt nach Puls. Da Fortbildung Sa+So die lange Ausfahrt killt: keine Kompensation, W2 bewusst als leichtere Woche vor Retest (23.6.) nehmen."}
 ];
 
 // ————— State & Speicher —————
@@ -329,7 +348,7 @@ let notes=nstore.get();
 const today=new Date().toISOString().slice(0,10);
 const currentWeek=Object.entries(WEEK_DATES).find(([,r])=>today>=r[0]&&today<=r[1]);
 let openWeeks={}; if(currentWeek) openWeeks[currentWeek[0]]=true;
-let openDay=null, showZones=false, showLog=false, showRules=false, showStats=false;
+let openDay=null, showZones=false, showLog=false, showRules=false, showStats=false, showReview=false;
 
 
 // ————— Graph-Helfer (reine SVG, responsiv via viewBox) —————
@@ -473,7 +492,7 @@ function render(){
    <span class="wrow"><span class="wid">${w.id}</span><span class="wrange">${w.range}</span>
    <span class="pill${w.tag==="Volumen"?" volumen":""}">${w.tag}</span>
    ${cur?'<span class="badge-now">● Aktuell</span>':""}
-   <span class="wmeta num">🚴 ${ws_.rd}/${ws_.rt} · ~${fmtH(ws_.rh)} h${ws_.kt?` · 🏋 ${ws_.kd}/${ws_.kt}`:""} <span class="chev">${open?"▲":"▼"}</span></span></span>
+   <span class="wmeta num">🚴 ${ws_.rd}/${ws_.rt} · ~${fmtH(ws_.rh)} h${ws_.kt?` · 🏋 ${ws_.kd}/${ws_.kt}`:""}${BONUS.filter(b=>b.wk===w.id).length?` · <span style="color:var(--bonus)">+${BONUS.filter(b=>b.wk===w.id).length}</span>`:""} <span class="chev">${open?"▲":"▼"}</span></span></span>
    <span class="dayband">${band}</span>
    ${open?`<span class="wnote">${esc(w.note)}</span>`:""}</button>`;
   if(open){
@@ -498,12 +517,37 @@ function render(){
       </div></div>`;
     }
    });
+   // Bonus-/Zusatzeinheiten dieser Woche anzeigen
+   const wkBonus=BONUS.filter(b=>b.wk===w.id);
+   wkBonus.forEach(b=>{
+    html+=`<div class="day bonus-row">
+     <span class="stripe" style="background:var(--bonus)"></span>
+     <span class="dd" style="color:var(--bonus)">${b.date.split(".")[0]}.</span>
+     <span class="dtxt"><span class="dtitle" style="color:var(--bonus)">+ ${esc(b.note)}</span><span class="dsub ist" style="color:var(--bonus)">▸ ${b.min} min${b.km?` · ${b.km} km`:""} · Bonus (${b.sport})</span></span>
+     <span class="shift" style="background:var(--bonus)">Zusatz</span></div>`;
+   });
    html+=`</div>`;
   }
   html+=`</div>`;
  });
  html+=`<div class="card dashed"><button class="sechead" data-a="log" aria-expanded="${showLog}"><span class="t">Updates &amp; Änderungen</span><span class="s num">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</span><span class="chev">${showLog?"▲":"▼"}</span></button>`;
  if(showLog){CHANGELOG.forEach(c=>{html+=`<div class="row"><span class="k num">${c.date}</span><span>${esc(c.text)}</span></div>`})}
+ html+=`</div>`;
+ // Wochenanalyse
+ html+=`<div class="card dashed"><button class="sechead" data-a="review" aria-expanded="${showReview}"><span class="t">Wochenanalyse</span><span class="s">Soll-Ist je Woche · ${REVIEWS.length} ${REVIEWS.length===1?"Eintrag":"Einträge"}</span><span class="chev">${showReview?"▲":"▼"}</span></button>`;
+ if(showReview){
+  [...REVIEWS].reverse().forEach(r=>{
+   html+=`<div class="review">
+    <div class="rev-head"><span class="rev-wk">${r.wk}</span>
+     <span class="rev-kpi">🚴 ${r.radH}</span>
+     <span class="rev-kpi">${r.lang?"✓":"✗"} lange Ausfahrt</span>
+     <span class="rev-kpi">🏋 ${r.kraft}</span>
+     <span class="rev-kpi">Z2: ${esc(r.z2)}</span></div>
+    <div class="rev-txt"><strong>Fazit:</strong> ${esc(r.fazit)}</div>
+    <div class="rev-txt"><strong>→ Folgewoche:</strong> ${esc(r.ableitung)}</div>
+   </div>`;
+  });
+ }
  html+=`</div>`;
  html+=`<div class="card dashed"><button class="sechead" data-a="rules" aria-expanded="${showRules}"><span class="t">Regeln</span><span class="s">Dienstplan, Training, Material &amp; Bedienung</span><span class="chev">${showRules?"▲":"▼"}</span></button>`;
  if(showRules){RULES.forEach(r=>{html+=`<div class="row"><span class="k ${r.cat.toLowerCase()}">${r.cat}</span><span>${esc(r.text)}</span></div>`})}
@@ -526,6 +570,7 @@ document.getElementById("app").addEventListener("click",e=>{
  else if(a==="log")showLog=!showLog;
  else if(a==="rules")showRules=!showRules;
  else if(a==="stats")showStats=!showStats;
+ else if(a==="review")showReview=!showReview;
  else if(a==="reset"){if(confirm("Wirklich allen Fortschritt löschen?")){done={};store.set(done)}}
  render();
 });
