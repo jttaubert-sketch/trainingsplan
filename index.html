@@ -185,11 +185,11 @@ const WEEKS=[
  {id:"W1",range:"8.–14. Jun",tag:"Einstieg",note:"Auftaktwoche · Kraftblock + Wochenend-Ausfahrten",days:[
   {d:"Mo 8.",type:"kraft",title:"Kraft 1",sub:"",h:1,detail:Dkraft1},
   {d:"Di 9.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
-  {d:"Mi 10.",type:"ruhe",title:"Ruhetag (+ Bonus-Lauf)",sub:"Lauf 36′ / 5,1 km — siehe Bonus",h:0,detail:"Kein Radplan-Soll. Zusätzlich gelaufen: lockerer Dauerlauf 5,1 km in 36 min (zählt als aerober Bonus)."},
+  {d:"Mi 10.",type:"kraft",title:"Kraft 3",sub:"",h:1,detail:"Dritte Krafteinheit der Woche (71 min). Dazu morgens lockerer Z2-Lauf 5,1 km — unten als Bonus geführt."},
   {d:"Do 11.",type:"ruhe",title:"Ruhetag",sub:"",h:0},
   {d:"Fr 12.",type:"ruhe",title:"Ruhetag",sub:"Sommerfest",h:0},
   {d:"Sa 13.",type:"lang",title:"Lange Gravel 2,5–3 h",sub:"Z2",h:3,detail:"Erster langer Block der Phase — bewusst ruhig. "+Dz2+" "+DlangFuel},
-  {d:"So 14.",type:"lang",title:"Aubachtal-Trail (statt Kraft)",sub:"getauscht: harte Trailrunde",h:1.85,detail:"Geplant war Kraft 1 — tatsächlich Aubachtal-Trailrunde (Tempo/Z3, RPE ~7). Krafttag dafür auf Mo/Di vorgezogen, daher 3× Kraft in W1."}]},
+  {d:"So 14.",type:"lang",title:"Aubachtal-Trailrunde",sub:"harte Trailrunde (Tempo/Z3)",h:1.85,detail:"Aubachtal-Trailrunde, Tempo/Z3, RPE ~7. Kraftreiz der Woche war durch 3× Kraft (Mo/Di/Mi) bereits gesetzt."}]},
  {id:"W2",range:"15.–21. Jun",tag:"Basis",note:"2 Nachtdienste · Fortbildung Sa+So (lange Ausfahrt entfällt)",days:[
   {d:"Mo 15.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends nach BMW-Abholung ~17:30",h:1.25,detail:"15′ einrollen → Hauptteil Z2 mit eingestreuten Sprints → 10′ ausrollen. "+Dsprint},
   {d:"Di 16.",type:"z2",title:"Z2 75′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1.25,detail:Dz2+" Etwas länger als sonst, um den Wegfall der Sonntagsausfahrt teilweise aufzufangen. Spätestens 12 Uhr fertig, danach Beine hoch bis Dienstbeginn."},
@@ -268,6 +268,7 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"14.06.2026",text:"Korrektur W1: Bonus-Lauf vom 10.6. wird jetzt direkt dem Mi 10. (Kraft 3) zugeordnet statt als eigene Zeile mit falschem Datums-Label zu erscheinen. Zusatzeinheiten hängen ab sofort am jeweiligen Trainingstag."},
  {date:"14.06.2026",text:"v15: Wochenanalyse als festes Ritual ab W1 — neuer Reiter mit Soll-Ist je Woche (Radumfang, lange Ausfahrt, Z2-Qualität, Kraft, Fazit + Ableitung). Bonus-/Zusatzeinheiten farbcodiert (Teal) inkl. Anzeige unter der Woche und Zähler im Wochenkopf. Fehlendes 3. Krafttraining am Mi 10.6. ergänzt."},
  {date:"14.06.2026",text:"v13: W1 auf volle Woche Mo 8.–So 14.6. erweitert und mit echten Strava-Einheiten gefüllt: Mo+Di Kraft (82/85 min), Mi Lauf 36′ (5,1 km, Bonus), Sa Z2-Ausfahrt 123 min, So Aubachtal-Trail 111 min. Krafttag von So auf Mo/Di vorgezogen → 3 Krafteinheiten in W1."},
  {date:"14.06.2026",text:"v12: Neue Regel — Plan wird laufend mit den tatsächlich geleisteten Strava-Einheiten abgeglichen; echte Werte (Dauer, Ø-Puls, Ø-Watt, km, hm) werden je Einheit angezeigt (grüne ▸-Zeile) und ersetzen das Soll in der Stundenbilanz. Alle Sportarten zählen, ungeplante Einheiten als Bonus. W1 mit Ist-Werten hinterlegt; ab W2 (15.6.) laufend."},
@@ -311,13 +312,13 @@ const RIDE_LOG=[
 const ACTUAL={
  "W1-0":{min:82,sport:"WeightTraining",note:"Krafttraining"},
  "W1-1":{min:85,sport:"WeightTraining",note:"Krafttraining"},
- "W1-2":{min:71,sport:"WeightTraining",note:"Krafttraining (+ Lauf morgens)"},
+ "W1-2":{min:71,sport:"WeightTraining",note:"Krafttraining"},
  "W1-5":{min:123,hr:119,w:88,km:41,hm:207,sport:"Ride",note:"Z1–Z2, sauber ruhig"},
  "W1-6":{min:111,hr:159,w:166,km:42,hm:456,sport:"Ride",note:"Aubachtal-Trail statt Kraft, RPE ~7"}
 };
 // BONUS: gefahren, aber nicht im Plan (z. B. Lauf, Schwimmen, Extra-Ausfahrt). Zählt als Ist-Bonus.
 const BONUS=[
- {wk:"W1",date:"10.06",sport:"Run",min:36,km:5.1,note:"Z2-Lauf morgens"}
+ {wk:"W1",dayKey:"W1-2",date:"10.06",sport:"Run",min:36,km:5.1,note:"Z2-Lauf morgens"}
 ];
 
 
@@ -502,7 +503,7 @@ function render(){
     html+=`<div class="day${rest?" rest":""}" data-a="${d.detail?"day":""}" data-k="${key}">
      <span class="stripe" style="background:${TYPE[d.type].c}"></span>
      <span class="dd">${d.d}</span>
-     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${ACTUAL[key]?`<span class="dsub ist">▸ ${ACTUAL[key].min} min${ACTUAL[key].hr?` · ⌀${ACTUAL[key].hr} bpm`:""}${ACTUAL[key].w?` · ${ACTUAL[key].w} W`:""}${ACTUAL[key].km?` · ${ACTUAL[key].km} km`:""}${ACTUAL[key].hm?` · ${ACTUAL[key].hm} hm`:""}</span>`:""}${notes[key]?`<span class="dsub" style="color:${TYPE.kraft.c}">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}</span>
+     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${ACTUAL[key]?`<span class="dsub ist">▸ ${ACTUAL[key].min} min${ACTUAL[key].hr?` · ⌀${ACTUAL[key].hr} bpm`:""}${ACTUAL[key].w?` · ${ACTUAL[key].w} W`:""}${ACTUAL[key].km?` · ${ACTUAL[key].km} km`:""}${ACTUAL[key].hm?` · ${ACTUAL[key].hm} hm`:""}</span>`:""}${notes[key]?`<span class="dsub" style="color:${TYPE.kraft.c}">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}${BONUS.filter(b=>b.dayKey===key).map(b=>`<span class="dsub" style="color:var(--bonus);font-weight:600">+ ${esc(b.note)} · ${b.min} min${b.km?` · ${b.km} km`:""} (Bonus, ${b.sport})</span>`).join("")}</span>
      ${d.shift?`<span class="shift">${d.shift}</span>`:""}
      ${rest?"":`<button class="chk${chk?" on":""}" data-a="chk" data-k="${key}" aria-label="${esc(d.d)} abhaken">✓</button>`}</div>`;
     if(dOpen&&d.detail){
@@ -516,15 +517,6 @@ function render(){
        <div class="noterow"><input type="text" id="note-${key}" placeholder="Stichwort, z. B. Beine schwer nach Spätdienst" value="${esc(nv.n||"").replace(/"/g,"&quot;")}" maxlength="120"><button data-a="savenote" data-k="${key}">Speichern</button></div>
       </div></div>`;
     }
-   });
-   // Bonus-/Zusatzeinheiten dieser Woche anzeigen
-   const wkBonus=BONUS.filter(b=>b.wk===w.id);
-   wkBonus.forEach(b=>{
-    html+=`<div class="day bonus-row">
-     <span class="stripe" style="background:var(--bonus)"></span>
-     <span class="dd" style="color:var(--bonus)">${b.date.split(".")[0]}.</span>
-     <span class="dtxt"><span class="dtitle" style="color:var(--bonus)">+ ${esc(b.note)}</span><span class="dsub ist" style="color:var(--bonus)">▸ ${b.min} min${b.km?` · ${b.km} km`:""} · Bonus (${b.sport})</span></span>
-     <span class="shift" style="background:var(--bonus)">Zusatz</span></div>`;
    });
    html+=`</div>`;
   }
