@@ -137,7 +137,12 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
 .zones{display:grid;grid-template-columns:1fr auto auto;gap:5px 16px;font-size:12.5px;padding:11px 14px;border-top:1px solid var(--line)}
 .zones .h{font-family:var(--cond);font-weight:600;color:var(--ink-soft);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
 .chev{font-size:10px;color:var(--ink-soft);width:12px;text-align:center;flex-shrink:0}
-.foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:16px}
+.glabel{font-family:var(--cond);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink);margin-bottom:6px}
+  .glegend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:11px;color:var(--ink-soft);margin-bottom:8px}
+  .gdot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px;vertical-align:-1px}
+  .gnote{margin-left:auto;font-style:italic}
+  .gcap{font-size:11px;color:var(--ink-soft);line-height:1.5;margin-top:7px}
+  .foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:16px}
 .reset{margin-top:18px;font-size:12px;color:var(--ink-soft);background:transparent;border:1px solid var(--line);border-radius:var(--r-int);padding:9px 14px;min-height:38px}
 
 @media(min-width:640px){
@@ -172,14 +177,14 @@ const WEEKS=[
   {d:"Fr 12.",type:"ruhe",title:"Ruhetag",sub:"Sommerfest",h:0},
   {d:"Sa 13.",type:"lang",title:"Lange Gravel 2,5–3 h",sub:"Z2",h:3,detail:"Erster langer Block der Phase — bewusst ruhig. "+Dz2+" "+DlangFuel},
   {d:"So 14.",type:"kraft",title:"Kraft 1",sub:"opt. + 60′ Z2 locker",h:1.5,detail:Dkraft1}]},
- {id:"W2",range:"15.–21. Jun",tag:"Basis",note:"2 Nachtdienste · Fortbildung Fr/Sa",days:[
+ {id:"W2",range:"15.–21. Jun",tag:"Basis",note:"2 Nachtdienste · Fortbildung Sa+So (lange Ausfahrt entfällt)",days:[
   {d:"Mo 15.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends nach BMW-Abholung ~17:30",h:1.25,detail:"15′ einrollen → Hauptteil Z2 mit eingestreuten Sprints → 10′ ausrollen. "+Dsprint},
-  {d:"Di 16.",type:"z2",title:"Z2 60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dz2+" Spätestens 12 Uhr fertig, danach Beine hoch bis Dienstbeginn."},
+  {d:"Di 16.",type:"z2",title:"Z2 75′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1.25,detail:Dz2+" Etwas länger als sonst, um den Wegfall der Sonntagsausfahrt teilweise aufzufangen. Spätestens 12 Uhr fertig, danach Beine hoch bis Dienstbeginn."},
   {d:"Mi 17.",type:"ruhe",title:"Post-Call · Ruhe",sub:"ausnahmslos",h:0,detail:"2–3 h Schlaf in der Nacht — heute zählt nur Regeneration: nachschlafen, essen, Spaziergang ok."},
   {d:"Do 18.",type:"kraft",title:"Kraft 1 vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dkraft1},
-  {d:"Fr 19.",type:"ruhe",title:"Post-Call · Ruhe",sub:"Fortbildung ganztägig",h:0},
-  {d:"Sa 20.",type:"ruhe",title:"Ruhe",sub:"Fortbildung ganztägig",h:0},
-  {d:"So 21.",type:"lang",title:"Lange Gravel 3 h",sub:"Z2",h:3,detail:Dz2+" "+DlangFuel+" Nach 2 Ruhetagen sollten sich die Beine gut anfühlen — trotzdem nicht überpacen."}]},
+  {d:"Fr 19.",type:"ruhe",title:"Post-Call · Ruhe",sub:"Fortbildung",h:0},
+  {d:"Sa 20.",type:"ruhe",title:"Ruhe",sub:"Fortbildung ganztägig (Sa+So)",h:0},
+  {d:"So 21.",type:"ruhe",title:"Ruhe",sub:"Fortbildung ganztägig — lange Ausfahrt entfällt, nicht nachholen",h:0}]},
  {id:"W3",range:"22.–28. Jun",tag:"Entlastung",note:"Spätdienstwoche · Slot 9–11 Uhr · FTP-RETEST Di",days:[
   {d:"Mo 22.",type:"kraft",title:"Kraft 1 · 9–11 Uhr",sub:"",shift:"Spätdienst",h:1,detail:Dkraft1},
   {d:"Di 23.",type:"intens",title:"FTP-RETEST",sub:"vormittags, ausgeruht",shift:"Spätdienst",h:1,detail:Dretest},
@@ -248,6 +253,8 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"14.06.2026",text:"v11: Krafttraining wird jetzt separat geführt (eigener Wochen- und Gesamtzähler 🏋, fließt nicht in die Rad-Stunden). Neuer Bereich „Fortschritt & Kurven“: FTP-Entwicklung (20-min- und 1-h-Power aus Strava, mit Ziel-Linie 226 W) und Rad-Wochenumfang (Plan vs. Ist). Datenpunkte werden beim Sonntags-Abgleich gepflegt."},
+ {date:"14.06.2026",text:"W2 angepasst: Fortbildung jetzt Sa+So (statt Fr/Sa) → lange Gravel-Ausfahrt So 21.6. entfällt ersatzlos (Regel: streichen, nicht nachholen). Di 16.6. dafür auf Z2 75′ aufgewertet, um etwas Grundlagenumfang aufzufangen. Wochenumfang dadurch reduziert — passt als ruhigere Woche vor der Entlastungswoche W3."},
  {date:"14.06.2026",text:"Athletenprofil bestätigt: kräftige Beine, aerobe Baustelle. Power-Profil 14.6. — 5s 702 W / 1min 315 W (stark), aber 20min 199 W / 1h 147 W (Dauerleistung schwächer). Konsequenz: Z2 STRIKT nach Puls (128–158) steuern, nicht nach Watt; FTP-Retest konservativ ansetzen, 1-h-Wert ist die ehrliche Traka-Planungsgröße."},
  {date:"14.06.2026",text:"W1 erledigt: Sa 13.6. lange Z2-Ausfahrt 2:03 h (Puls Ø 119 — sauber ruhig) ✓. So 14.6. statt Kraft die Aubachtal-Trailrunde 1:51 h / 456 hm / Puls Ø 159 (Tempo/Z3, RPE ~7) — Krafttag getauscht, dafür diese Woche 3× Kraft absolviert. Kraftblock sitzt."},
  {date:"12.06.2026",text:"v8: Design-Überarbeitung — Dark Mode (folgt Systemeinstellung), Tagesband pro Woche im zugeklappten Zustand (Typ + Erledigt-Status aller 7 Tage auf einen Blick), größere Touch-Ziele, konsistentes Form- und Typo-System, sanfteres Bewegungsverhalten."},
@@ -264,6 +271,20 @@ const CHANGELOG=[
 ];
 
 const ZONES=[["Z1 Regeneration","< 125 W","< 128"],["Z2 Grundlage","125–170 W","128–158"],["Z3 Tempo","171–203 W","159–174"],["Sweet Spot","199–210 W","165–175"],["Z4 Schwelle","204–237 W","175–189"],["Z5 VO2max","238–271 W","190+"]];
+
+
+// ————— Fortschrittsdaten (aus Strava-Abgleich, manuell gepflegt) —————
+// FTP-Schätzung: bestes 20-min-Power x 0,95 bzw. realistischer 1-h-Wert. Datum + Wert.
+const FTP_LOG=[
+ {date:"06.06",label:"Sella Ronda",p20:197,p60:179},
+ {date:"14.06",label:"Aubachtal",p20:199,p60:147},
+ // Nächster Punkt: FTP-Retest 23.06.
+];
+// Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
+const RIDE_LOG=[
+ {wk:"W1",h:3.9},
+ // W2 ff. folgen
+];
 
 // ————— State & Speicher —————
 const KEY="jan-training-progress";
@@ -283,31 +304,88 @@ let notes=nstore.get();
 const today=new Date().toISOString().slice(0,10);
 const currentWeek=Object.entries(WEEK_DATES).find(([,r])=>today>=r[0]&&today<=r[1]);
 let openWeeks={}; if(currentWeek) openWeeks[currentWeek[0]]=true;
-let openDay=null, showZones=false, showLog=false, showRules=false;
+let openDay=null, showZones=false, showLog=false, showRules=false, showStats=false;
+
+
+// ————— Graph-Helfer (reine SVG, responsiv via viewBox) —————
+function lineGraph(series, opts){
+ // series: [{pts:[{x,y}], color, label}], opts:{w,h,ymin,ymax,xlabels,yunit,ylabels}
+ const W=opts.w||320,H=opts.h||150,pl=34,pr=10,pt=12,pb=24;
+ const iw=W-pl-pr, ih=H-pt-pb;
+ const ymin=opts.ymin,ymax=opts.ymax,n=opts.xlabels.length;
+ const xAt=i=>pl+(n<=1?iw/2:iw*i/(n-1));
+ const yAt=v=>pt+ih-(ih*(v-ymin)/(ymax-ymin||1));
+ let g=`<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" role="img">`;
+ // horizontale Gitterlinien + y-Beschriftung
+ (opts.ylabels||[ymin,(ymin+ymax)/2,ymax]).forEach(v=>{
+  const y=yAt(v);
+  g+=`<line x1="${pl}" y1="${y}" x2="${W-pr}" y2="${y}" stroke="var(--line)" stroke-width="1"/>`;
+  g+=`<text x="${pl-5}" y="${y+3}" text-anchor="end" font-size="9" fill="var(--ink-soft)">${Math.round(v)}</text>`;
+ });
+ // x-Beschriftung
+ opts.xlabels.forEach((lb,i)=>{g+=`<text x="${xAt(i)}" y="${H-7}" text-anchor="middle" font-size="9" fill="var(--ink-soft)">${lb}</text>`});
+ // Serien
+ series.forEach(s=>{
+  if(!s.pts.length)return;
+  const d=s.pts.map((p,i)=>`${i?"L":"M"}${xAt(p.x).toFixed(1)},${yAt(p.y).toFixed(1)}`).join(" ");
+  g+=`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  s.pts.forEach(p=>{g+=`<circle cx="${xAt(p.x).toFixed(1)}" cy="${yAt(p.y).toFixed(1)}" r="3.5" fill="${s.color}"/>`});
+ });
+ g+=`</svg>`;
+ return g;
+}
+function barGraph(bars, opts){
+ // bars:[{label,val,done,big}], opts:{w,h,ymax,yunit}
+ const W=opts.w||320,H=opts.h||150,pl=30,pr=8,pt=10,pb=22;
+ const iw=W-pl-pr, ih=H-pt-pb, n=bars.length, gap=5;
+ const bw=(iw-gap*(n-1))/n, ymax=opts.ymax;
+ const yAt=v=>pt+ih-(ih*v/(ymax||1));
+ let g=`<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" role="img">`;
+ [0,ymax/2,ymax].forEach(v=>{const y=yAt(v);g+=`<line x1="${pl}" y1="${y}" x2="${W-pr}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${pl-5}" y="${y+3}" text-anchor="end" font-size="9" fill="var(--ink-soft)">${Math.round(v)}</text>`});
+ bars.forEach((b,i)=>{
+  const x=pl+i*(bw+gap), y=yAt(b.val), bh=pt+ih-y;
+  g+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0,bh).toFixed(1)}" rx="2" fill="${b.big?"var(--accent)":"var(--z2)"}" opacity="${b.done?1:0.4}"/>`;
+  g+=`<text x="${(x+bw/2).toFixed(1)}" y="${H-7}" text-anchor="middle" font-size="9" fill="var(--ink-soft)">${b.label}</text>`;
+ });
+ g+=`</svg>`;
+ return g;
+}
 
 // ————— Render —————
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-function stats(){let t=0,dc=0,hp=0,hd=0;WEEKS.forEach(w=>w.days.forEach((d,i)=>{if(d.type==="ruhe")return;t++;hp+=d.h;if(done[w.id+"-"+i]){dc++;hd+=d.h}}));return{t,dc,hp,hd}}
+const RIDE=["z2","lang","intens"];
+function stats(){let t=0,dc=0,hp=0,hd=0,kt=0,kd=0;WEEKS.forEach(w=>w.days.forEach((d,i)=>{
+ const dn=done[w.id+"-"+i];
+ if(d.type==="kraft"){kt++;if(dn)kd++;return}
+ if(d.type==="ruhe")return;
+ t++;hp+=d.h;if(dn){dc++;hd+=d.h}
+}));return{t,dc,hp,hd,kt,kd}}
+// Wochen-Helfer: Rad-Stunden, Rad-erledigt, Kraft geplant/erledigt
+function weekStats(w){let rh=0,rd=0,rt=0,kt=0,kd=0;w.days.forEach((d,i)=>{
+ const dn=done[w.id+"-"+i];
+ if(d.type==="kraft"){kt++;if(dn)kd++;return}
+ if(d.type==="ruhe")return;
+ rt++;rh+=d.h;if(dn)rd++;
+});return{rh,rd,rt,kt,kd}}
 const fmtH=h=>h.toFixed(1).replace(".0","");
 
 function render(){
  const s=stats(), pct=s.t?Math.round(s.dc/s.t*100):0;
  const wTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/(7*864e5)));
- const maxH=Math.max(...WEEKS.map(w=>w.days.reduce((a,d)=>a+d.h,0)));
+ const maxRideH=Math.max(...WEEKS.map(w=>weekStats(w).rh));
  let html=`<header><div class="wrap">
   <div class="eyebrow">Phase 1 · Basis · ~${wTraka} Wochen bis The Traka</div>
   <div class="head-top">
    <h1>Mikroplan<br>12.06–02.08</h1>
    <div><div class="pct num">${pct}<small>%</small></div>
-   <div class="pct-sub num">${s.dc}/${s.t} Einheiten · ${s.hd.toFixed(1)} / ~${s.hp.toFixed(0)} h</div></div>
+   <div class="pct-sub num">🚴 ${s.dc}/${s.t} Rad · ${s.hd.toFixed(1)}/${s.hp.toFixed(0)} h &nbsp;·&nbsp; 🏋 ${s.kd}/${s.kt} Kraft</div></div>
   </div>
   <div class="bar"><div style="width:${pct}%"></div></div>
   <div class="stats"><span><strong>FTP:</strong> 226 W hinterlegt · real ~190–200 W → Z2 bis Retest 23.06. nach Puls (128–158)</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
   <div class="vol">`;
  WEEKS.forEach(w=>{
-  const h=w.days.reduce((a,d)=>a+d.h,0);
-  const hd=w.days.reduce((a,d,i)=>a+(d.type!=="ruhe"&&done[w.id+"-"+i]?d.h:0),0);
-  html+=`<div class="col"><div class="stack"><div class="b${w.tag==="Volumen"?" vol-big":""}" style="height:${h/maxH*100}%"><div class="fill" style="height:${h?hd/h*100:0}%"></div></div></div><span class="lbl num">${w.id}·${fmtH(h)}h</span></div>`;
+  const wv=weekStats(w);
+  html+=`<div class="col"><div class="stack"><div class="b${w.tag==="Volumen"?" vol-big":""}" style="height:${wv.rh/maxRideH*100}%"><div class="fill" style="height:${wv.rh?wv.rd/wv.rt*100:0}%"></div></div></div><span class="lbl num">${w.id}·${fmtH(wv.rh)}h</span></div>`;
  });
  html+=`</div></div></header><main><div class="legend">`;
  Object.values(TYPE).forEach(m=>{html+=`<span><span class="sw" style="background:${m.c}"></span>${m.label}</span>`});
@@ -317,10 +395,41 @@ function render(){
   ZONES.forEach(z=>{html+=`<span>${z[0]}</span><span>${z[1]}</span><span>${z[2]}</span>`});
   html+=`</div></div>`;
  }
+ // ——— Fortschritt / Graphen ———
+ {
+  const ftpPts20=FTP_LOG.map((f,i)=>({x:i,y:f.p20}));
+  const ftpPts60=FTP_LOG.map((f,i)=>({x:i,y:f.p60}));
+  const allFtp=FTP_LOG.flatMap(f=>[f.p20,f.p60]);
+  const fmin=Math.min(...allFtp,140)-10, fmax=Math.max(...allFtp,210)+10;
+  const xlabels=FTP_LOG.map(f=>f.date);
+  // Rad-Stunden: Ist (RIDE_LOG) vs Plan-Soll pro Woche
+  const planH=WEEKS.map(w=>weekStats(w).rh);
+  const maxBar=Math.max(...planH,1)*1.1;
+  const bars=WEEKS.map((w,i)=>{
+   const ist=RIDE_LOG.find(r=>r.wk===w.id);
+   return {label:w.id,val: ist?ist.h:planH[i], done: !!ist, big:w.tag==="Volumen"};
+  });
+  html+=`<div class="card"><button class="sechead" data-a="stats" aria-expanded="${showStats}"><span class="t">Fortschritt &amp; Kurven</span><span class="s">FTP-Entwicklung · Wochenumfang</span><span class="chev">${showStats?"▲":"▼"}</span></button>`;
+  if(showStats){
+   html+=`<div style="padding:6px 14px 16px">
+    <div class="glabel">FTP-Schätzung aus Strava (W)</div>
+    <div class="glegend"><span><span class="gdot" style="background:var(--intens)"></span>20-min-Power</span><span><span class="gdot" style="background:var(--z2)"></span>1-h-Power (Traka-relevant)</span><span class="gnote">Ziel-Linie 226 W hinterlegt</span></div>
+    ${lineGraph([
+      {pts:ftpPts20,color:"var(--intens)"},
+      {pts:ftpPts60,color:"var(--z2)"}
+    ],{w:340,h:160,ymin:fmin,ymax:fmax,xlabels,ylabels:[...new Set([fmin,(fmin+fmax)/2,fmax,226])].filter(v=>v>=fmin&&v<=fmax)})}
+    <div class="gcap">Steigende 1-h-Power = die aerobe Baustelle schließt sich. Genau das soll bis Traka passieren.</div>
+
+    <div class="glabel" style="margin-top:18px">Rad-Wochenumfang (h)</div>
+    <div class="glegend"><span><span class="gdot" style="background:var(--z2)"></span>geplant</span><span><span class="gdot" style="background:var(--z2);opacity:1"></span>voll = Ist aus Strava</span><span><span class="gdot" style="background:var(--accent)"></span>Volumenwoche</span></div>
+    ${barGraph(bars,{w:340,h:150,ymax:maxBar})}
+    <div class="gcap">Kraft wird separat geführt (Zähler je Woche oben) und fließt nicht in die Rad-Stunden ein.</div>
+   </div>`;
+  }
+  html+=`</div>`;
+ }
  WEEKS.forEach(w=>{
-  const wd=w.days.filter(d=>d.type!=="ruhe");
-  const dc=w.days.reduce((a,d,i)=>a+(d.type!=="ruhe"&&done[w.id+"-"+i]?1:0),0);
-  const h=w.days.reduce((a,d)=>a+d.h,0);
+  const ws_=weekStats(w);
   const open=!!openWeeks[w.id];
   const [ws,we]=WEEK_DATES[w.id];
   const cur=today>=ws&&today<=we;
@@ -334,7 +443,7 @@ function render(){
    <span class="wrow"><span class="wid">${w.id}</span><span class="wrange">${w.range}</span>
    <span class="pill${w.tag==="Volumen"?" volumen":""}">${w.tag}</span>
    ${cur?'<span class="badge-now">● Aktuell</span>':""}
-   <span class="wmeta num">${dc}/${wd.length} · ~${fmtH(h)} h <span class="chev">${open?"▲":"▼"}</span></span></span>
+   <span class="wmeta num">🚴 ${ws_.rd}/${ws_.rt} · ~${fmtH(ws_.rh)} h${ws_.kt?` · 🏋 ${ws_.kd}/${ws_.kt}`:""} <span class="chev">${open?"▲":"▼"}</span></span></span>
    <span class="dayband">${band}</span>
    ${open?`<span class="wnote">${esc(w.note)}</span>`:""}</button>`;
   if(open){
@@ -386,6 +495,7 @@ document.getElementById("app").addEventListener("click",e=>{
  else if(a==="zones")showZones=!showZones;
  else if(a==="log")showLog=!showLog;
  else if(a==="rules")showRules=!showRules;
+ else if(a==="stats")showStats=!showStats;
  else if(a==="reset"){if(confirm("Wirklich allen Fortschritt löschen?")){done={};store.set(done)}}
  render();
 });
