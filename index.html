@@ -108,7 +108,8 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
 .dtxt{flex:1;min-width:0}
 .dtitle{font-weight:600;font-size:13.5px}
 .dtitle.done{font-weight:400;text-decoration:line-through;color:var(--ink-soft)}
-.dsub{font-size:11.5px;color:var(--ink-soft);display:block;margin-top:1px}
+.dsub.ist{color:var(--done);font-weight:600}
+  .dsub{font-size:11.5px;color:var(--ink-soft);display:block;margin-top:1px}
 .shift{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.04em;color:#fff;background:var(--dienst);padding:3px 8px;border-radius:999px;white-space:nowrap;flex-shrink:0}
 @media (prefers-color-scheme: dark){.shift{color:#16100C}}
 .chk{width:30px;height:30px;border-radius:var(--r-int);border:2px solid var(--line);background:transparent;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;color:transparent}
@@ -170,13 +171,17 @@ const Dretest="Protokoll: 20′ einrollen mit 3×1′ zügig → 5′ locker →
 
 const TYPE={lang:{label:"Lange Gravel",c:"var(--lang)"},z2:{label:"Z2 Grundlage",c:"var(--z2)"},kraft:{label:"Kraft",c:"var(--kraft)"},intens:{label:"Test / Intensität",c:"var(--intens)"},ruhe:{label:"Ruhe",c:"var(--ruhe)"}};
 
-const WEEK_DATES={W1:["2026-06-12","2026-06-14"],W2:["2026-06-15","2026-06-21"],W3:["2026-06-22","2026-06-28"],W4:["2026-06-29","2026-07-05"],W5:["2026-07-06","2026-07-12"],W6:["2026-07-13","2026-07-19"],W7:["2026-07-20","2026-07-26"],W8:["2026-07-27","2026-08-02"]};
+const WEEK_DATES={W1:["2026-06-08","2026-06-14"],W2:["2026-06-15","2026-06-21"],W3:["2026-06-22","2026-06-28"],W4:["2026-06-29","2026-07-05"],W5:["2026-07-06","2026-07-12"],W6:["2026-07-13","2026-07-19"],W7:["2026-07-20","2026-07-26"],W8:["2026-07-27","2026-08-02"]};
 
 const WEEKS=[
- {id:"W1",range:"12.–14. Jun",tag:"Einstieg",note:"Kurzwoche · Sommerfest Fr",days:[
+ {id:"W1",range:"8.–14. Jun",tag:"Einstieg",note:"Auftaktwoche · Kraftblock + Wochenend-Ausfahrten",days:[
+  {d:"Mo 8.",type:"kraft",title:"Kraft 1",sub:"",h:1,detail:Dkraft1},
+  {d:"Di 9.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
+  {d:"Mi 10.",type:"ruhe",title:"Ruhetag (+ Bonus-Lauf)",sub:"Lauf 36′ / 5,1 km — siehe Bonus",h:0,detail:"Kein Radplan-Soll. Zusätzlich gelaufen: lockerer Dauerlauf 5,1 km in 36 min (zählt als aerober Bonus)."},
+  {d:"Do 11.",type:"ruhe",title:"Ruhetag",sub:"",h:0},
   {d:"Fr 12.",type:"ruhe",title:"Ruhetag",sub:"Sommerfest",h:0},
   {d:"Sa 13.",type:"lang",title:"Lange Gravel 2,5–3 h",sub:"Z2",h:3,detail:"Erster langer Block der Phase — bewusst ruhig. "+Dz2+" "+DlangFuel},
-  {d:"So 14.",type:"kraft",title:"Kraft 1",sub:"opt. + 60′ Z2 locker",h:1.5,detail:Dkraft1}]},
+  {d:"So 14.",type:"lang",title:"Aubachtal-Trail (statt Kraft)",sub:"getauscht: harte Trailrunde",h:1.85,detail:"Geplant war Kraft 1 — tatsächlich Aubachtal-Trailrunde (Tempo/Z3, RPE ~7). Krafttag dafür auf Mo/Di vorgezogen, daher 3× Kraft in W1."}]},
  {id:"W2",range:"15.–21. Jun",tag:"Basis",note:"2 Nachtdienste · Fortbildung Sa+So (lange Ausfahrt entfällt)",days:[
   {d:"Mo 15.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends nach BMW-Abholung ~17:30",h:1.25,detail:"15′ einrollen → Hauptteil Z2 mit eingestreuten Sprints → 10′ ausrollen. "+Dsprint},
   {d:"Di 16.",type:"z2",title:"Z2 75′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1.25,detail:Dz2+" Etwas länger als sonst, um den Wegfall der Sonntagsausfahrt teilweise aufzufangen. Spätestens 12 Uhr fertig, danach Beine hoch bis Dienstbeginn."},
@@ -249,10 +254,13 @@ const RULES=[
  {cat:"Training",text:"Lange Ausfahrten: 60–80 g KH/h ab Stunde 1, 500–750 ml/h trinken. Kette frisch gewachst vor jedem Rennen."},
  {cat:"Material",text:"Spacer ab sofort schrittweise raus: 5 mm alle 2–3 Wochen, Nacken/Rücken beobachten — gratis Aero-Gewinn Nr. 1."},
  {cat:"Material",text:"50-mm-Frontreifen am 18.7. testen, Tire Inserts + Race-Sealant bis 25.7. montieren (Race-Setup-Fahrt). Kette frisch gewachst vor jedem Rennen."},
+ {cat:"Abgleich",text:"Jeden Sonntag (oder nach Bedarf) Plan-Soll mit den tatsächlich geleisteten Strava-Einheiten abgleichen. Echte Werte und Zeiten (Dauer, Ø-Puls, Ø-Watt, km, hm) werden in die Einheit übernommen und ersetzen das Soll. ALLE Sportarten zählen (Rad, Kraft, Lauf, Schwimmen, Wandern); ungeplante Einheiten zählen als Bonus auf die Ist-Stunden."},
  {cat:"Bedienung",text:"Woche antippen = auf-/zuklappen · Tag antippen = Einheits-Details · Häkchen und Notizen werden lokal auf dem Gerät gespeichert."}
 ];
 
 const CHANGELOG=[
+ {date:"14.06.2026",text:"v13: W1 auf volle Woche Mo 8.–So 14.6. erweitert und mit echten Strava-Einheiten gefüllt: Mo+Di Kraft (82/85 min), Mi Lauf 36′ (5,1 km, Bonus), Sa Z2-Ausfahrt 123 min, So Aubachtal-Trail 111 min. Krafttag von So auf Mo/Di vorgezogen → 3 Krafteinheiten in W1."},
+ {date:"14.06.2026",text:"v12: Neue Regel — Plan wird laufend mit den tatsächlich geleisteten Strava-Einheiten abgeglichen; echte Werte (Dauer, Ø-Puls, Ø-Watt, km, hm) werden je Einheit angezeigt (grüne ▸-Zeile) und ersetzen das Soll in der Stundenbilanz. Alle Sportarten zählen, ungeplante Einheiten als Bonus. W1 mit Ist-Werten hinterlegt; ab W2 (15.6.) laufend."},
  {date:"14.06.2026",text:"v11: Krafttraining wird jetzt separat geführt (eigener Wochen- und Gesamtzähler 🏋, fließt nicht in die Rad-Stunden). Neuer Bereich „Fortschritt & Kurven“: FTP-Entwicklung (20-min- und 1-h-Power aus Strava, mit Ziel-Linie 226 W) und Rad-Wochenumfang (Plan vs. Ist). Datenpunkte werden beim Sonntags-Abgleich gepflegt."},
  {date:"14.06.2026",text:"W2 angepasst: Fortbildung jetzt Sa+So (statt Fr/Sa) → lange Gravel-Ausfahrt So 21.6. entfällt ersatzlos (Regel: streichen, nicht nachholen). Di 16.6. dafür auf Z2 75′ aufgewertet, um etwas Grundlagenumfang aufzufangen. Wochenumfang dadurch reduziert — passt als ruhigere Woche vor der Entlastungswoche W3."},
  {date:"14.06.2026",text:"Athletenprofil bestätigt: kräftige Beine, aerobe Baustelle. Power-Profil 14.6. — 5s 702 W / 1min 315 W (stark), aber 20min 199 W / 1h 147 W (Dauerleistung schwächer). Konsequenz: Z2 STRIKT nach Puls (128–158) steuern, nicht nach Watt; FTP-Retest konservativ ansetzen, 1-h-Wert ist die ehrliche Traka-Planungsgröße."},
@@ -286,6 +294,21 @@ const RIDE_LOG=[
  // W2 ff. folgen
 ];
 
+
+// ————— Geleistete Einheiten (aus Strava, beim Abgleich gepflegt) —————
+// ACTUAL: Ist-Werte zu geplanten Einheiten. Key = "W#-index" (gleich wie done).
+//   {min:Minuten, hr:ØPuls, w:ØWatt, km:Distanz, hm:Höhenmeter, sport:"Ride|WeightTraining|Run|..."}
+const ACTUAL={
+ "W1-0":{min:82,sport:"WeightTraining",note:"Krafttraining"},
+ "W1-1":{min:85,sport:"WeightTraining",note:"Krafttraining"},
+ "W1-5":{min:123,hr:119,w:88,km:41,hm:207,sport:"Ride",note:"Z1–Z2, sauber ruhig"},
+ "W1-6":{min:111,hr:159,w:166,km:42,hm:456,sport:"Ride",note:"Aubachtal-Trail statt Kraft, RPE ~7"}
+};
+// BONUS: gefahren, aber nicht im Plan (z. B. Lauf, Schwimmen, Extra-Ausfahrt). Zählt als Ist-Bonus.
+const BONUS=[
+ {date:"10.06",sport:"Run",min:36,km:5.1,note:"Lauf Z2 — aerober Bonus"}
+];
+
 // ————— State & Speicher —————
 const KEY="jan-training-progress";
 let mem={};
@@ -294,6 +317,8 @@ const store={
  set(v){mem=v;try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}
 };
 let done=store.get();
+// Einheit gilt als erledigt, wenn manuell abgehakt ODER mit echten Strava-Ist-Daten belegt.
+function isDone(key){return !!done[key] || !!(typeof ACTUAL!=="undefined" && ACTUAL[key]);}
 const NKEY="jan-training-notes";
 let notesMem={};
 const nstore={
@@ -355,18 +380,22 @@ function barGraph(bars, opts){
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 const RIDE=["z2","lang","intens"];
 function stats(){let t=0,dc=0,hp=0,hd=0,kt=0,kd=0;WEEKS.forEach(w=>w.days.forEach((d,i)=>{
- const dn=done[w.id+"-"+i];
+ const dn=isDone(w.id+"-"+i);
  if(d.type==="kraft"){kt++;if(dn)kd++;return}
  if(d.type==="ruhe")return;
  t++;hp+=d.h;if(dn){dc++;hd+=d.h}
 }));return{t,dc,hp,hd,kt,kd}}
 // Wochen-Helfer: Rad-Stunden, Rad-erledigt, Kraft geplant/erledigt
-function weekStats(w){let rh=0,rd=0,rt=0,kt=0,kd=0;w.days.forEach((d,i)=>{
- const dn=done[w.id+"-"+i];
+function weekStats(w){let rh=0,rd=0,rt=0,kt=0,kd=0,rhIst=0,bonusH=0;w.days.forEach((d,i)=>{
+ const key=w.id+"-"+i,act=ACTUAL[key],dn=isDone(key);
  if(d.type==="kraft"){kt++;if(dn)kd++;return}
  if(d.type==="ruhe")return;
- rt++;rh+=d.h;if(dn)rd++;
-});return{rh,rd,rt,kt,kd}}
+ rt++;rh+=d.h;if(dn){rd++;rhIst+=act?act.min/60:d.h}
+});
+ // Bonus-Einheiten dieser Woche dazurechnen
+ const [ws_,we_]=WEEK_DATES[w.id];
+ BONUS.forEach(b=>{const bd="2026-"+b.date.split(".").reverse().join("-");if(bd>=ws_&&bd<=we_)bonusH+=b.min/60});
+ return{rh,rd,rt,kt,kd,rhIst:rhIst+bonusH,bonusH}}
 const fmtH=h=>h.toFixed(1).replace(".0","");
 
 function render(){
@@ -406,8 +435,9 @@ function render(){
   const planH=WEEKS.map(w=>weekStats(w).rh);
   const maxBar=Math.max(...planH,1)*1.1;
   const bars=WEEKS.map((w,i)=>{
-   const ist=RIDE_LOG.find(r=>r.wk===w.id);
-   return {label:w.id,val: ist?ist.h:planH[i], done: !!ist, big:w.tag==="Volumen"};
+   const wv=weekStats(w);
+   const hasIst=wv.rhIst>0 && wv.rd>0;
+   return {label:w.id,val: hasIst?wv.rhIst:planH[i], done: hasIst, big:w.tag==="Volumen"};
   });
   html+=`<div class="card"><button class="sechead" data-a="stats" aria-expanded="${showStats}"><span class="t">Fortschritt &amp; Kurven</span><span class="s">FTP-Entwicklung · Wochenumfang</span><span class="chev">${showStats?"▲":"▼"}</span></button>`;
   if(showStats){
@@ -436,7 +466,7 @@ function render(){
   // Tagesband: 7 Segmente, Farbe = Typ, voll = erledigt, blass = offen, fast unsichtbar = Ruhe
   let band="";
   w.days.forEach((d,i)=>{
-   const cls=d.type==="ruhe"?"rst":(done[w.id+"-"+i]?"don":"");
+   const cls=d.type==="ruhe"?"rst":(isDone(w.id+"-"+i)?"don":"");
    band+=`<span class="${cls}" style="--seg:${TYPE[d.type].c}"></span>`;
   });
   html+=`<div class="card${cur?" current":""}"><button class="whead" data-a="week" data-w="${w.id}" aria-expanded="${open}">
@@ -449,11 +479,11 @@ function render(){
   if(open){
    html+=`<div class="days">`;
    w.days.forEach((d,i)=>{
-    const key=w.id+"-"+i, rest=d.type==="ruhe", chk=!!done[key], dOpen=openDay===key;
+    const key=w.id+"-"+i, rest=d.type==="ruhe", chk=isDone(key), dOpen=openDay===key;
     html+=`<div class="day${rest?" rest":""}" data-a="${d.detail?"day":""}" data-k="${key}">
      <span class="stripe" style="background:${TYPE[d.type].c}"></span>
      <span class="dd">${d.d}</span>
-     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${notes[key]?`<span class="dsub" style="color:${TYPE.kraft.c}">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}</span>
+     <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${ACTUAL[key]?`<span class="dsub ist">▸ ${ACTUAL[key].min} min${ACTUAL[key].hr?` · ⌀${ACTUAL[key].hr} bpm`:""}${ACTUAL[key].w?` · ${ACTUAL[key].w} W`:""}${ACTUAL[key].km?` · ${ACTUAL[key].km} km`:""}${ACTUAL[key].hm?` · ${ACTUAL[key].hm} hm`:""}</span>`:""}${notes[key]?`<span class="dsub" style="color:${TYPE.kraft.c}">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}</span>
      ${d.shift?`<span class="shift">${d.shift}</span>`:""}
      ${rest?"":`<button class="chk${chk?" on":""}" data-a="chk" data-k="${key}" aria-label="${esc(d.d)} abhaken">✓</button>`}</div>`;
     if(dOpen&&d.detail){
