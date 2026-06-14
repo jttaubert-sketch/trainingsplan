@@ -145,6 +145,12 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
   .gdot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px;vertical-align:-1px}
   .gnote{margin-left:auto;font-style:italic}
   .gcap{font-size:11px;color:var(--ink-soft);line-height:1.5;margin-top:7px}
+  .wk-review{padding:11px 14px;background:var(--panel2);border-top:2px solid var(--accent)}
+  .wk-review-head{font-family:var(--cond);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:7px}
+  .wk-review-kpis{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .wk-review-kpis span{font-size:11px;color:var(--ink-soft);background:var(--panel);padding:3px 8px;border-radius:999px;white-space:nowrap}
+  .wk-review-txt{font-size:12px;line-height:1.5;color:var(--ink);margin-top:4px}
+  .wk-review-txt strong{color:var(--ink-soft);font-weight:600}
   .review{padding:11px 14px;border-top:1px solid var(--line)}
   .rev-head{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:7px}
   .rev-wk{font-family:var(--cond);font-weight:700;font-size:17px;color:var(--accent)}
@@ -268,6 +274,7 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"14.06.2026",text:"Wochenanalyse W1 auf korrekte Ist-Daten aktualisiert (3,9 h Rad, 3/3 Kraft, Lauf-Bonus, gesamt ~8,5 h). Zusätzlich erscheint die Analyse jetzt auch kompakt am Ende jeder Woche (orange abgesetzt unter den Tagen), nicht nur im Sammel-Reiter."},
  {date:"14.06.2026",text:"Korrektur W1: Bonus-Lauf vom 10.6. wird jetzt direkt dem Mi 10. (Kraft 3) zugeordnet statt als eigene Zeile mit falschem Datums-Label zu erscheinen. Zusatzeinheiten hängen ab sofort am jeweiligen Trainingstag."},
  {date:"14.06.2026",text:"v15: Wochenanalyse als festes Ritual ab W1 — neuer Reiter mit Soll-Ist je Woche (Radumfang, lange Ausfahrt, Z2-Qualität, Kraft, Fazit + Ableitung). Bonus-/Zusatzeinheiten farbcodiert (Teal) inkl. Anzeige unter der Woche und Zähler im Wochenkopf. Fehlendes 3. Krafttraining am Mi 10.6. ergänzt."},
  {date:"14.06.2026",text:"v13: W1 auf volle Woche Mo 8.–So 14.6. erweitert und mit echten Strava-Einheiten gefüllt: Mo+Di Kraft (82/85 min), Mi Lauf 36′ (5,1 km, Bonus), Sa Z2-Ausfahrt 123 min, So Aubachtal-Trail 111 min. Krafttag von So auf Mo/Di vorgezogen → 3 Krafteinheiten in W1."},
@@ -324,9 +331,9 @@ const BONUS=[
 
 // ————— Wochenanalysen (Soll-Ist, je Sonntag beim Abgleich) —————
 const REVIEWS=[
- {wk:"W1", radH:"3,9 / 5 h", lang:true, z2:"sauber (Sa Ø119 bpm)", kraft:"3/3 (+ Lauf Bonus)",
-  fazit:"Starker Trainingsstart: 3× Kraft sitzt, Samstag mustergültig ruhig (Z1–Z2). Sonntag wurde aus dem Krafttag eine Trail-Tempofahrt (Ø159 bpm, Z3) — kein Problem, da Kraftreiz schon gesetzt. Power-Profil bestätigt: kräftige Beine (5s 678 W), aerobe Dauerleistung noch schwach (1h 94–147 W).",
-  ableitung:"W2 ruhig angehen, Z2 strikt nach Puls. Da Fortbildung Sa+So die lange Ausfahrt killt: keine Kompensation, W2 bewusst als leichtere Woche vor Retest (23.6.) nehmen."}
+ {wk:"W1", radH:"3,9 h (Soll ~3 h)", lang:true, z2:"sauber (Sa Ø119 bpm, max 158)", kraft:"3/3", bonus:"Lauf 36′ / 5,1 km",
+  fazit:"Sehr solider Auftakt, mehr Volumen als geplant: 3× Kraft (82/85/71 min) + Lauf-Bonus + 2 Radtage, gesamt ~8,5 h. Samstag mustergültig ruhig (Z1–Z2, Ø119 bpm). Sonntag Aubachtal-Trail bewusst härter (Ø159 bpm, Z3, RPE ~7). Power-Profil bestätigt das Bild: kräftige Beine (5s 678 W), aerobe Dauerleistung noch die Baustelle (1h 94–147 W).",
+  ableitung:"W2 ruhig angehen, Z2 strikt nach Puls (128–158). Fortbildung Sa+So streicht die lange Ausfahrt — bewusst keine Kompensation, W2 als leichtere Woche vor dem FTP-Retest (Di 23.6.) nehmen."}
 ];
 
 // ————— State & Speicher —————
@@ -518,6 +525,16 @@ function render(){
       </div></div>`;
     }
    });
+   // Kompakte Wochenanalyse am Ende der Woche (falls vorhanden)
+   const rev=REVIEWS.find(r=>r.wk===w.id);
+   if(rev){
+    html+=`<div class="wk-review">
+     <div class="wk-review-head">Wochenanalyse ${rev.wk}</div>
+     <div class="wk-review-kpis"><span>🚴 ${esc(rev.radH)}</span><span>${rev.lang?"✓":"✗"} lange Ausfahrt</span><span>🏋 ${esc(rev.kraft)}</span>${rev.bonus?`<span style="color:var(--bonus)">+ ${esc(rev.bonus)}</span>`:""}<span>Z2: ${esc(rev.z2)}</span></div>
+     <div class="wk-review-txt"><strong>Fazit:</strong> ${esc(rev.fazit)}</div>
+     <div class="wk-review-txt"><strong>→ Folgewoche:</strong> ${esc(rev.ableitung)}</div>
+    </div>`;
+   }
    html+=`</div>`;
   }
   html+=`</div>`;
@@ -534,6 +551,7 @@ function render(){
      <span class="rev-kpi">🚴 ${r.radH}</span>
      <span class="rev-kpi">${r.lang?"✓":"✗"} lange Ausfahrt</span>
      <span class="rev-kpi">🏋 ${r.kraft}</span>
+     ${r.bonus?`<span class="rev-kpi" style="color:var(--bonus)">+ ${esc(r.bonus)}</span>`:""}
      <span class="rev-kpi">Z2: ${esc(r.z2)}</span></div>
     <div class="rev-txt"><strong>Fazit:</strong> ${esc(r.fazit)}</div>
     <div class="rev-txt"><strong>→ Folgewoche:</strong> ${esc(r.ableitung)}</div>

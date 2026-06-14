@@ -1,5 +1,5 @@
 // Service Worker — Offline-Cache für die Trainings-App
-const CACHE = "jan-training-v16";
+const CACHE = "jan-training-v17";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
