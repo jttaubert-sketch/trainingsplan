@@ -78,7 +78,9 @@ h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,9vw,46px);margin
 /* ——— Inhalt ——— */
 main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bottom) + 44px)}
 .legend{display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--ink-soft);padding:2px 2px 12px}
-.legend .sw{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:-1px}
+.legend .leg-title{font-weight:600;color:var(--ink);margin-right:2px}
+  .legend .leg-item{display:inline-flex;align-items:center;white-space:nowrap;gap:5px}
+  .legend .leg-item .sw{width:11px;height:11px;min-width:11px;border-radius:3px;display:block;flex:0 0 11px;margin:0}
 .legend button{margin-left:auto;font-size:12px;font-weight:600;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-int);padding:8px 12px;min-height:36px}
 
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-card);margin-bottom:10px;overflow:hidden}
@@ -95,6 +97,11 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
 .badge-now{font-family:var(--cond);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
 .wmeta{font-size:12px;color:var(--ink-soft);margin-left:auto;white-space:nowrap}
 .dayband{display:flex;gap:3px;margin-top:9px;height:7px}
+  .wk-bar{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .wk-bar-track{flex:1;height:5px;background:var(--line);border-radius:99px;display:flex;overflow:hidden}
+  .wk-bar-soll{height:5px;background:var(--done);border-radius:99px}
+  .wk-bar-extra{height:5px;background:var(--accent)}
+  .wk-bar-lbl{font-size:10.5px;color:var(--ink-soft);white-space:nowrap;flex-shrink:0}
 .dayband span{flex:1;border-radius:2px;background:var(--seg);opacity:.32}
 .dayband span.don{opacity:1}
 .dayband span.rst{opacity:.15}
@@ -194,11 +201,11 @@ const WEEKS=[
   {d:"Mi 10.",type:"kraft",title:"Kraft 3",sub:"",h:1,detail:"Dritte Krafteinheit der Woche (71 min). Dazu morgens lockerer Z2-Lauf 5,1 km — unten als Bonus geführt."},
   {d:"Do 11.",type:"ruhe",title:"Ruhetag",sub:"",h:0},
   {d:"Fr 12.",type:"ruhe",title:"Ruhetag",sub:"Sommerfest",h:0},
-  {d:"Sa 13.",type:"lang",title:"Lange Gravel 2,5–3 h",sub:"Z2",h:3,detail:"Erster langer Block der Phase — bewusst ruhig. "+Dz2+" "+DlangFuel},
-  {d:"So 14.",type:"lang",title:"Aubachtal-Trailrunde",sub:"harte Trailrunde (Tempo/Z3)",h:1.85,detail:"Aubachtal-Trailrunde, Tempo/Z3, RPE ~7. Kraftreiz der Woche war durch 3× Kraft (Mo/Di/Mi) bereits gesetzt."}]},
+  {d:"Sa 13.",type:"lang",title:"Lange Gravel 2,5–3 h",sub:"Z2 · Soll 2,5 h",h:2.5,detail:"Erster langer Block der Phase — bewusst ruhig. "+Dz2+" "+DlangFuel},
+  {d:"So 14.",type:"lang",title:"Aubachtal-Trailrunde",sub:"optional · Trailrunde (Tempo/Z3)",h:1.85,opt:true,detail:"Optionale Zusatzausfahrt (zählt nicht ins Soll, aber ins Ist). Aubachtal-Trailrunde, Tempo/Z3, RPE ~7. Kraftreiz war durch 3× Kraft (Mo/Di/Mi) bereits gesetzt."}]},
  {id:"W2",range:"15.–21. Jun",tag:"Basis",note:"2 Nachtdienste · Fortbildung Sa+So (lange Ausfahrt entfällt)",days:[
   {d:"Mo 15.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends nach BMW-Abholung ~17:30",h:1.25,detail:"15′ einrollen → Hauptteil Z2 mit eingestreuten Sprints → 10′ ausrollen. "+Dsprint},
-  {d:"Di 16.",type:"z2",title:"Z2 75′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1.25,detail:Dz2+" Etwas länger als sonst, um den Wegfall der Sonntagsausfahrt teilweise aufzufangen. Spätestens 12 Uhr fertig, danach Beine hoch bis Dienstbeginn."},
+  {d:"Di 16.",type:"z2",title:"Z2 90–120′ vormittags",sub:"Mitteldistanz · Soll 90′",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: Die zweite längere aerobe Einheit der Woche — wichtiger für deine aerobe Basis als zwei kurze. Spätestens 12 Uhr fertig, danach Beine hoch bis Dienstbeginn."},
   {d:"Mi 17.",type:"ruhe",title:"Post-Call · Ruhe",sub:"ausnahmslos",h:0,detail:"2–3 h Schlaf in der Nacht — heute zählt nur Regeneration: nachschlafen, essen, Spaziergang ok."},
   {d:"Do 18.",type:"kraft",title:"Kraft 1 vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dkraft1},
   {d:"Fr 19.",type:"ruhe",title:"Post-Call · Ruhe",sub:"Fortbildung",h:0},
@@ -213,24 +220,24 @@ const WEEKS=[
   {d:"Sa 27.",type:"z2",title:"Z2 90′ · vormittags",sub:"",shift:"Spätdienst",h:1.5,detail:Dz2},
   {d:"So 28.",type:"ruhe",title:"Ruhe",sub:"",shift:"Spätdienst",h:0}]},
  {id:"W4",range:"29. Jun – 5. Jul",tag:"Basis",note:"Mo frei · So Tagdienst 7:30–15:30",days:[
-  {d:"Mo 29.",type:"z2",title:"Z2 105–120′ + Sprints",sub:"freier Tag — Hauptchance der Woche",h:2,detail:"Längste Wocheneinheit unter der Woche. "+Dz2+" "+Dsprint},
+  {d:"Mo 29.",type:"z2",title:"Z2 105–120′ Mitteldistanz",sub:"freier Tag · Soll 105′",h:1.75,detail:"Längste Wocheneinheit unter der Woche — reine Z2-Dauer (keine Sprints diese Woche). "+Dz2},
   {d:"Di 30.",type:"kraft",title:"Kraft 1",sub:"abends ab ~17 Uhr",h:1,detail:Dkraft1},
-  {d:"Mi 1.7.",type:"z2",title:"Z2 60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dz2},
+  {d:"Mi 1.7.",type:"z2",title:"Z2 90′ vormittags",sub:"Mitteldistanz · Dienst ab 14:45",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: zweite längere aerobe Einheit der Woche."},
   {d:"Do 2.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
   {d:"Fr 3.",type:"z2",title:"Z2 60′ locker",sub:"abends",h:1,detail:Dz2+" Bewusst kurz und leicht — morgen ist die lange Ausfahrt."},
-  {d:"Sa 4.",type:"lang",title:"Lange Gravel 3–3,5 h",sub:"Z2",h:3.5,detail:Dz2+" "+DlangFuel},
+  {d:"Sa 4.",type:"lang",title:"Lange Gravel 3–3,5 h",sub:"Z2 · Soll 3 h",h:3,detail:Dz2+" "+DlangFuel},
   {d:"So 5.",type:"ruhe",title:"Ruhe",sub:"Tagdienst 7:30–15:30",shift:"Tagdienst",h:0}]},
  {id:"W5",range:"6.–12. Jul",tag:"Basis",note:"Nachtdienst Mi · Wochenende frei",days:[
   {d:"Mo 6.",type:"z2",title:"Z2 75′",sub:"abends",h:1.25,detail:Dz2},
   {d:"Di 7.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
-  {d:"Mi 8.",type:"z2",title:"Z2 60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dz2},
+  {d:"Mi 8.",type:"z2",title:"Z2 90′ vormittags",sub:"Mitteldistanz · Dienst ab 14:45",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: zweite längere aerobe Einheit der Woche."},
   {d:"Do 9.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
   {d:"Fr 10.",type:"z2",title:"Z2 60′ + Sprints",sub:"abends",h:1,detail:Dz2+" "+Dsprint},
   {d:"Sa 11.",type:"lang",title:"Lange Gravel 4 h",sub:"erste 4-h-Ausfahrt",h:4,detail:"Sprung auf 4 h. "+DlangFuel+" Route mit Abkürzungsoption planen, falls die Beine nach 3 h zumachen."},
-  {d:"So 12.",type:"z2",title:"Z2 60–75′ ganz locker",sub:"Recovery-Spin nach der 4-h-Ausfahrt",h:1.25,detail:"Unteres Z2 oder Z1, flache Runde. Optional kurz Kraft 2 dranhängen — oder komplett frei, wenn die Beine schwer sind."}]},
+  {d:"So 12.",type:"z2",title:"Z2 60–75′ ganz locker",sub:"Recovery-Spin · Soll 60′",h:1,detail:"Unteres Z2 oder Z1, flache Runde. Optional kurz Kraft 2 dranhängen — oder komplett frei, wenn die Beine schwer sind."}]},
  {id:"W6",range:"13.–19. Jul",tag:"Basis",note:"dienstfreie Woche · freies Wochenende",days:[
   {d:"Mo 13.",type:"ruhe",title:"Ruhetag",sub:"nach dem Wochenendblock",h:0,detail:"Kein Dienst mehr — bleibt trotzdem Ruhetag: Sa 4 h + So-Spin sind genug Reiz, Anpassung passiert in der Pause."},
-  {d:"Di 14.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends",h:1.25,detail:Dz2+" "+Dsprint},
+  {d:"Di 14.",type:"z2",title:"Z2 90′",sub:"Mitteldistanz · abends",h:1.5,detail:Dz2+" Etwas länger, dafür ohne Sprints (jede zweite Woche)."},
   {d:"Mi 15.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
   {d:"Do 16.",type:"z2",title:"Z2 90′",sub:"abends",h:1.5,detail:Dz2},
   {d:"Fr 17.",type:"kraft",title:"Kraft 2 kurz oder Ruhe",sub:"vor dem langen Samstag",h:1,detail:Dkraft2},
@@ -243,12 +250,12 @@ const WEEKS=[
   {d:"Do 23.",type:"z2",title:"Z2 60′ ganz locker",sub:"",h:1,detail:"Aktive Erholung mitten in der großen Woche — unteres Z2 oder Z1."},
   {d:"Fr 24.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
   {d:"Sa 25.",type:"lang",title:"Lange Gravel 4 h",sub:"Race-Setup fahren",h:4,detail:"Komplettes Race-Setup testen: 50er-Front + Tire Inserts (Vittoria Air-Liner Light / Tannus) + Race-Sealant vorher montieren. Finale Reifendrücke v/h notieren, Taschen und Verpflegung am Rad wie im Rennen. "+DlangFuel},
-  {d:"So 26.",type:"z2",title:"Z2 90–120′ locker",sub:"sanfter Back-to-back-Test",h:2,detail:"Müde Beine sind hier Absicht — Vorgeschmack auf Phase 4. Tempo egal, Zeit im Sattel zählt."}]},
+  {d:"So 26.",type:"z2",title:"Z2 90–120′ locker",sub:"Back-to-back · Soll 90′",h:1.5,detail:"Müde Beine sind hier Absicht — Vorgeschmack auf Phase 4. Tempo egal, Zeit im Sattel zählt."}]},
  {id:"W8",range:"27. Jul – 2. Aug",tag:"Entlastung",note:"Zahnarzt Mo · Nachtdienst Fr→Sa",days:[
   {d:"Mo 27.",type:"ruhe",title:"Ruhe",sub:"Zahnarzt",h:0},
   {d:"Di 28.",type:"z2",title:"Z2 60′",sub:"abends",h:1,detail:Dz2},
   {d:"Mi 29.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
-  {d:"Do 30.",type:"z2",title:"Z2 60′ + Sprints",sub:"abends",h:1,detail:Dz2+" "+Dsprint},
+  {d:"Do 30.",type:"z2",title:"Z2 60′",sub:"abends",h:1,detail:Dz2+" Ohne Sprints (Entlastungswoche)."},
   {d:"Fr 31.",type:"z2",title:"Z2 45–60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:0.75,detail:"Entlastungswoche: ganz locker rollen, optional streichen."},
   {d:"Sa 1.8.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
   {d:"So 2.",type:"z2",title:"Z2 90′ locker",sub:"August-Plan folgt",h:1.5,detail:Dz2}]}
@@ -268,12 +275,23 @@ const RULES=[
  {cat:"Training",text:"Lange Ausfahrten: 60–80 g KH/h ab Stunde 1, 500–750 ml/h trinken. Kette frisch gewachst vor jedem Rennen."},
  {cat:"Material",text:"Spacer ab sofort schrittweise raus: 5 mm alle 2–3 Wochen, Nacken/Rücken beobachten — gratis Aero-Gewinn Nr. 1."},
  {cat:"Material",text:"50-mm-Frontreifen am 18.7. testen, Tire Inserts + Race-Sealant bis 25.7. montieren (Race-Setup-Fahrt). Kette frisch gewachst vor jedem Rennen."},
+ {cat:"Training",text:"FTP-Korrektur (Priorität): Hinterlegte 226 W sind nachweislich zu hoch (reale Bestwerte: 20-min ~197 W, 1-h ~179 W). Retest am 23.6. nicht verschieben, danach FTP konservativ auf ~190 W setzen und alle Zonen neu rechnen. Bis dahin Z2 strikt nach Puls."},
+ {cat:"Training",text:"Sprint-Dosierung Phase 1: 5×15s-Sprints nur jede zweite Woche (W2, W5, W7) — die neuromuskuläre Kraft ist bereits gut (5s ~680 W), Priorität liegt auf reiner Z2-Dauer für die aerobe Basis."},
+ {cat:"Training",text:"Mitteldistanz: Zusätzlich zur langen Wochenend-Ausfahrt eine zweite längere Z2-Einheit (90–120 min) werktags, wo der Dienstplan es zulässt. Aerobe Mitteldistanz ist die Hauptbaustelle — wertvoller als zwei kurze Einheiten."},
+ {cat:"Kraft",text:"Kraft-Dosierung über die Phasen: Phase 1 (jetzt) 2–3×/Woche ok, Phase 2 ab Sep auf 2× reduzieren, Phase 4 ab März nur noch 1× Erhalt — sobald die Radstunden steigen, hat Beinregeneration Vorrang."},
+ {cat:"Training",text:"Laufen als Ausweich-Option: An Tagen ohne Zeit fürs Rad ein lockerer Z2-Lauf (zeiteffiziente aerobe Basis), max. 1×/Woche, locker. Zählt als Bonus."},
  {cat:"Abgleich",text:"Am Ende jeder Woche eine kurze Soll-Ist-Analyse ziehen: Radumfang Ist/Soll, lange Ausfahrt erfüllt?, Z2-Qualität (Puls wirklich <158?), Kraft erfüllt, 1–2 Sätze Fazit + konkrete Ableitung für die Folgewoche. Maßstab ist nicht reine Planerfüllung, sondern der Dienstplan-Kontext. Erscheint im Reiter „Wochenanalyse“; Essenz wandert ins Changelog."},
  {cat:"Abgleich",text:"Jeden Sonntag (oder nach Bedarf) Plan-Soll mit den tatsächlich geleisteten Strava-Einheiten abgleichen. Echte Werte und Zeiten (Dauer, Ø-Puls, Ø-Watt, km, hm) werden in die Einheit übernommen und ersetzen das Soll. ALLE Sportarten zählen (Rad, Kraft, Lauf, Schwimmen, Wandern); ungeplante Einheiten zählen als Bonus auf die Ist-Stunden."},
  {cat:"Bedienung",text:"Woche antippen = auf-/zuklappen · Tag antippen = Einheits-Details · Häkchen und Notizen werden lokal auf dem Gerät gespeichert."}
 ];
 
 const CHANGELOG=[
+ {date:"14.06.2026",text:"Plan-Überarbeitung nach Strava-Komplettanalyse (5 Punkte): (1) FTP-Korrektur 226→~190 W als Priorität markiert, (2) Sprints in Phase 1 nur noch jede zweite Woche, (3) Kraft-Reduktions-Leitlinie über die Phasen, (4) zweite Werktags-Mitteldistanz (90–120′) pro Woche ausgebaut, (5) Laufen als Ausweich-Option. Ziel: aerobe Basis gezielt stärken (deine Hauptbaustelle)."},
+ {date:"14.06.2026",text:"Soll-Berechnung: Bei Einheiten mit Zeitspanne zählt jetzt das Minimum als Soll (z. B. \"2,5–3 h\" → Soll 2,5 h). Betrifft W1 Sa, W4 Mo+Sa, W5 So, W7 So. Macht die Soll-Erfüllung realistisch erreichbar."},
+ {date:"14.06.2026",text:"Legende repariert: Farbpunkte waren unsichtbar, weil die CSS-Farbvariablen fehlten — jetzt definiert (hell+dunkel), alle Farben im ganzen Dashboard (Legende, Tagesband, Einheiten-Streifen) sichtbar. Legende mit Titel und klar getrennten Items inkl. Zusatz/Bonus."},
+ {date:"14.06.2026",text:"Header zeigt Gesamtbilanz über alle 8 Wochen (statt nur bis heute). Pro Woche eigene Ist/Soll-Prozentleiste, auch im zugeklappten Zustand."},
+ {date:"14.06.2026",text:"Optionale Einheiten (opt-Flag): zählen nicht ins Soll, aber ins Ist, wenn gefahren. So 14.6. als optional markiert → W1-Rad-Soll korrekt 3 h, Ist 3,9 h = 130 %."},
+ {date:"14.06.2026",text:"Soll/Ist-Balken: 100 % = Soll (grün), Mehrleistung als orange Überschreitung (z. B. +30 % extra). Rad-Zeit, Kraft und Bonus sauber getrennt; Bonus separat ausgewiesen."},
  {date:"14.06.2026",text:"Wochenanalyse W1 auf korrekte Ist-Daten aktualisiert (3,9 h Rad, 3/3 Kraft, Lauf-Bonus, gesamt ~8,5 h). Zusätzlich erscheint die Analyse jetzt auch kompakt am Ende jeder Woche (orange abgesetzt unter den Tagen), nicht nur im Sammel-Reiter."},
  {date:"14.06.2026",text:"Korrektur W1: Bonus-Lauf vom 10.6. wird jetzt direkt dem Mi 10. (Kraft 3) zugeordnet statt als eigene Zeile mit falschem Datums-Label zu erscheinen. Zusatzeinheiten hängen ab sofort am jeweiligen Trainingstag."},
  {date:"14.06.2026",text:"v15: Wochenanalyse als festes Ritual ab W1 — neuer Reiter mit Soll-Ist je Woche (Radumfang, lange Ausfahrt, Z2-Qualität, Kraft, Fazit + Ableitung). Bonus-/Zusatzeinheiten farbcodiert (Teal) inkl. Anzeige unter der Woche und Zähler im Wochenkopf. Fehlendes 3. Krafttraining am Mi 10.6. ergänzt."},
@@ -406,46 +424,71 @@ function barGraph(bars, opts){
 // ————— Render —————
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 const RIDE=["z2","lang","intens"];
-function stats(){let t=0,dc=0,hp=0,hd=0,kt=0,kd=0;WEEKS.forEach(w=>w.days.forEach((d,i)=>{
- const dn=isDone(w.id+"-"+i);
- if(d.type==="kraft"){kt++;if(dn)kd++;return}
- if(d.type==="ruhe")return;
- t++;hp+=d.h;if(dn){dc++;hd+=d.h}
-}));return{t,dc,hp,hd,kt,kd}}
+function stats(){let t=0,dc=0,hpPlan=0,hIst=0,kt=0,kd=0,bonusH=0;
+ WEEKS.forEach(w=>{
+  w.days.forEach((d,i)=>{
+   const key=w.id+"-"+i,dn=isDone(key),act=ACTUAL[key];
+   if(d.type==="kraft"){kt++;if(dn)kd++;return}
+   if(d.type==="ruhe")return;
+   if(!d.opt){t++;hpPlan+=d.h}
+   if(dn){dc++;hIst+=act?act.min/60:d.h}
+  });
+  BONUS.filter(b=>b.wk===w.id).forEach(b=>bonusH+=b.min/60);
+ });
+ return{t,dc,hpPlan,hIst,kt,kd,bonusH}}
 // Wochen-Helfer: Rad-Stunden, Rad-erledigt, Kraft geplant/erledigt
 function weekStats(w){let rh=0,rd=0,rt=0,kt=0,kd=0,rhIst=0,bonusH=0;w.days.forEach((d,i)=>{
  const key=w.id+"-"+i,act=ACTUAL[key],dn=isDone(key);
  if(d.type==="kraft"){kt++;if(dn)kd++;return}
  if(d.type==="ruhe")return;
- rt++;rh+=d.h;if(dn){rd++;rhIst+=act?act.min/60:d.h}
+ if(!d.opt){rt++;rh+=d.h}
+ if(dn){rd++;rhIst+=act?act.min/60:d.h}
 });
  // Bonus-Einheiten dieser Woche dazurechnen
  const [ws_,we_]=WEEK_DATES[w.id];
  BONUS.forEach(b=>{const bd="2026-"+b.date.split(".").reverse().join("-");if(bd>=ws_&&bd<=we_)bonusH+=b.min/60});
- return{rh,rd,rt,kt,kd,rhIst:rhIst+bonusH,bonusH}}
+ return{rhPlan:rh,rd,rt,kt,kd,rhIst,bonusH}}
 const fmtH=h=>h.toFixed(1).replace(".0","");
 
 function render(){
  const s=stats(), pct=s.t?Math.round(s.dc/s.t*100):0;
+ const hpct=s.hpPlan?Math.round(s.hIst/s.hpPlan*100):0; // Stunden Ist/Soll, kann >100
  const wTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/(7*864e5)));
- const maxRideH=Math.max(...WEEKS.map(w=>weekStats(w).rh));
+ const maxRideH=Math.max(...WEEKS.map(w=>Math.max(weekStats(w).rhPlan,weekStats(w).rhIst)));
  let html=`<header><div class="wrap">
   <div class="eyebrow">Phase 1 · Basis · ~${wTraka} Wochen bis The Traka</div>
   <div class="head-top">
    <h1>Mikroplan<br>12.06–02.08</h1>
    <div><div class="pct num">${pct}<small>%</small></div>
-   <div class="pct-sub num">🚴 ${s.dc}/${s.t} Rad · ${s.hd.toFixed(1)}/${s.hp.toFixed(0)} h &nbsp;·&nbsp; 🏋 ${s.kd}/${s.kt} Kraft</div></div>
+   <div class="pct-sub num">insgesamt: 🚴 ${s.hIst.toFixed(1)} / ${s.hpPlan.toFixed(0)} h (${hpct}%)${s.bonusH?` <span style="color:var(--bonus)">+${s.bonusH.toFixed(1)} h Bonus</span>`:""} &nbsp;·&nbsp; 🏋 ${s.kd}/${s.kt}</div></div>
   </div>
-  <div class="bar"><div style="width:${pct}%"></div></div>
+  <div class="bar soll-ist">
+   <div class="bar-soll" style="width:${Math.min(100,hpct)}%"></div>
+   ${hpct>100?`<div class="bar-extra" style="width:${Math.min(100,hpct-100)}%"></div>`:""}
+   <span class="bar-mark" style="left:${hpct>100?100/hpct*100:100}%"></span>
+  </div>
+  <div class="bar-lbl"><span>Ist ${hpct}% vom Soll</span>${hpct>100?`<span style="color:var(--accent)">+${hpct-100}% extra</span>`:hpct<100&&hpct>0?`<span>${100-hpct}% bis Soll</span>`:""}</div>
   <div class="stats"><span><strong>FTP:</strong> 226 W hinterlegt · real ~190–200 W → Z2 bis Retest 23.06. nach Puls (128–158)</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
   <div class="vol">`;
  WEEKS.forEach(w=>{
   const wv=weekStats(w);
-  html+=`<div class="col"><div class="stack"><div class="b${w.tag==="Volumen"?" vol-big":""}" style="height:${wv.rh/maxRideH*100}%"><div class="fill" style="height:${wv.rh?wv.rd/wv.rt*100:0}%"></div></div></div><span class="lbl num">${w.id}·${fmtH(wv.rh)}h</span></div>`;
+  const barH=wv.rhIst>0?wv.rhIst:wv.rhPlan;
+  html+=`<div class="col"><div class="stack"><div class="b${w.tag==="Volumen"?" vol-big":""}" style="height:${barH/maxRideH*100}%"><div class="fill" style="height:${wv.rhIst>0?100:0}%"></div></div></div><span class="lbl num">${w.id}·${fmtH(barH)}h</span></div>`;
  });
- html+=`</div></div></header><main><div class="legend">`;
- Object.values(TYPE).forEach(m=>{html+=`<span><span class="sw" style="background:${m.c}"></span>${m.label}</span>`});
- html+=`<span><span class="sw" style="background:var(--dienst)"></span>Dienst</span><button data-a="zones">${showZones?"Zonen ausblenden":"Zonen anzeigen"}</button></div>`;
+ html+=`</div></div></header><main>`;
+ // Legende: nur Plan-Typen + Dienst + Bonus, klar getrennt
+ html+=`<div class="legend"><span class="leg-title">Legende:</span>`;
+ const legendItems=[
+  {c:TYPE.lang.c,label:"Lange Gravel"},
+  {c:TYPE.z2.c,label:"Z2 Grundlage"},
+  {c:TYPE.kraft.c,label:"Kraft"},
+  {c:TYPE.intens.c,label:"Test/Intensität"},
+  {c:TYPE.ruhe.c,label:"Ruhe"},
+  {c:"var(--bonus)",label:"Zusatz/Bonus"},
+  {c:"var(--dienst)",label:"Dienst"},
+ ];
+ legendItems.forEach(it=>{html+=`<span class="leg-item"><span class="sw" style="background:${it.c}"></span>${it.label}</span>`});
+ html+=`<button data-a="zones">${showZones?"Zonen ausblenden":"Zonen anzeigen"}</button></div>`;
  if(showZones){
   html+=`<div class="card"><div class="zones num"><span class="h">Zone</span><span class="h">Watt</span><span class="h">Puls</span>`;
   ZONES.forEach(z=>{html+=`<span>${z[0]}</span><span>${z[1]}</span><span>${z[2]}</span>`});
@@ -459,11 +502,11 @@ function render(){
   const fmin=Math.min(...allFtp,140)-10, fmax=Math.max(...allFtp,210)+10;
   const xlabels=FTP_LOG.map(f=>f.date);
   // Rad-Stunden: Ist (RIDE_LOG) vs Plan-Soll pro Woche
-  const planH=WEEKS.map(w=>weekStats(w).rh);
+  const planH=WEEKS.map(w=>weekStats(w).rhPlan);
   const maxBar=Math.max(...planH,1)*1.1;
   const bars=WEEKS.map((w,i)=>{
    const wv=weekStats(w);
-   const hasIst=wv.rhIst>0 && wv.rd>0;
+   const hasIst=wv.rhIst>0;
    return {label:w.id,val: hasIst?wv.rhIst:planH[i], done: hasIst, big:w.tag==="Volumen"};
   });
   html+=`<div class="card"><button class="sechead" data-a="stats" aria-expanded="${showStats}"><span class="t">Fortschritt &amp; Kurven</span><span class="s">FTP-Entwicklung · Wochenumfang</span><span class="chev">${showStats?"▲":"▼"}</span></button>`;
@@ -500,8 +543,9 @@ function render(){
    <span class="wrow"><span class="wid">${w.id}</span><span class="wrange">${w.range}</span>
    <span class="pill${w.tag==="Volumen"?" volumen":""}">${w.tag}</span>
    ${cur?'<span class="badge-now">● Aktuell</span>':""}
-   <span class="wmeta num">🚴 ${ws_.rd}/${ws_.rt} · ~${fmtH(ws_.rh)} h${ws_.kt?` · 🏋 ${ws_.kd}/${ws_.kt}`:""}${BONUS.filter(b=>b.wk===w.id).length?` · <span style="color:var(--bonus)">+${BONUS.filter(b=>b.wk===w.id).length}</span>`:""} <span class="chev">${open?"▲":"▼"}</span></span></span>
+   <span class="wmeta num">🚴 ${ws_.rhIst>0?`${fmtH(ws_.rhIst)}/${fmtH(ws_.rhPlan)} h`:`~${fmtH(ws_.rhPlan)} h`}${ws_.kt?` · 🏋 ${ws_.kd}/${ws_.kt}`:""}${ws_.bonusH>0?` · <span style="color:var(--bonus)">+${fmtH(ws_.bonusH)} h</span>`:""} <span class="chev">${open?"▲":"▼"}</span></span></span>
    <span class="dayband">${band}</span>
+   ${(()=>{const p=ws_.rhPlan?Math.round(ws_.rhIst/ws_.rhPlan*100):0;return `<span class="wk-bar"><span class="wk-bar-track"><span class="wk-bar-soll" style="width:${Math.min(100,p)}%"></span>${p>100?`<span class="wk-bar-extra" style="width:${Math.min(100,p-100)}%"></span>`:""}</span><span class="wk-bar-lbl num">${ws_.rhIst>0?`${fmtH(ws_.rhIst)}/${fmtH(ws_.rhPlan)} h · ${p}%`:`Soll ${fmtH(ws_.rhPlan)} h`}</span></span>`;})()}
    ${open?`<span class="wnote">${esc(w.note)}</span>`:""}</button>`;
   if(open){
    html+=`<div class="days">`;
