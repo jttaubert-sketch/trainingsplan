@@ -21,26 +21,29 @@
    Ein Akzent: Streckenmarkierungs-Orange. Zonenfarben sind Datenfarben, kein Dekor.
    ———————————————————————————————————————————— */
 :root{
-  --bg:#E9E7DF; --panel:#FCFBF7; --panel2:#F2F0E8;
-  --ink:#20261F; --ink-soft:#5B655C; --line:#D6D3C7;
-  --accent:#D14B1F; --accent-ink:#FFFFFF;
+  --bg:#E6E4DA; --panel:#FBFAF5; --panel2:#EFEDE3;
+  --ink:#1C231C; --ink-soft:#586259; --ink-faint:#8A9189; --line:#DAD7CB;
+  --accent:#C8491D; --accent-ink:#FFFFFF; --accent-soft:#F4E2D8;
   --z2:#3E6F8E; --lang:#2E5746; --kraft:#8A7141; --intens:#C2401C;
   --ruhe:#A8ADA6; --dienst:#7A3E8F;
   --done:#2E5746;
   --bonus:#1F8A8A;
+  --shadow-md:0 4px 16px -4px rgba(28,35,28,.10), 0 2px 6px -2px rgba(28,35,28,.06);
+  --shadow-card:0 1px 3px rgba(46,87,70,.05), 0 6px 24px -8px rgba(28,35,28,.08);
   --cond:'Barlow Condensed',-apple-system,system-ui,sans-serif;
   --body:'Barlow',-apple-system,system-ui,sans-serif;
-  --r-card:12px; --r-int:8px;
+  --r-card:14px; --r-int:9px;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#14181A; --panel:#1D2321; --panel2:#232A27;
-    --ink:#E9E7DD; --ink-soft:#9AA39A; --line:#323A35;
-    --accent:#E8642F; --accent-ink:#16100C;
-    --z2:#6FA3C4; --lang:#5E9C82; --kraft:#C0A36E; --intens:#E8642F;
+    --bg:#0F1413; --panel:#19201D; --panel2:#212824;
+    --ink:#EAE8DE; --ink-soft:#97A097; --ink-faint:#646E66; --line:#2C342F;
+    --accent:#F0703A; --accent-ink:#160E08; --accent-soft:#2A1C13;
+    --z2:#6FA3C4; --lang:#5E9C82; --kraft:#C0A36E; --intens:#F0703A;
     --ruhe:#5C645D; --dienst:#B07CC4;
-    --done:#5E9C82;
-    --bonus:#4FC4C4;
+    --done:#5E9C82; --bonus:#4FC4C4;
+    --shadow-md:0 4px 18px -4px rgba(0,0,0,.45), 0 2px 6px -2px rgba(0,0,0,.3);
+    --shadow-card:0 2px 8px rgba(0,0,0,.28), 0 8px 28px -10px rgba(0,0,0,.4);
   }
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -52,16 +55,18 @@ button:active{transform:scale(.98)}
 .num{font-variant-numeric:tabular-nums}
 
 /* ——— Kopf ——— */
-header{background:linear-gradient(180deg,#242B23,#20261F);color:#EFEDE3;padding:calc(env(safe-area-inset-top) + 20px) 18px 18px}
-@media (prefers-color-scheme: dark){header{background:linear-gradient(180deg,#1A201D,#14181A);border-bottom:1px solid var(--line)}}
+header{background:linear-gradient(165deg,#243024 0%,#1A211B 60%,#171E18 100%);color:#EFEDE3;padding:calc(env(safe-area-inset-top) + 22px) 18px 20px;position:relative}
+  header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 60%)}
+@media (prefers-color-scheme: dark){header{background:linear-gradient(165deg,#1A211D 0%,#101614 70%,#0D1211 100%)}}
 .wrap{max-width:920px;margin:0 auto;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
-.eyebrow{font-family:var(--cond);font-weight:600;letter-spacing:.2em;font-size:11px;color:var(--accent);text-transform:uppercase}
-h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,9vw,46px);margin:2px 0 0;line-height:.95;text-transform:uppercase;letter-spacing:.01em}
+.eyebrow{font-family:var(--cond);font-weight:600;letter-spacing:.24em;font-size:11px;color:var(--accent);text-transform:uppercase;display:inline-flex;align-items:center;gap:7px}
+  .eyebrow::before{content:"";width:18px;height:2px;background:var(--accent);border-radius:2px}
+h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,9vw,46px);margin:5px 0 0;line-height:.92;text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
 .head-top{display:flex;justify-content:space-between;align-items:flex-end;gap:14px}
-.pct{font-family:var(--cond);font-weight:700;font-size:clamp(30px,8vw,40px);line-height:.9;text-align:right}
+.pct{font-family:var(--cond);font-weight:700;font-size:clamp(32px,8vw,42px);line-height:.85;text-align:right;color:#fff}
 .pct small{font-size:.5em;font-weight:600}
 .pct-sub{font-size:11px;color:#A9B0A4;margin-top:3px;white-space:nowrap}
-.bar{margin-top:14px;height:5px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+.bar{margin-top:14px;height:6px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
 .bar>div{height:100%;background:var(--accent)}
 .stats{display:flex;gap:8px 16px;margin-top:12px;flex-wrap:wrap;font-size:12px;color:#B9BFB2}
 .stats strong{color:#EFEDE3;font-weight:600}
@@ -70,8 +75,8 @@ h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,9vw,46px);margin
 .vol{display:flex;gap:5px;align-items:flex-end;margin-top:16px;height:62px}
 .vol .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
 .vol .stack{width:100%;height:42px;display:flex;align-items:flex-end}
-.vol .b{width:100%;border-radius:4px 4px 0 0;position:relative;overflow:hidden;background:rgba(255,255,255,.14)}
-.vol .b.vol-big{background:var(--accent)}
+.vol .b{width:100%;border-radius:5px 5px 2px 2px;position:relative;overflow:hidden;background:rgba(255,255,255,.13);transition:height .5s cubic-bezier(.16,1,.3,1)}
+.vol .b.vol-big{background:var(--accent);box-shadow:0 0 12px -2px var(--accent)}
 .vol .fill{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.5)}
 .vol .lbl{font-family:var(--cond);font-weight:600;font-size:10px;color:#A9B0A4;white-space:nowrap}
 
@@ -79,28 +84,28 @@ h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,9vw,46px);margin
 main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bottom) + 44px)}
 .legend{display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--ink-soft);padding:2px 2px 12px}
 .legend .leg-title{font-weight:600;color:var(--ink);margin-right:2px}
-  .legend .leg-item{display:inline-flex;align-items:center;white-space:nowrap;gap:5px}
+  .legend .leg-item{display:inline-flex;align-items:center;white-space:nowrap;gap:6px;padding:4px 9px;background:var(--panel);border:1px solid var(--line);border-radius:999px}
   .legend .leg-item .sw{width:11px;height:11px;min-width:11px;border-radius:3px;display:block;flex:0 0 11px;margin:0}
 .legend button{margin-left:auto;font-size:12px;font-weight:600;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-int);padding:8px 12px;min-height:36px}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-card);margin-bottom:10px;overflow:hidden}
-.card.current{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-.card.dashed{border-style:dashed;background:transparent}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-card);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow-card)}
+.card.current{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent), var(--shadow-card)}
+.card.dashed{border-style:dashed;background:transparent;box-shadow:none}
 
 /* Wochenkopf + Tagesband (Signature) */
 .whead{width:100%;display:block;padding:12px 14px 11px;background:transparent;border:none;text-align:left}
 .wrow{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.wid{font-family:var(--cond);font-weight:700;font-size:20px;color:var(--accent)}
+.wid{font-family:var(--cond);font-weight:700;font-size:21px;color:var(--accent);letter-spacing:.02em}
 .wrange{font-family:var(--cond);font-weight:600;font-size:17px;letter-spacing:.02em}
-.pill{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:3px 9px;border-radius:999px;background:var(--panel2);color:var(--ink-soft)}
-.pill.volumen{background:var(--accent);color:var(--accent-ink)}
+.pill{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:3px 10px;border-radius:999px;background:var(--panel2);color:var(--ink-soft);border:1px solid var(--line)}
+.pill.volumen{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .badge-now{font-family:var(--cond);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent)}
 .wmeta{font-size:12px;color:var(--ink-soft);margin-left:auto;white-space:nowrap}
 .dayband{display:flex;gap:3px;margin-top:9px;height:7px}
   .wk-bar{display:flex;align-items:center;gap:8px;margin-top:8px}
-  .wk-bar-track{flex:1;height:5px;background:var(--line);border-radius:99px;display:flex;overflow:hidden}
-  .wk-bar-soll{height:5px;background:var(--done);border-radius:99px}
-  .wk-bar-extra{height:5px;background:var(--accent)}
+  .wk-bar-track{flex:1;height:6px;background:var(--panel2);border-radius:99px;display:flex;overflow:hidden;border:1px solid var(--line)}
+  .wk-bar-soll{height:6px;background:var(--done);border-radius:99px;transition:width .5s cubic-bezier(.16,1,.3,1)}
+  .wk-bar-extra{height:6px;background:var(--accent)}
   .wk-bar-lbl{font-size:10.5px;color:var(--ink-soft);white-space:nowrap;flex-shrink:0}
 .dayband span{flex:1;border-radius:2px;background:var(--seg);opacity:.32}
 .dayband span.don{opacity:1}
@@ -109,10 +114,11 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
 
 /* Tage */
 .days{border-top:1px solid var(--line)}
-.day{display:flex;align-items:center;gap:10px;padding:11px 14px;border-top:1px solid var(--line);min-height:48px}
+.day{display:flex;align-items:center;gap:11px;padding:11px 14px;border-top:1px solid var(--line);min-height:48px;transition:background .15s ease}
+  .day:hover{background:var(--panel2)}
 .day:first-child{border-top:none}
 .day.rest{opacity:.6}
-.stripe{width:4px;align-self:stretch;border-radius:2px;flex-shrink:0}
+.stripe{width:4px;align-self:stretch;border-radius:99px;flex-shrink:0}
 .dd{font-family:var(--cond);font-weight:600;font-size:15px;min-width:50px;flex-shrink:0}
 .dtxt{flex:1;min-width:0}
 .dtitle{font-weight:600;font-size:13.5px}
@@ -122,23 +128,24 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
 .shift{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.04em;color:#fff;background:var(--dienst);padding:3px 8px;border-radius:999px;white-space:nowrap;flex-shrink:0}
 @media (prefers-color-scheme: dark){.shift{color:#16100C}}
 .chk{width:30px;height:30px;border-radius:var(--r-int);border:2px solid var(--line);background:transparent;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;color:transparent}
-.chk.on{border-color:var(--done);background:var(--done);color:#fff}
+.chk.on{border-color:var(--done);background:var(--done);color:#fff;box-shadow:0 2px 6px -2px var(--done)}
 @media (prefers-color-scheme: dark){.chk.on{color:#14181A}}
 
 /* Detail + Notizen */
-.detail{padding:10px 14px 13px 78px;font-size:12.5px;line-height:1.55;color:var(--ink-soft);background:var(--panel2);border-top:1px dashed var(--line)}
+.detail{padding:11px 16px 14px 78px;font-size:12.5px;line-height:1.58;color:var(--ink-soft);background:var(--panel2);border-top:1px solid var(--line);box-shadow:inset 3px 0 0 var(--accent-soft)}
 .notewrap{margin-top:11px;padding-top:10px;border-top:1px dashed var(--line)}
 .rpelbl{font-family:var(--cond);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);margin-bottom:6px}
 .rperow{display:flex;gap:4px;flex-wrap:wrap}
 .rpe{width:32px;height:32px;border-radius:var(--r-int);border:1px solid var(--line);background:var(--panel);font-size:12.5px;font-weight:600;padding:0}
-.rpe.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rpe.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 2px 6px -2px var(--accent)}
 .noterow{display:flex;gap:6px;margin-top:9px}
 .noterow input{flex:1;min-width:0;font-family:var(--body);font-size:13px;padding:9px 11px;border:1px solid var(--line);border-radius:var(--r-int);background:var(--panel);color:var(--ink)}
 .noterow input::placeholder{color:var(--ink-soft)}
 .noterow button{font-size:12px;font-weight:600;padding:9px 14px;border:none;border-radius:var(--r-int);background:var(--accent);color:var(--accent-ink)}
 
 /* Sektionen unten */
-.sechead{width:100%;display:flex;align-items:center;gap:10px;padding:13px 14px;background:transparent;border:none;text-align:left;min-height:46px}
+.sechead{width:100%;display:flex;align-items:center;gap:10px;padding:13px 14px;background:transparent;border:none;text-align:left;min-height:46px;transition:background .15s ease}
+  .sechead:hover{background:var(--panel2)}
 .sechead .t{font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
 .sechead .s{font-size:11px;color:var(--ink-soft);flex:1}
 .row{display:flex;gap:10px;padding:10px 14px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.5}
@@ -152,7 +159,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
   .gdot{display:inline-block;width:9px;height:9px;border-radius:99px;margin-right:5px;vertical-align:-1px}
   .gnote{margin-left:auto;font-style:italic}
   .gcap{font-size:11px;color:var(--ink-soft);line-height:1.5;margin-top:7px}
-  .wk-review{padding:11px 14px;background:var(--panel2);border-top:2px solid var(--accent)}
+  .wk-review{padding:13px 16px;background:linear-gradient(180deg,var(--accent-soft),var(--panel2) 70%);border-top:2px solid var(--accent)}
   .wk-review-head{font-family:var(--cond);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:7px}
   .wk-review-kpis{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
   .wk-review-kpis span{font-size:11px;color:var(--ink-soft);background:var(--panel);padding:3px 8px;border-radius:999px;white-space:nowrap}
@@ -161,11 +168,61 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
   .review{padding:11px 14px;border-top:1px solid var(--line)}
   .rev-head{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:7px}
   .rev-wk{font-family:var(--cond);font-weight:700;font-size:17px;color:var(--accent)}
-  .rev-kpi{font-size:11px;color:var(--ink-soft);background:var(--panel2);padding:3px 8px;border-radius:999px;white-space:nowrap}
+  .rev-kpi{font-size:11px;color:var(--ink-soft);background:var(--panel);padding:4px 9px;border-radius:999px;white-space:nowrap;border:1px solid var(--line)}
   .rev-txt{font-size:12.5px;line-height:1.55;color:var(--ink);margin-top:4px}
   .rev-txt strong{color:var(--ink-soft);font-weight:600}
   .foot{font-size:11.5px;color:var(--ink-soft);line-height:1.6;margin-top:16px}
-.reset{margin-top:18px;font-size:12px;color:var(--ink-soft);background:transparent;border:1px solid var(--line);border-radius:var(--r-int);padding:9px 14px;min-height:38px}
+  /* ——— Tab-Navigation ——— */
+  .tabs{display:flex;gap:4px;margin-top:16px;background:rgba(255,255,255,.07);padding:4px;border-radius:12px}
+  .tab{flex:1;font-family:var(--cond);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;color:#A9B0A4;background:transparent;border:none;padding:9px 8px;border-radius:9px;cursor:pointer;transition:all .18s ease;min-height:40px}
+  .tab.on{background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 8px -2px var(--accent)}
+  .tab:not(.on):active{transform:scale(.97)}
+  /* ——— Overview ——— */
+  .hero-card{padding:16px}
+  .oh-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .oh-eyebrow{font-family:var(--cond);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+  .oh-wid{font-family:var(--cond);font-weight:600;font-size:15px;color:var(--ink)}
+  .oh-big{font-family:var(--cond);font-weight:700;font-size:34px;line-height:1;color:var(--ink);margin-bottom:10px}
+  .oh-unit{font-size:16px;color:var(--ink-soft);font-weight:600}
+  .oh-pct{font-size:18px;color:var(--ink-soft);font-weight:700;margin-left:4px}
+  .oh-pct.over{color:var(--accent)}
+  .oh-sub{font-size:12.5px;color:var(--ink-soft);margin-top:9px}
+  .oh-next{margin-top:13px;padding-top:13px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
+  .oh-next-lbl{font-family:var(--cond);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+  .oh-next-day{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:var(--ink)}
+  .oh-next-day .stripe{width:4px;height:18px;border-radius:99px}
+  .oh-link{margin-top:14px;width:100%;font-family:var(--cond);font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border:none;border-radius:var(--r-int);padding:11px;cursor:pointer;min-height:42px;transition:transform .12s}
+  .oh-link:active{transform:scale(.98)}
+  .oc-head{font-family:var(--cond);font-weight:700;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);padding:14px 14px 4px}
+  .todo-list{padding:6px 14px 8px}
+  .todo{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+  .todo:first-child{border-top:none}
+  .todo-dot{width:8px;height:8px;border-radius:99px;flex:0 0 8px}
+  .todo-txt{flex:1;font-size:13px;line-height:1.4;color:var(--ink)}
+  .todo-txt.done{color:var(--ink-faint);text-decoration:line-through}
+  .todo-when{font-size:11px;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .countdown{padding:16px;background:linear-gradient(135deg,#243024,#1A211B);color:#EFEDE3}
+  .cd-row{display:flex;justify-content:space-between;align-items:center}
+  .cd-big{font-family:var(--cond);font-weight:700;font-size:52px;line-height:.9;color:var(--accent)}
+  .cd-lbl{font-family:var(--cond);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#A9B0A4;margin-top:2px}
+  .cd-side{text-align:right;font-size:15px;font-weight:700;color:#EFEDE3;line-height:1.4}
+  .cd-side span{font-size:11px;color:#A9B0A4;font-weight:500}
+  /* ——— Setup ——— */
+  .setup-list{padding:4px 0 8px}
+  .srow{display:flex;gap:12px;padding:9px 14px;border-top:1px solid var(--line)}
+  .srow:first-child{border-top:none}
+  .srow-k{font-family:var(--cond);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);flex:0 0 110px}
+  .srow-v{font-size:13px;color:var(--ink);line-height:1.4}
+  /* ——— Drag&Drop ——— */
+  .drag-handle{cursor:grab;color:var(--ink-faint);font-size:15px;line-height:1;padding:0 2px;flex-shrink:0;touch-action:none;user-select:none}
+  .drag-handle:active{cursor:grabbing}
+  .day{position:relative}
+  .day.dragging{opacity:.45;background:var(--panel2)}
+  .day.drop-above::before,.day.drop-below::after{content:"";position:absolute;left:8px;right:8px;height:2px;background:var(--accent);border-radius:2px}
+  .day.drop-above::before{top:-1px}
+  .day.drop-below::after{bottom:-1px}
+.reset{margin-top:18px;font-size:12px;color:var(--ink-soft);background:var(--panel);border:1px solid var(--line);border-radius:var(--r-int);padding:9px 14px;min-height:38px;transition:transform .12s ease,border-color .15s}
+  .reset:hover{border-color:var(--ink-faint)}
 
 @media(min-width:640px){
   .whead{padding:13px 16px}
@@ -315,6 +372,29 @@ const CHANGELOG=[
 ];
 
 const ZONES=[["Z1 Regeneration","< 125 W","< 128"],["Z2 Grundlage","125–170 W","128–158"],["Z3 Tempo","171–203 W","159–174"],["Sweet Spot","199–210 W","165–175"],["Z4 Schwelle","204–237 W","175–189"],["Z5 VO2max","238–271 W","190+"]];
+// ——— Setup-Daten ———
+const SETUP_TODOS=[
+ {txt:"Spacer schrittweise raus (5–10 mm über Wochen) — gratis, größter Aero-Gewinn",when:"laufend",done:false},
+ {txt:"Tire Inserts + Race-Dichtmilch einbauen",when:"bis Sa 25.7.",done:false},
+ {txt:"50-mm-Frontreifen testen",when:"Sa 18.7.",done:false},
+ {txt:"42–44T Kettenblatt prüfen (40×10 läuft bei ~55 km/h aus)",when:"optional",done:false},
+ {txt:"Komfort-Sattelstütze für Langstrecke",when:"optional",done:false},
+ {txt:"FTP-Retest → alle Wattbereiche neu rechnen",when:"Di 23.6.",done:false},
+ {txt:"Zwift Ride Smart Frame kaufen (Bundle Black Friday)",when:"Sep/Okt",done:false},
+];
+const SETUP_BIKE=[
+ {k:"Rad",v:"Orbea Terra Race M21eLTD 1X"},
+ {k:"Antrieb",v:"SRAM Force XPLR AXS 13-fach, 40T, 10–46"},
+ {k:"Powermeter",v:"SRAM einseitig"},
+ {k:"Laufräder",v:"OQUO RP50LTD (25 mm innen, ~1.460 g)"},
+ {k:"Reifen",v:"Schwalbe G-One RS Pro 45 mm"},
+ {k:"Cockpit",v:"integriert 100/400, aktuell ~3 Spacer"},
+ {k:"Sattelstütze",v:"OC XP10 Carbon, 27,2 mm, ohne Setback"},
+ {k:"Sattel",v:"Selle San Marco Shortfit 2.0"},
+ {k:"Pedale / Schuhe",v:"Shimano XTR M9200 / Lake MX30G"},
+ {k:"Kette",v:"gewachst (Optimize Wax), frisch vor jedem Rennen"},
+ {k:"Indoor",v:"Wahoo Kickr Core + Zwift Ride Frame (geplant)"},
+];
 
 
 // ————— Fortschrittsdaten (aus Strava-Abgleich, manuell gepflegt) —————
@@ -375,6 +455,27 @@ const today=new Date().toISOString().slice(0,10);
 const currentWeek=Object.entries(WEEK_DATES).find(([,r])=>today>=r[0]&&today<=r[1]);
 let openWeeks={}; if(currentWeek) openWeeks[currentWeek[0]]=true;
 let openDay=null, showZones=false, showLog=false, showRules=false, showStats=false, showReview=false;
+
+// ——— Routing (Master-Gerät, lokal) ———
+let route="overview"; // overview | plan | setup
+
+// ——— Persistente Tag-Reihenfolge je Woche (Drag&Drop) ———
+const OKEY="jan-training-dayorder";
+const ostore={
+ get(){try{return JSON.parse(localStorage.getItem(OKEY)||"{}")}catch(e){return {}}},
+ set(v){try{localStorage.setItem(OKEY,JSON.stringify(v))}catch(e){}}
+};
+let dayOrder=ostore.get(); // {W1:[2,0,1,...], ...} — Indizes in Anzeigereihenfolge
+// Liefert die Tage einer Woche in gespeicherter Reihenfolge (mit Original-Index als oi)
+function orderedDays(w){
+ const order=dayOrder[w.id];
+ const base=w.days.map((d,i)=>({d,oi:i}));
+ if(!order||order.length!==base.length) return base;
+ const seen=new Set(), out=[];
+ order.forEach(oi=>{if(oi>=0&&oi<base.length&&!seen.has(oi)){out.push(base[oi]);seen.add(oi)}});
+ base.forEach((b,i)=>{if(!seen.has(i))out.push(b)});
+ return out;
+}
 
 
 // ————— Graph-Helfer (reine SVG, responsiv via viewBox) —————
@@ -452,30 +553,63 @@ const fmtH=h=>h.toFixed(1).replace(".0","");
 
 function render(){
  const s=stats(), pct=s.t?Math.round(s.dc/s.t*100):0;
- const hpct=s.hpPlan?Math.round(s.hIst/s.hpPlan*100):0; // Stunden Ist/Soll, kann >100
+ const hpct=s.hpPlan?Math.round(s.hIst/s.hpPlan*100):0;
  const wTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/(7*864e5)));
- const maxRideH=Math.max(...WEEKS.map(w=>Math.max(weekStats(w).rhPlan,weekStats(w).rhIst)));
+ const tabs=[["overview","Übersicht"],["plan","Trainingsplan"],["setup","Setup"]];
  let html=`<header><div class="wrap">
   <div class="eyebrow">Phase 1 · Basis · ~${wTraka} Wochen bis The Traka</div>
-  <div class="head-top">
-   <h1>Mikroplan<br>12.06–02.08</h1>
-   <div><div class="pct num">${pct}<small>%</small></div>
-   <div class="pct-sub num">insgesamt: 🚴 ${s.hIst.toFixed(1)} / ${s.hpPlan.toFixed(0)} h (${hpct}%)${s.bonusH?` <span style="color:var(--bonus)">+${s.bonusH.toFixed(1)} h Bonus</span>`:""} &nbsp;·&nbsp; 🏋 ${s.kd}/${s.kt}</div></div>
-  </div>
-  <div class="bar soll-ist">
-   <div class="bar-soll" style="width:${Math.min(100,hpct)}%"></div>
-   ${hpct>100?`<div class="bar-extra" style="width:${Math.min(100,hpct-100)}%"></div>`:""}
-   <span class="bar-mark" style="left:${hpct>100?100/hpct*100:100}%"></span>
-  </div>
-  <div class="bar-lbl"><span>Ist ${hpct}% vom Soll</span>${hpct>100?`<span style="color:var(--accent)">+${hpct-100}% extra</span>`:hpct<100&&hpct>0?`<span>${100-hpct}% bis Soll</span>`:""}</div>
-  <div class="stats"><span><strong>FTP:</strong> 226 W hinterlegt · real ~190–200 W → Z2 bis Retest 23.06. nach Puls (128–158)</span><span><strong>Gewicht:</strong> 89 kg → 2,5 W/kg</span></div>
-  <div class="vol">`;
- WEEKS.forEach(w=>{
-  const wv=weekStats(w);
-  const barH=wv.rhIst>0?wv.rhIst:wv.rhPlan;
-  html+=`<div class="col"><div class="stack"><div class="b${w.tag==="Volumen"?" vol-big":""}" style="height:${barH/maxRideH*100}%"><div class="fill" style="height:${wv.rhIst>0?100:0}%"></div></div></div><span class="lbl num">${w.id}·${fmtH(barH)}h</span></div>`;
- });
- html+=`</div></div></header><main>`;
+  <div class="head-top"><h1>Jans Trainingscockpit</h1></div>
+  <nav class="tabs">${tabs.map(([k,l])=>`<button class="tab${route===k?" on":""}" data-a="nav" data-r="${k}">${l}</button>`).join("")}</nav>
+ </div></header><main>`;
+ if(route==="overview") html+=renderOverview(s,pct,hpct,wTraka);
+ else if(route==="plan") html+=renderPlan();
+ else if(route==="setup") html+=renderSetup();
+ document.getElementById("app").innerHTML=html;
+ return;
+}
+
+// ════════ ÜBERSICHT (Landing) ════════
+function renderOverview(s,pct,hpct,wTraka){
+ const maxRideH=Math.max(...WEEKS.map(w=>Math.max(weekStats(w).rhPlan,weekStats(w).rhIst)));
+ let html="";
+ // 1) AKTUELLE WOCHE + nächste Einheit
+ const cw=currentWeek?WEEKS.find(w=>w.id===currentWeek[0]):WEEKS[0];
+ const cwS=weekStats(cw);
+ const cwPct=cwS.rhPlan?Math.round(cwS.rhIst/cwS.rhPlan*100):0;
+ // nächste offene (nicht erledigte, nicht Ruhe) Einheit
+ let next=null;
+ for(const {d,oi} of orderedDays(cw)){const k=cw.id+"-"+oi;if(d.type!=="ruhe"&&!isDone(k)){next={d,k};break}}
+ html+=`<div class="card hero-card">
+  <div class="oh-row"><span class="oh-eyebrow">Aktuelle Woche</span><span class="oh-wid">${cw.id} · ${cw.range}</span></div>
+  <div class="oh-big num">${cwS.rhIst>0?fmtH(cwS.rhIst):"0"}<span class="oh-unit">/ ${fmtH(cwS.rhPlan)} h Rad</span> <span class="oh-pct${cwPct>=100?" over":""}">${cwPct}%</span></div>
+  <div class="bar soll-ist"><div class="bar-soll" style="width:${Math.min(100,cwPct)}%"></div>${cwPct>100?`<div class="bar-extra" style="width:${Math.min(100,cwPct-100)}%"></div>`:""}</div>
+  <div class="oh-sub num">🏋 ${cwS.kd}/${cwS.kt} Kraft${cwS.bonusH>0?` · <span style="color:var(--bonus)">+${fmtH(cwS.bonusH)} h Bonus</span>`:""}</div>
+  ${next?`<div class="oh-next"><span class="oh-next-lbl">Nächste Einheit</span><span class="oh-next-day"><span class="stripe" style="background:${TYPE[next.d.type].c}"></span>${esc(next.d.d)} · ${esc(next.d.title)}</span></div>`:`<div class="oh-next"><span class="oh-next-lbl">Diese Woche erledigt ✓</span></div>`}
+  <button class="oh-link" data-a="nav" data-r="plan">Zum Trainingsplan →</button>
+ </div>`;
+ // 2) FTP / Fortschrittskurve
+ const ftpPts20=FTP_LOG.map((f,i)=>({x:i,y:f.p20}));
+ const ftpPts60=FTP_LOG.map((f,i)=>({x:i,y:f.p60}));
+ const allFtp=FTP_LOG.flatMap(f=>[f.p20,f.p60]);
+ const fmin=Math.min(...allFtp,140)-10, fmax=Math.max(...allFtp,210)+10;
+ html+=`<div class="card"><div class="oc-head">Fortschritt · FTP-Entwicklung</div><div style="padding:0 14px 14px">
+  <div class="glegend"><span><span class="gdot" style="background:var(--intens)"></span>20-min</span><span><span class="gdot" style="background:var(--z2)"></span>1-h (Traka-relevant)</span><span class="gnote">Ziel 226 W</span></div>
+  ${lineGraph([{pts:ftpPts20,color:"var(--intens)"},{pts:ftpPts60,color:"var(--z2)"}],{w:340,h:150,ymin:fmin,ymax:fmax,xlabels:FTP_LOG.map(f=>f.date),ylabels:[...new Set([fmin,(fmin+fmax)/2,fmax,226])].filter(v=>v>=fmin&&v<=fmax)})}
+  <div class="gcap">Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
+ </div></div>`;
+ // 3) Material-Prio + To-dos
+ html+=`<div class="card"><div class="oc-head">Material · nächste Schritte</div><div class="todo-list">`;
+ SETUP_TODOS.slice(0,4).forEach(t=>{html+=`<div class="todo"><span class="todo-dot" style="background:${t.done?"var(--done)":"var(--accent)"}"></span><span class="todo-txt${t.done?" done":""}">${esc(t.txt)}</span>${t.when?`<span class="todo-when">${esc(t.when)}</span>`:""}</div>`});
+ html+=`</div><button class="oh-link" data-a="nav" data-r="setup">Zum Setup →</button></div>`;
+ // 4) Traka-Countdown
+ const dTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/864e5));
+ html+=`<div class="card countdown"><div class="cd-row"><div><div class="cd-big num">${wTraka}</div><div class="cd-lbl">Wochen bis The Traka</div></div><div class="cd-side num">${dTraka} Tage<br><span>Mai 2027 · Girona</span></div></div></div>`;
+ return html;
+}
+
+// ════════ TRAININGSPLAN (Wochen, Drag&Drop) ════════
+function renderPlan(){
+ let html="";
  // Legende: nur Plan-Typen + Dienst + Bonus, klar getrennt
  html+=`<div class="legend"><span class="leg-title">Legende:</span>`;
  const legendItems=[
@@ -494,41 +628,7 @@ function render(){
   ZONES.forEach(z=>{html+=`<span>${z[0]}</span><span>${z[1]}</span><span>${z[2]}</span>`});
   html+=`</div></div>`;
  }
- // ——— Fortschritt / Graphen ———
- {
-  const ftpPts20=FTP_LOG.map((f,i)=>({x:i,y:f.p20}));
-  const ftpPts60=FTP_LOG.map((f,i)=>({x:i,y:f.p60}));
-  const allFtp=FTP_LOG.flatMap(f=>[f.p20,f.p60]);
-  const fmin=Math.min(...allFtp,140)-10, fmax=Math.max(...allFtp,210)+10;
-  const xlabels=FTP_LOG.map(f=>f.date);
-  // Rad-Stunden: Ist (RIDE_LOG) vs Plan-Soll pro Woche
-  const planH=WEEKS.map(w=>weekStats(w).rhPlan);
-  const maxBar=Math.max(...planH,1)*1.1;
-  const bars=WEEKS.map((w,i)=>{
-   const wv=weekStats(w);
-   const hasIst=wv.rhIst>0;
-   return {label:w.id,val: hasIst?wv.rhIst:planH[i], done: hasIst, big:w.tag==="Volumen"};
-  });
-  html+=`<div class="card"><button class="sechead" data-a="stats" aria-expanded="${showStats}"><span class="t">Fortschritt &amp; Kurven</span><span class="s">FTP-Entwicklung · Wochenumfang</span><span class="chev">${showStats?"▲":"▼"}</span></button>`;
-  if(showStats){
-   html+=`<div style="padding:6px 14px 16px">
-    <div class="glabel">FTP-Schätzung aus Strava (W)</div>
-    <div class="glegend"><span><span class="gdot" style="background:var(--intens)"></span>20-min-Power</span><span><span class="gdot" style="background:var(--z2)"></span>1-h-Power (Traka-relevant)</span><span class="gnote">Ziel-Linie 226 W hinterlegt</span></div>
-    ${lineGraph([
-      {pts:ftpPts20,color:"var(--intens)"},
-      {pts:ftpPts60,color:"var(--z2)"}
-    ],{w:340,h:160,ymin:fmin,ymax:fmax,xlabels,ylabels:[...new Set([fmin,(fmin+fmax)/2,fmax,226])].filter(v=>v>=fmin&&v<=fmax)})}
-    <div class="gcap">Steigende 1-h-Power = die aerobe Baustelle schließt sich. Genau das soll bis Traka passieren.</div>
-
-    <div class="glabel" style="margin-top:18px">Rad-Wochenumfang (h)</div>
-    <div class="glegend"><span><span class="gdot" style="background:var(--z2)"></span>geplant</span><span><span class="gdot" style="background:var(--z2);opacity:1"></span>voll = Ist aus Strava</span><span><span class="gdot" style="background:var(--accent)"></span>Volumenwoche</span></div>
-    ${barGraph(bars,{w:340,h:150,ymax:maxBar})}
-    <div class="gcap">Kraft wird separat geführt (Zähler je Woche oben) und fließt nicht in die Rad-Stunden ein.</div>
-   </div>`;
-  }
-  html+=`</div>`;
- }
- WEEKS.forEach(w=>{
+  WEEKS.forEach(w=>{
   const ws_=weekStats(w);
   const open=!!openWeeks[w.id];
   const [ws,we]=WEEK_DATES[w.id];
@@ -548,10 +648,12 @@ function render(){
    ${(()=>{const p=ws_.rhPlan?Math.round(ws_.rhIst/ws_.rhPlan*100):0;return `<span class="wk-bar"><span class="wk-bar-track"><span class="wk-bar-soll" style="width:${Math.min(100,p)}%"></span>${p>100?`<span class="wk-bar-extra" style="width:${Math.min(100,p-100)}%"></span>`:""}</span><span class="wk-bar-lbl num">${ws_.rhIst>0?`${fmtH(ws_.rhIst)}/${fmtH(ws_.rhPlan)} h · ${p}%`:`Soll ${fmtH(ws_.rhPlan)} h`}</span></span>`;})()}
    ${open?`<span class="wnote">${esc(w.note)}</span>`:""}</button>`;
   if(open){
-   html+=`<div class="days">`;
-   w.days.forEach((d,i)=>{
+   html+=`<div class="days" data-week="${w.id}">`;
+   orderedDays(w).forEach(({d,oi})=>{
+    const i=oi;
     const key=w.id+"-"+i, rest=d.type==="ruhe", chk=isDone(key), dOpen=openDay===key;
-    html+=`<div class="day${rest?" rest":""}" data-a="${d.detail?"day":""}" data-k="${key}">
+    html+=`<div class="day${rest?" rest":""}" draggable="true" data-a="${d.detail?"day":""}" data-k="${key}" data-w="${w.id}" data-oi="${i}">
+     <span class="drag-handle" data-a="draghandle" aria-label="Verschieben">⠿</span>
      <span class="stripe" style="background:${TYPE[d.type].c}"></span>
      <span class="dd">${d.d}</span>
      <span class="dtxt"><span class="dtitle${chk?" done":""}">${esc(d.title)}</span>${d.sub?`<span class="dsub">${esc(d.sub)}${d.detail?" "+(dOpen?"▲":"▼"):""}</span>`:(d.detail?`<span class="dsub">${dOpen?"▲":"▼"}</span>`:"")}${ACTUAL[key]?`<span class="dsub ist">▸ ${ACTUAL[key].min} min${ACTUAL[key].hr?` · ⌀${ACTUAL[key].hr} bpm`:""}${ACTUAL[key].w?` · ${ACTUAL[key].w} W`:""}${ACTUAL[key].km?` · ${ACTUAL[key].km} km`:""}${ACTUAL[key].hm?` · ${ACTUAL[key].hm} hm`:""}</span>`:""}${notes[key]?`<span class="dsub" style="color:${TYPE.kraft.c}">✎ RPE ${notes[key].rpe||"–"}${notes[key].n?" · "+esc(notes[key].n):""}</span>`:""}${BONUS.filter(b=>b.dayKey===key).map(b=>`<span class="dsub" style="color:var(--bonus);font-weight:600">+ ${esc(b.note)} · ${b.min} min${b.km?` · ${b.km} km`:""} (Bonus, ${b.sport})</span>`).join("")}</span>
@@ -606,9 +708,21 @@ function render(){
  html+=`<div class="card dashed"><button class="sechead" data-a="rules" aria-expanded="${showRules}"><span class="t">Regeln</span><span class="s">Dienstplan, Training, Material &amp; Bedienung</span><span class="chev">${showRules?"▲":"▼"}</span></button>`;
  if(showRules){RULES.forEach(r=>{html+=`<div class="row"><span class="k ${r.cat.toLowerCase()}">${r.cat}</span><span>${esc(r.text)}</span></div>`})}
  html+=`</div>`;
- html+=`<p class="foot">ⓘ Diese App läuft lokal und offline. Plan-Updates: neue index.html von Claude generieren lassen und im Hosting ersetzen — Häkchen und Notizen bleiben erhalten. Hell/Dunkel folgt der Systemeinstellung.</p>
- <button class="reset" data-a="reset">Fortschritt zurücksetzen</button></main>`;
- document.getElementById("app").innerHTML=html;
+ html+=`<p class="foot">ⓘ Master-Gerät: Häkchen, Notizen und verschobene Einheiten werden lokal auf diesem Gerät gespeichert (kein Geräte-Sync). Hell/Dunkel folgt der Systemeinstellung.</p>
+ <button class="reset" data-a="reset">Fortschritt zurücksetzen</button>`;
+ return html;
+}
+
+// ════════ SETUP ════════
+function renderSetup(){
+ let html=`<div class="card"><div class="oc-head">Material · Prioritäten</div><div class="todo-list">`;
+ SETUP_TODOS.forEach(t=>{html+=`<div class="todo"><span class="todo-dot" style="background:${t.done?"var(--done)":"var(--accent)"}"></span><span class="todo-txt${t.done?" done":""}">${esc(t.txt)}</span>${t.when?`<span class="todo-when">${esc(t.when)}</span>`:""}</div>`});
+ html+=`</div></div>`;
+ // Bike-Setup-Details
+ html+=`<div class="card"><div class="oc-head">Aktuelles Setup</div><div class="setup-list">`;
+ SETUP_BIKE.forEach(s=>{html+=`<div class="srow"><span class="srow-k">${esc(s.k)}</span><span class="srow-v">${esc(s.v)}</span></div>`});
+ html+=`</div></div>`;
+ return html;
 }
 
 document.getElementById("app").addEventListener("click",e=>{
@@ -625,7 +739,49 @@ document.getElementById("app").addEventListener("click",e=>{
  else if(a==="rules")showRules=!showRules;
  else if(a==="stats")showStats=!showStats;
  else if(a==="review")showReview=!showReview;
+ else if(a==="nav"){route=el.dataset.r;openDay=null;window.scrollTo(0,0)}
  else if(a==="reset"){if(confirm("Wirklich allen Fortschritt löschen?")){done={};store.set(done)}}
+ render();
+});
+
+// ——— Drag&Drop: Einheiten innerhalb der Woche verschieben (Tag-Zuordnung ändern) ———
+let dragKey=null, dragWeek=null;
+const app=document.getElementById("app");
+app.addEventListener("dragstart",e=>{
+ const day=e.target.closest(".day"); if(!day)return;
+ dragKey=day.dataset.k; dragWeek=day.dataset.w;
+ day.classList.add("dragging");
+ try{e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",dragKey)}catch(_){}
+});
+app.addEventListener("dragend",e=>{
+ const day=e.target.closest(".day"); if(day)day.classList.remove("dragging");
+ app.querySelectorAll(".day.drop-above,.day.drop-below").forEach(d=>d.classList.remove("drop-above","drop-below"));
+});
+app.addEventListener("dragover",e=>{
+ const day=e.target.closest(".day"); if(!day||!dragWeek)return;
+ if(day.dataset.w!==dragWeek)return; // nur innerhalb derselben Woche
+ e.preventDefault();
+ const r=day.getBoundingClientRect();
+ const below=e.clientY > r.top+r.height/2;
+ app.querySelectorAll(".day.drop-above,.day.drop-below").forEach(d=>d.classList.remove("drop-above","drop-below"));
+ day.classList.add(below?"drop-below":"drop-above");
+});
+app.addEventListener("drop",e=>{
+ const day=e.target.closest(".day"); if(!day||!dragWeek)return;
+ if(day.dataset.w!==dragWeek){dragKey=dragWeek=null;return}
+ e.preventDefault();
+ const w=WEEKS.find(x=>x.id===dragWeek); if(!w){dragKey=dragWeek=null;return}
+ // aktuelle Anzeige-Reihenfolge (Original-Indizes)
+ let order=orderedDays(w).map(o=>o.oi);
+ const fromOi=parseInt(dragKey.split("-")[1]);
+ const toOi=parseInt(day.dataset.oi);
+ const r=day.getBoundingClientRect();
+ const below=e.clientY > r.top+r.height/2;
+ order=order.filter(x=>x!==fromOi);
+ let idx=order.indexOf(toOi); if(below)idx++;
+ order.splice(idx,0,fromOi);
+ dayOrder[w.id]=order; ostore.set(dayOrder);
+ dragKey=dragWeek=null;
  render();
 });
 

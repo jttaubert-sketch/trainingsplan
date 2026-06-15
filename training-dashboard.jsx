@@ -102,6 +102,7 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"15.06.2026",text:"Design-Überarbeitung (v25): neue „Forest“-Palette (tiefes Tannengrün, getöntes Bone, Burnt-Orange-Akzent) statt Beige-Grau, getönte weiche Schatten statt flacher Rahmen, einheitlicher 14px-Radius, feinere Typo-Hierarchie (Header-Akzentlinie, Eyebrow-Strich), Pills mit Rand, Legende-Items als Panel-Pillen, sanfte Hover-/Tactile-States, Verläufe und Glow auf den Fortschrittsbalken. Layout und Funktion unverändert. Dark Mode mitgezogen."},
  {date:"14.06.2026",text:"Plan-Überarbeitung nach Strava-Komplettanalyse (5 Punkte): (1) FTP-Korrektur 226→~190 W als Priorität, (2) Sprints in Phase 1 nur jede zweite Woche, (3) Kraft-Reduktions-Leitlinie über die Phasen, (4) zweite Werktags-Mitteldistanz (90–120′) ausgebaut, (5) Laufen als Ausweich-Option. Ziel: aerobe Basis gezielt stärken."},
  {date:"14.06.2026",text:"Soll-Berechnung: Bei Einheiten mit Zeitspanne zählt jetzt das Minimum als Soll (z. B. \"2,5–3 h\" → Soll 2,5 h). Betrifft W1 Sa, W4 Mo+Sa, W5 So, W7 So."},
  {date:"14.06.2026",text:"Legende repariert: Farbpunkte waren unsichtbar (CSS-Farbvariablen fehlten) — jetzt definiert (hell+dunkel), alle Farben im Dashboard sichtbar. Legende mit Titel und klar getrennten Items inkl. Zusatz/Bonus."},
@@ -161,6 +162,29 @@ const BONUS_COLOR = "#1F8A8A";
 const TYPE_META = TYPE;
 const STORAGE_KEY = "jan-training-progress-v2";
 const NOTES_KEY = "jan-training-notes-v2";
+const ORDER_KEY = "jan-training-dayorder-v2";
+const SETUP_TODOS = [
+  { txt: "Spacer schrittweise raus (5–10 mm über Wochen) — gratis, größter Aero-Gewinn", when: "laufend", done: false },
+  { txt: "Tire Inserts + Race-Dichtmilch einbauen", when: "bis Sa 25.7.", done: false },
+  { txt: "50-mm-Frontreifen testen", when: "Sa 18.7.", done: false },
+  { txt: "42–44T Kettenblatt prüfen", when: "optional", done: false },
+  { txt: "Komfort-Sattelstütze für Langstrecke", when: "optional", done: false },
+  { txt: "FTP-Retest → alle Wattbereiche neu rechnen", when: "Di 23.6.", done: false },
+  { txt: "Zwift Ride Smart Frame kaufen (Bundle Black Friday)", when: "Sep/Okt", done: false },
+];
+const SETUP_BIKE = [
+  { k: "Rad", v: "Orbea Terra Race M21eLTD 1X" },
+  { k: "Antrieb", v: "SRAM Force XPLR AXS 13-fach, 40T, 10–46" },
+  { k: "Powermeter", v: "SRAM einseitig" },
+  { k: "Laufräder", v: "OQUO RP50LTD (25 mm innen, ~1.460 g)" },
+  { k: "Reifen", v: "Schwalbe G-One RS Pro 45 mm" },
+  { k: "Cockpit", v: "integriert 100/400, aktuell ~3 Spacer" },
+  { k: "Sattelstütze", v: "OC XP10 Carbon, 27,2 mm, ohne Setback" },
+  { k: "Sattel", v: "Selle San Marco Shortfit 2.0" },
+  { k: "Pedale / Schuhe", v: "Shimano XTR M9200 / Lake MX30G" },
+  { k: "Kette", v: "gewachst (Optimize Wax), frisch vor jedem Rennen" },
+  { k: "Indoor", v: "Wahoo Kickr Core + Zwift Ride Frame (geplant)" },
+];
 const RIDE = ["z2", "lang", "intens"];
 const isDone = (done, key) => !!done[key] || !!ACTUAL[key];
 
@@ -237,8 +261,10 @@ function BarGraph({ bars, ymax }) {
 }
 
 const T = {
-  bg: "#E9E7DF", panel: "#FCFBF7", panel2: "#F2F0E8", ink: "#20261F",
-  inkSoft: "#5B655C", line: "#D6D3C7", accent: "#D14B1F", done: "#2E5746", dienst: "#7A3E8F",
+  bg: "#E6E4DA", panel: "#FBFAF5", panel2: "#EFEDE3", ink: "#1C231C",
+  inkSoft: "#586259", inkFaint: "#8A9189", line: "#DAD7CB", accent: "#C8491D",
+  accentSoft: "#F4E2D8", done: "#2E5746", dienst: "#7A3E8F",
+  shadowCard: "0 1px 3px rgba(46,87,70,.05), 0 6px 24px -8px rgba(28,35,28,.08)",
 };
 
 export default function TrainingDashboard() {
@@ -255,13 +281,38 @@ export default function TrainingDashboard() {
   const [showLog, setShowLog] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [route, setRoute] = useState("overview");
+  const [dayOrder, setDayOrder] = useState({});
+  const [dragKey, setDragKey] = useState(null);
 
   useEffect(() => {
     (async () => {
       try { const r = await window.storage.get(STORAGE_KEY); if (r?.value) setDone(JSON.parse(r.value)); } catch (e) {}
       try { const r = await window.storage.get(NOTES_KEY); if (r?.value) setNotes(JSON.parse(r.value)); } catch (e) {}
+      try { const r = await window.storage.get(ORDER_KEY); if (r?.value) setDayOrder(JSON.parse(r.value)); } catch (e) {}
     })();
   }, []);
+
+  // Tage einer Woche in gespeicherter Reihenfolge (mit Original-Index oi)
+  const orderedDays = (w) => {
+    const order = dayOrder[w.id];
+    const base = w.days.map((d, i) => ({ d, oi: i }));
+    if (!order || order.length !== base.length) return base;
+    const seen = new Set(), out = [];
+    order.forEach((oi) => { if (oi >= 0 && oi < base.length && !seen.has(oi)) { out.push(base[oi]); seen.add(oi); } });
+    base.forEach((b, i) => { if (!seen.has(i)) out.push(b); });
+    return out;
+  };
+  const moveDay = async (wid, fromOi, toOi, below) => {
+    const w = WEEKS.find((x) => x.id === wid); if (!w) return;
+    let order = orderedDays(w).map((o) => o.oi);
+    order = order.filter((x) => x !== fromOi);
+    let idx = order.indexOf(toOi); if (below) idx++;
+    order.splice(idx, 0, fromOi);
+    const next = { ...dayOrder, [wid]: order };
+    setDayOrder(next);
+    try { await window.storage.set(ORDER_KEY, JSON.stringify(next)); } catch (e) {}
+  };
 
   const toggle = async (key, ev) => {
     ev.stopPropagation();
@@ -315,41 +366,128 @@ export default function TrainingDashboard() {
   return (
     <div style={{ minHeight: "100vh", background: T.bg, color: T.ink, fontFamily: "'Barlow',system-ui,sans-serif" }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap');
-        :root{--lang:#2E5746;--z2:#3E6F8E;--kraft:#8A7141;--intens:#C2401C;--ruhe:#A8ADA6;--bonus:#1F8A8A;--dienst:#7A3E8F;--done:#2E5746;--accent:#D14B1F;}
-        @media (prefers-color-scheme: dark){:root{--lang:#5E9C82;--z2:#6FA3C4;--kraft:#C0A36E;--intens:#E8642F;--ruhe:#5C645D;--bonus:#4FC4C4;--dienst:#B07CC4;--done:#5E9C82;--accent:#E8642F;}}
+        :root{--lang:#2E5746;--z2:#3E6F8E;--kraft:#8A7141;--intens:#C2401C;--ruhe:#A8ADA6;--bonus:#1F8A8A;--dienst:#7A3E8F;--done:#2E5746;--accent:#C8491D;}
+        @media (prefers-color-scheme: dark){:root{--lang:#5E9C82;--z2:#6FA3C4;--kraft:#C0A36E;--intens:#F0703A;--ruhe:#5C645D;--bonus:#4FC4C4;--dienst:#B07CC4;--done:#5E9C82;--accent:#F0703A;}}
         .cond{font-family:'Barlow Condensed',sans-serif}
         .num{font-variant-numeric:tabular-nums}
-        .wk:hover{background:#F2F0E8}`}</style>
+        .wk{transition:background .15s ease}
+        .wk:hover{background:#EFEDE3}`}</style>
 
       {/* Kopf */}
-      <header style={{ background: "linear-gradient(180deg,#242B23,#20261F)", color: "#EFEDE3", padding: "22px 18px 18px" }}>
+      <header style={{ background: "linear-gradient(165deg,#243024 0%,#1A211B 60%,#171E18 100%)", color: "#EFEDE3", padding: "22px 18px 18px", position: "relative" }}>
+        <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, height: 2, background: "linear-gradient(90deg,var(--accent),transparent 60%)" }} />
         <div style={{ maxWidth: 920, margin: "0 auto" }}>
           <div className="cond" style={{ fontWeight: 600, letterSpacing: "0.2em", fontSize: 11, color: T.accent, textTransform: "uppercase" }}>
             Phase 1 · Basis · ~{wTraka} Wochen bis The Traka
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 14 }}>
-            <h1 className="cond" style={{ fontWeight: 700, fontSize: 40, margin: "2px 0 0", lineHeight: 0.95, textTransform: "uppercase" }}>Mikroplan<br />12.06–02.08</h1>
-            <div style={{ textAlign: "right" }}>
-              <div className="cond num" style={{ fontWeight: 700, fontSize: 38, lineHeight: 0.9 }}>{pct}<span style={{ fontSize: 19 }}>%</span></div>
-              <div className="num" style={{ fontSize: 11, color: "#A9B0A4", marginTop: 3 }}>insgesamt: 🚴 {s.hIst.toFixed(1)} / {s.hpPlan.toFixed(0)} h ({hpct}%){s.bonusH ? <span style={{ color: BONUS_COLOR }}> +{s.bonusH.toFixed(1)} h Bonus</span> : null} &nbsp;·&nbsp; 🏋 {s.kd}/{s.kt}</div>
-            </div>
-          </div>
-          <div style={{ marginTop: 14, height: 5, background: "rgba(255,255,255,.12)", borderRadius: 99, display: "flex", position: "relative" }}>
-            <div style={{ width: `${Math.min(100, hpct)}%`, height: "100%", background: T.done, borderRadius: hpct >= 100 ? "99px" : "99px 0 0 99px", transition: "width .45s cubic-bezier(.16,1,.3,1)" }} />
-            {hpct > 100 && <div style={{ width: `${Math.min(100, hpct - 100)}%`, height: "100%", background: T.accent, borderRadius: "0 99px 99px 0" }} />}
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 5, fontSize: 10.5, color: "#A9B0A4" }}>
-            <span>Ist {hpct}% vom Soll</span>
-            {hpct > 100 ? <span style={{ color: T.accent }}>+{hpct - 100}% extra</span> : hpct > 0 ? <span>{100 - hpct}% bis Soll</span> : null}
-          </div>
-          <div style={{ display: "flex", gap: "8px 16px", marginTop: 12, flexWrap: "wrap", fontSize: 12, color: "#B9BFB2" }}>
-            <span><strong style={{ color: "#EFEDE3" }}>FTP:</strong> 226 W hinterlegt · real ~190–200 W → Z2 bis Retest 23.06. nach Puls (128–158)</span>
-            <span><strong style={{ color: "#EFEDE3" }}>Gewicht:</strong> 89 kg → 2,5 W/kg</span>
-          </div>
+          <h1 className="cond" style={{ fontWeight: 700, fontSize: 34, margin: "4px 0 0", lineHeight: 0.95, textTransform: "uppercase" }}>Jans Trainingscockpit</h1>
+          <nav style={{ display: "flex", gap: 4, marginTop: 16, background: "rgba(255,255,255,.07)", padding: 4, borderRadius: 12 }}>
+            {[["overview", "Übersicht"], ["plan", "Trainingsplan"], ["setup", "Setup"]].map(([k, l]) => (
+              <button key={k} onClick={() => { setRoute(k); setOpenDay(null); }} className="cond" style={{ flex: 1, fontWeight: 600, fontSize: 14, letterSpacing: "0.03em", textTransform: "uppercase", color: route === k ? T.accent === "#C8491D" ? "#fff" : "#160E08" : "#A9B0A4", background: route === k ? T.accent : "transparent", border: "none", padding: "9px 8px", borderRadius: 9, cursor: "pointer", minHeight: 40 }}>{l}</button>
+            ))}
+          </nav>
         </div>
       </header>
 
       <main style={{ maxWidth: 920, margin: "0 auto", padding: "14px 14px 44px" }}>
+        {route === "overview" && (
+          <>
+            {/* 1) Aktuelle Woche */}
+            {(() => {
+              const cw = WEEKS.find((w) => { const [a, b] = WEEK_DATES[w.id]; return today >= a && today <= b; }) || WEEKS[0];
+              const cwS = weekStats(cw, done);
+              const cwPct = cwS.rhPlan ? Math.round((cwS.rhIst / cwS.rhPlan) * 100) : 0;
+              let next = null;
+              for (const { d, oi } of orderedDays(cw)) { const k = cw.id + "-" + oi; if (d.type !== "ruhe" && !isDone(done, k)) { next = { d, k }; break; } }
+              return (
+                <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard, padding: 16 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+                    <span className="cond" style={{ fontWeight: 600, fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: T.accent }}>Aktuelle Woche</span>
+                    <span className="cond" style={{ fontWeight: 600, fontSize: 15, color: T.ink }}>{cw.id} · {cw.range}</span>
+                  </div>
+                  <div className="cond num" style={{ fontWeight: 700, fontSize: 34, lineHeight: 1, color: T.ink, marginBottom: 10 }}>{cwS.rhIst > 0 ? cwS.rhIst.toFixed(1).replace(".0", "") : "0"}<span style={{ fontSize: 16, color: T.inkSoft, fontWeight: 600 }}> / {cwS.rhPlan.toFixed(1).replace(".0", "")} h Rad</span> <span style={{ fontSize: 18, color: cwPct >= 100 ? T.accent : T.inkSoft, fontWeight: 700 }}>{cwPct}%</span></div>
+                  <div style={{ height: 6, background: "rgba(0,0,0,.06)", borderRadius: 99, display: "flex", overflow: "hidden" }}>
+                    <div style={{ width: `${Math.min(100, cwPct)}%`, height: "100%", background: T.done, borderRadius: 99 }} />
+                    {cwPct > 100 && <div style={{ width: `${Math.min(100, cwPct - 100)}%`, height: "100%", background: T.accent }} />}
+                  </div>
+                  <div className="num" style={{ fontSize: 12.5, color: T.inkSoft, marginTop: 9 }}>🏋 {cwS.kd}/{cwS.kt} Kraft{cwS.bonusH > 0 ? <span style={{ color: BONUS_COLOR }}> · +{cwS.bonusH.toFixed(1).replace(".0", "")} h Bonus</span> : null}</div>
+                  <div style={{ marginTop: 13, paddingTop: 13, borderTop: `1px solid ${T.line}`, display: "flex", flexDirection: "column", gap: 5 }}>
+                    <span className="cond" style={{ fontWeight: 600, fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: T.inkFaint }}>{next ? "Nächste Einheit" : "Diese Woche erledigt ✓"}</span>
+                    {next && <span style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 14, fontWeight: 600, color: T.ink }}><span style={{ width: 4, height: 18, borderRadius: 99, background: TYPE_META[next.d.type].c }} />{next.d.d} · {next.d.title}</span>}
+                  </div>
+                  <button onClick={() => setRoute("plan")} className="cond" style={{ marginTop: 14, width: "100%", fontWeight: 600, fontSize: 13, letterSpacing: "0.04em", textTransform: "uppercase", color: T.accent, background: T.accentSoft, border: "none", borderRadius: 9, padding: 11, cursor: "pointer", minHeight: 42 }}>Zum Trainingsplan →</button>
+                </div>
+              );
+            })()}
+            {/* 2) FTP-Kurve */}
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+              <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Fortschritt · FTP-Entwicklung</div>
+              <div style={{ padding: "0 14px 14px" }}>
+                <div style={{ display: "flex", gap: "6px 14px", flexWrap: "wrap", fontSize: 11, color: T.inkSoft, marginBottom: 8 }}>
+                  <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#C2401C", marginRight: 5, verticalAlign: -1 }} />20-min</span>
+                  <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#3E6F8E", marginRight: 5, verticalAlign: -1 }} />1-h (Traka-relevant)</span>
+                  <span style={{ marginLeft: "auto", fontStyle: "italic" }}>Ziel 226 W</span>
+                </div>
+                <LineGraph series={[ftp20, ftp60]} ymin={fmin} ymax={fmax} xlabels={FTP_LOG.map((f) => f.date)} ylabels={[...new Set([fmin, (fmin + fmax) / 2, fmax, 226])].filter((v) => v >= fmin && v <= fmax)} />
+                <div style={{ fontSize: 11, color: T.inkSoft, lineHeight: 1.5, marginTop: 7 }}>Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
+              </div>
+            </div>
+            {/* 3) Material-Prio */}
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+              <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Material · nächste Schritte</div>
+              <div style={{ padding: "6px 14px 8px" }}>
+                {SETUP_TODOS.slice(0, 4).map((t, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderTop: i === 0 ? "none" : `1px solid ${T.line}` }}>
+                    <span style={{ width: 8, height: 8, borderRadius: 99, flex: "0 0 8px", background: t.done ? T.done : T.accent }} />
+                    <span style={{ flex: 1, fontSize: 13, lineHeight: 1.4, color: T.ink }}>{t.txt}</span>
+                    {t.when && <span className="num" style={{ fontSize: 11, color: T.inkSoft, whiteSpace: "nowrap" }}>{t.when}</span>}
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => setRoute("setup")} className="cond" style={{ margin: "0 14px 14px", width: "calc(100% - 28px)", fontWeight: 600, fontSize: 13, letterSpacing: "0.04em", textTransform: "uppercase", color: T.accent, background: T.accentSoft, border: "none", borderRadius: 9, padding: 11, cursor: "pointer", minHeight: 42 }}>Zum Setup →</button>
+            </div>
+            {/* 4) Countdown */}
+            <div style={{ background: "linear-gradient(135deg,#243024,#1A211B)", color: "#EFEDE3", borderRadius: 14, marginBottom: 10, padding: 16, boxShadow: T.shadowCard }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <div className="cond" style={{ fontWeight: 700, fontSize: 52, lineHeight: 0.9, color: T.accent }}>{wTraka}</div>
+                  <div className="cond" style={{ fontWeight: 600, fontSize: 13, letterSpacing: "0.1em", textTransform: "uppercase", color: "#A9B0A4", marginTop: 2 }}>Wochen bis The Traka</div>
+                </div>
+                <div className="num" style={{ textAlign: "right", fontSize: 15, fontWeight: 700, lineHeight: 1.4 }}>{Math.max(0, Math.round((new Date("2027-05-01") - new Date()) / 864e5))} Tage<br /><span style={{ fontSize: 11, color: "#A9B0A4", fontWeight: 500 }}>Mai 2027 · Girona</span></div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {route === "setup" && (
+          <>
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+              <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Material · Prioritäten</div>
+              <div style={{ padding: "6px 14px 10px" }}>
+                {SETUP_TODOS.map((t, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderTop: i === 0 ? "none" : `1px solid ${T.line}` }}>
+                    <span style={{ width: 8, height: 8, borderRadius: 99, flex: "0 0 8px", background: t.done ? T.done : T.accent }} />
+                    <span style={{ flex: 1, fontSize: 13, lineHeight: 1.4, color: T.ink }}>{t.txt}</span>
+                    {t.when && <span className="num" style={{ fontSize: 11, color: T.inkSoft, whiteSpace: "nowrap" }}>{t.when}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+              <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Aktuelles Setup</div>
+              <div style={{ padding: "4px 0 10px" }}>
+                {SETUP_BIKE.map((sb, i) => (
+                  <div key={i} style={{ display: "flex", gap: 12, padding: "9px 14px", borderTop: i === 0 ? "none" : `1px solid ${T.line}` }}>
+                    <span className="cond" style={{ fontWeight: 600, fontSize: 13, textTransform: "uppercase", letterSpacing: "0.03em", color: T.inkSoft, flex: "0 0 110px" }}>{sb.k}</span>
+                    <span style={{ fontSize: 13, color: T.ink, lineHeight: 1.4 }}>{sb.v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {route === "plan" && <>
         {/* Legende */}
         <div style={{ display: "flex", gap: "6px 14px", flexWrap: "wrap", alignItems: "center", fontSize: 11, color: T.inkSoft, padding: "2px 2px 12px" }}>
           <span style={{ fontWeight: 600, color: T.ink }}>Legende:</span>
@@ -370,7 +508,7 @@ export default function TrainingDashboard() {
         </div>
 
         {showZones && (
-          <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, marginBottom: 10 }}>
+          <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
             <div className="num" style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "5px 16px", fontSize: 12.5, padding: "11px 14px" }}>
               <span className="cond" style={{ fontWeight: 600, color: T.inkSoft, fontSize: 11, textTransform: "uppercase" }}>Zone</span>
               <span className="cond" style={{ fontWeight: 600, color: T.inkSoft, fontSize: 11, textTransform: "uppercase" }}>Watt</span>
@@ -381,7 +519,7 @@ export default function TrainingDashboard() {
         )}
 
         {/* Fortschritt & Kurven */}
-        <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, marginBottom: 10, overflow: "hidden" }}>
+        <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, overflow: "hidden", boxShadow: T.shadowCard }}>
           <button onClick={() => setShowStats(!showStats)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "13px 14px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
             <span className="cond" style={{ fontWeight: 700, fontSize: 16, textTransform: "uppercase", letterSpacing: "0.06em", color: T.inkSoft }}>Fortschritt &amp; Kurven</span>
             <span style={{ fontSize: 11, color: T.inkSoft, flex: 1 }}>FTP-Entwicklung · Wochenumfang</span>
@@ -418,7 +556,7 @@ export default function TrainingDashboard() {
           const [ws_, we_] = WEEK_DATES[w.id];
           const cur = today >= ws_ && today <= we_;
           return (
-            <div key={w.id} style={{ background: T.panel, border: `1px solid ${cur ? T.accent : T.line}`, borderRadius: 12, marginBottom: 10, overflow: "hidden", boxShadow: cur ? `0 0 0 1px ${T.accent}` : "none" }}>
+            <div key={w.id} style={{ background: T.panel, border: `1px solid ${cur ? T.accent : T.line}`, borderRadius: 14, marginBottom: 10, overflow: "hidden", boxShadow: cur ? `0 0 0 1px ${T.accent}, ${T.shadowCard}` : T.shadowCard }}>
               <button className="wk" onClick={() => setOpenWeeks({ ...openWeeks, [w.id]: !open })} style={{ width: "100%", display: "block", padding: "12px 14px 11px", background: "transparent", border: "none", textAlign: "left", cursor: "pointer" }}>
                 <span style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
                   <span className="cond" style={{ fontWeight: 700, fontSize: 20, color: T.accent }}>{w.id}</span>
@@ -452,12 +590,26 @@ export default function TrainingDashboard() {
               </button>
               {open && (
                 <div style={{ borderTop: `1px solid ${T.line}` }}>
-                  {w.days.map((d, i) => {
+                  {orderedDays(w).map(({ d, oi }) => {
+                    const i = oi;
                     const key = w.id + "-" + i, rest = d.type === "ruhe", chk = isDone(done, key), dOpen = openDay === key, nv = notes[key] || {};
                     return (
-                      <div key={key}>
-                        <div onClick={() => d.detail && setOpenDay(dOpen ? null : key)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "11px 14px", borderTop: i === 0 ? "none" : `1px solid ${T.line}`, opacity: rest ? 0.6 : 1, cursor: d.detail ? "pointer" : "default", minHeight: 48 }}>
-                          <span style={{ width: 4, alignSelf: "stretch", borderRadius: 2, background: TYPE_META[d.type].c }} />
+                      <div key={key}
+                        draggable
+                        onDragStart={(e) => { setDragKey(key); e.dataTransfer.effectAllowed = "move"; }}
+                        onDragOver={(e) => { if (dragKey && dragKey.split("-")[0] === w.id) e.preventDefault(); }}
+                        onDrop={(e) => {
+                          if (!dragKey || dragKey.split("-")[0] !== w.id) return;
+                          e.preventDefault();
+                          const r = e.currentTarget.getBoundingClientRect();
+                          const below = e.clientY > r.top + r.height / 2;
+                          moveDay(w.id, parseInt(dragKey.split("-")[1]), i, below);
+                          setDragKey(null);
+                        }}
+                        style={{ opacity: dragKey === key ? 0.45 : 1 }}>
+                        <div onClick={() => d.detail && setOpenDay(dOpen ? null : key)} style={{ display: "flex", alignItems: "center", gap: 9, padding: "11px 14px", borderTop: `1px solid ${T.line}`, opacity: rest ? 0.6 : 1, cursor: d.detail ? "pointer" : "default", minHeight: 48 }}>
+                          <span style={{ cursor: "grab", color: T.inkFaint, fontSize: 15, lineHeight: 1, flexShrink: 0, userSelect: "none" }} title="Verschieben">⠿</span>
+                          <span style={{ width: 4, alignSelf: "stretch", borderRadius: 99, background: TYPE_META[d.type].c }} />
                           <span className="cond" style={{ fontWeight: 600, fontSize: 15, minWidth: 50 }}>{d.d}</span>
                           <span style={{ flex: 1, minWidth: 0 }}>
                             <span style={{ fontWeight: chk ? 400 : 600, fontSize: 13.5, textDecoration: chk ? "line-through" : "none", color: chk ? T.inkSoft : T.ink }}>{d.title}</span>
@@ -511,7 +663,7 @@ export default function TrainingDashboard() {
         })}
 
         {/* Wochenanalyse */}
-        <div style={{ background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 12, marginBottom: 10, overflow: "hidden" }}>
+        <div style={{ background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 14, marginBottom: 10, overflow: "hidden" }}>
           <button onClick={() => setShowReview(!showReview)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "13px 14px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
             <span className="cond" style={{ fontWeight: 700, fontSize: 16, textTransform: "uppercase", letterSpacing: "0.06em", color: T.inkSoft }}>Wochenanalyse</span>
             <span style={{ fontSize: 11, color: T.inkSoft, flex: 1 }}>Soll-Ist je Woche · {REVIEWS.length} {REVIEWS.length === 1 ? "Eintrag" : "Einträge"}</span>
@@ -532,7 +684,7 @@ export default function TrainingDashboard() {
         </div>
 
         {/* Updates */}
-        <div style={{ background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 12, marginBottom: 10, overflow: "hidden" }}>
+        <div style={{ background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 14, marginBottom: 10, overflow: "hidden" }}>
           <button onClick={() => setShowLog(!showLog)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "13px 14px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
             <span className="cond" style={{ fontWeight: 700, fontSize: 16, textTransform: "uppercase", letterSpacing: "0.06em", color: T.inkSoft }}>Updates &amp; Änderungen</span>
             <span className="num" style={{ fontSize: 11, color: T.inkSoft, flex: 1 }}>{CHANGELOG.length} Einträge · zuletzt {CHANGELOG[0].date}</span>
@@ -547,7 +699,7 @@ export default function TrainingDashboard() {
         </div>
 
         {/* Regeln */}
-        <div style={{ background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 12, marginBottom: 10, overflow: "hidden" }}>
+        <div style={{ background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 14, marginBottom: 10, overflow: "hidden" }}>
           <button onClick={() => setShowRules(!showRules)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "13px 14px", background: "transparent", border: "none", cursor: "pointer", textAlign: "left" }}>
             <span className="cond" style={{ fontWeight: 700, fontSize: 16, textTransform: "uppercase", letterSpacing: "0.06em", color: T.inkSoft }}>Regeln</span>
             <span style={{ fontSize: 11, color: T.inkSoft, flex: 1 }}>Dienstplan, Training, Material &amp; Bedienung</span>
@@ -561,7 +713,8 @@ export default function TrainingDashboard() {
           ))}
         </div>
 
-        <p style={{ fontSize: 11.5, color: T.inkSoft, lineHeight: 1.6, marginTop: 16 }}>Dieses Dashboard ist synchron mit der iPhone-App (PWA v11). Fortschritt wird im Artifact gespeichert; Graph-Datenpunkte pflegen wir beim Sonntags-Abgleich.</p>
+        <p style={{ fontSize: 11.5, color: T.inkSoft, lineHeight: 1.6, marginTop: 16 }}>Master-Gerät: Häkchen, Notizen und verschobene Einheiten werden lokal gespeichert. Einheiten lassen sich am ⠿-Griff innerhalb der Woche per Drag&amp;Drop verschieben.</p>
+        </>}
       </main>
     </div>
   );
