@@ -102,6 +102,7 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"17.06.2026",text:"Neue Fitness-/Form-Kurve im Fortschritt-Reiter (vereinfachtes PMC nach TrainingPeaks-Vorbild): Fitness (42-Tage-Trend), Ermüdung (7-Tage), Form (Differenz). Zeigt, ob du aufbaust ohne zu überlasten und ob du frisch ins Rennen gehst. Basis: Strava Relative Effort (FTP-unabhängig). Aktuell Form +6 — gut erholt nach dem Dolomiten-Block."},
  {date:"17.06.2026",text:"RPE-Abgleich verfeinert: Lange Gravel-Ausfahrten haben keinen Erwartungswert mehr — ihre Anstrengung ist zu routenabhängig (flach vs. viele Höhenmeter vs. Race-Sim). RPE lässt sich weiter notieren, aber ohne Soll-Ist-Hinweis. Strukturierte Einheiten (Z2, Sweet Spot, Schwelle) behalten den Abgleich."},
  {date:"17.06.2026",text:"Zwei neue Features nach Join-Cycling-Analyse: (1) RPE-Soll-Ist-Abgleich — jede Einheit hat eine erwartete RPE (Z2 3–4, SS 5–6, Schwelle 7–8, lange Gravel 4–5, Sprints 4–6); liegt die notierte deutlich darüber, erscheint ein Hinweis (Ermüdung oder FTP zu hoch). (2) Readiness-Check in der Übersicht (Fit/Okay/Platt) — empfiehlt je nach Status, wie die nächste Einheit anzugehen ist. Beide nur empfehlend, Post-Call bleibt immer Ruhetag."},
  {date:"16.06.2026",text:"Übersicht: Traka-Countdown jetzt ganz oben. Indoor-Setup (Zwift Ride Frame + Kickr Core + Zwift-Abo) als vorhanden markiert."},
@@ -138,6 +139,14 @@ const FTP_LOG=[
  {date:"06.06",label:"Sella Ronda",p20:197,p60:179},
  {date:"14.06",label:"Aubachtal",p20:199,p60:147},
  // Nächster Punkt: FTP-Retest 23.06.
+];
+// Fitness/Ermüdung/Form (PMC) aus Strava Relative Effort. Fit=42-Tage, Müd=7-Tage, Form=Fit−Müd.
+const PMC_LOG=[
+ {date:"24.05",fit:2,mued:2,form:1},
+ {date:"31.05",fit:28,mued:65,form:-37},
+ {date:"07.06",fit:52,mued:102,form:-51},
+ {date:"14.06",fit:46,mued:45,form:0},
+ {date:"17.06",fit:44,mued:39,form:6},
 ];
 // Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
 const RIDE_LOG=[
@@ -744,6 +753,30 @@ export default function TrainingDashboard() {
                 <div style={{ fontSize: 11, color: T.inkSoft, lineHeight: 1.5, marginTop: 7 }}>Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
               </div>
             </div>
+            {/* Fitness / Ermüdung / Form (PMC) */}
+            {(() => {
+              const fitPts = { pts: PMC_LOG.map((p, i) => ({ x: i, y: p.fit })), color: "#3E6F8E" };
+              const muedPts = { pts: PMC_LOG.map((p, i) => ({ x: i, y: p.mued })), color: "#C2401C" };
+              const formPts = { pts: PMC_LOG.map((p, i) => ({ x: i, y: p.form })), color: "#2E5746" };
+              const allP = PMC_LOG.flatMap((p) => [p.fit, p.mued, p.form]);
+              const pmin = Math.min(...allP, 0) - 10, pmax = Math.max(...allP) + 10;
+              const curForm = PMC_LOG[PMC_LOG.length - 1].form;
+              const formLabel = curForm > 15 ? "frisch / Tapering-Bereich" : curForm > 5 ? "gut erholt" : curForm > -10 ? "ausgeglichen" : curForm > -30 ? "ermüdet (Trainingsreiz)" : "stark ermüdet";
+              return (
+                <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+                  <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Fitness · Ermüdung · Form</div>
+                  <div style={{ padding: "0 14px 14px" }}>
+                    <div style={{ display: "flex", gap: "6px 14px", flexWrap: "wrap", fontSize: 11, color: T.inkSoft, marginBottom: 8 }}>
+                      <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#3E6F8E", marginRight: 5, verticalAlign: -1 }} />Fitness (42 T)</span>
+                      <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#C2401C", marginRight: 5, verticalAlign: -1 }} />Ermüdung (7 T)</span>
+                      <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#2E5746", marginRight: 5, verticalAlign: -1 }} />Form</span>
+                    </div>
+                    <LineGraph series={[fitPts, muedPts, formPts]} ymin={pmin} ymax={pmax} xlabels={PMC_LOG.map((p) => p.date)} ylabels={[...new Set([pmin, 0, pmax / 2, pmax].map(Math.round))].filter((v) => v >= pmin && v <= pmax)} />
+                    <div style={{ fontSize: 11, color: T.inkSoft, lineHeight: 1.5, marginTop: 7 }}>Aktuell: Form {curForm > 0 ? "+" : ""}{curForm} — <strong>{formLabel}</strong>. Form = Fitness − Ermüdung. Hoch + ausgeruht = bereit für harte Einheiten / Rennen; tief = Reiz, braucht Erholung. <em>Basis: Strava Relative Effort, FTP-unabhängig.</em></div>
+                  </div>
+                </div>
+              );
+            })()}
             {/* Wochenumfang */}
             <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
               <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Rad-Wochenumfang (h)</div>

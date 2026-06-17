@@ -364,6 +364,7 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"17.06.2026",text:"Neue Fitness-/Form-Kurve im Fortschritt-Reiter (vereinfachtes PMC nach TrainingPeaks-Vorbild): Fitness (42-Tage-Trend), Ermüdung (7-Tage), Form (Differenz). Zeigt, ob du aufbaust ohne zu überlasten und ob du frisch ins Rennen gehst. Basis: Strava Relative Effort (FTP-unabhängig). Aktuell Form +6 — gut erholt nach dem Dolomiten-Block."},
  {date:"17.06.2026",text:"RPE-Abgleich verfeinert: Lange Gravel-Ausfahrten haben keinen Erwartungswert mehr — ihre Anstrengung ist zu routenabhängig (flach vs. viele Höhenmeter vs. Race-Sim). RPE lässt sich weiter notieren, aber ohne Soll-Ist-Hinweis. Strukturierte Einheiten (Z2, Sweet Spot, Schwelle) behalten den Abgleich."},
  {date:"16.06.2026",text:"Übersicht: Traka-Countdown jetzt ganz oben. Indoor-Setup (Zwift Ride Frame + Kickr Core + Zwift-Abo) als vorhanden markiert — der offene To-do dazu ist erledigt."},
  {date:"16.06.2026",text:"Zwei neue Reiter: „Fortschritt“ (Gesamtbilanz, FTP-Kurve, Wochenumfang, Kraftverlauf, alle Wochenanalysen) und „Changelog“ (Änderungshistorie). Beide aus dem Plan-Reiter herausgelöst, der jetzt schlanker ist. Navigation jetzt 5 Reiter."},
@@ -428,6 +429,15 @@ const FTP_LOG=[
  {date:"06.06",label:"Sella Ronda",p20:197,p60:179},
  {date:"14.06",label:"Aubachtal",p20:199,p60:147},
  // Nächster Punkt: FTP-Retest 23.06.
+];
+// Fitness/Ermüdung/Form (PMC) aus Strava Relative Effort. Fit=42-Tage, Müd=7-Tage, Form=Fit−Müd.
+// Wird beim Sonntags-Abgleich fortgeschrieben. Basis konservativ, FTP-unabhängig (nutzt Relative Effort).
+const PMC_LOG=[
+ {date:"24.05",fit:2,mued:2,form:1},
+ {date:"31.05",fit:28,mued:65,form:-37},
+ {date:"07.06",fit:52,mued:102,form:-51},
+ {date:"14.06",fit:46,mued:45,form:0},
+ {date:"17.06",fit:44,mued:39,form:6},
 ];
 // Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
 const RIDE_LOG=[
@@ -802,6 +812,19 @@ function renderProgress(s,hpct){
   <div class="glegend"><span><span class="gdot" style="background:var(--intens)"></span>20-min</span><span><span class="gdot" style="background:var(--z2)"></span>1-h (Traka-relevant)</span><span class="gnote">Ziel 226 W</span></div>
   ${lineGraph([{pts:ftpPts20,color:"var(--intens)"},{pts:ftpPts60,color:"var(--z2)"}],{w:340,h:160,ymin:fmin,ymax:fmax,xlabels:FTP_LOG.map(f=>f.date),ylabels:[...new Set([fmin,(fmin+fmax)/2,fmax,226])].filter(v=>v>=fmin&&v<=fmax)})}
   <div class="gcap">Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
+ </div></div>`;
+ // Fitness / Ermüdung / Form (PMC)
+ const fitPts=PMC_LOG.map((p,i)=>({x:i,y:p.fit}));
+ const muedPts=PMC_LOG.map((p,i)=>({x:i,y:p.mued}));
+ const formPts=PMC_LOG.map((p,i)=>({x:i,y:p.form}));
+ const allP=PMC_LOG.flatMap(p=>[p.fit,p.mued,p.form]);
+ const pmin=Math.min(...allP,0)-10, pmax=Math.max(...allP)+10;
+ const curForm=PMC_LOG[PMC_LOG.length-1].form;
+ const formLabel=curForm>15?"frisch / Tapering-Bereich":curForm>5?"gut erholt":curForm>-10?"ausgeglichen":curForm>-30?"ermüdet (Trainingsreiz)":"stark ermüdet";
+ html+=`<div class="card"><div class="oc-head">Fitness · Ermüdung · Form</div><div style="padding:0 14px 14px">
+  <div class="glegend"><span><span class="gdot" style="background:var(--z2)"></span>Fitness (42 T)</span><span><span class="gdot" style="background:var(--intens)"></span>Ermüdung (7 T)</span><span><span class="gdot" style="background:var(--done)"></span>Form</span></div>
+  ${lineGraph([{pts:fitPts,color:"var(--z2)"},{pts:muedPts,color:"var(--intens)"},{pts:formPts,color:"var(--done)"}],{w:340,h:160,ymin:pmin,ymax:pmax,xlabels:PMC_LOG.map(p=>p.date),ylabels:[...new Set([pmin,0,pmax/2,pmax].map(Math.round))].filter(v=>v>=pmin&&v<=pmax)})}
+  <div class="gcap">Aktuell: Form ${curForm>0?"+":""}${curForm} — <strong>${formLabel}</strong>. Form = Fitness − Ermüdung. Hoch + ausgeruht = bereit für harte Einheiten / Rennen; tief = Reiz, braucht Erholung. <em>Basis: Strava Relative Effort, FTP-unabhängig.</em></div>
  </div></div>`;
  // Wochenumfang-Balken (Plan vs Ist)
  const planH=WEEKS.map(w=>weekStats(w).rhPlan);
