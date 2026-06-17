@@ -202,6 +202,27 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
   .todo-txt.done{color:var(--ink-faint);text-decoration:line-through}
   .todo-when{font-size:11px;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
   .countdown{padding:16px;background:linear-gradient(135deg,#243024,#1A211B);color:#EFEDE3}
+  /* ——— Readiness ——— */
+  .readiness{padding:14px}
+  .rd-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .rd-reset{font-size:11px;color:var(--ink-soft);background:transparent;border:none;text-decoration:underline;cursor:pointer;padding:2px 4px}
+  .rd-btns{display:flex;gap:8px}
+  .rd-btn{flex:1;font-family:var(--cond);font-weight:600;font-size:15px;letter-spacing:.02em;padding:12px 6px;border-radius:var(--r-int);border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;min-height:48px;transition:all .15s ease}
+  .rd-btn.on.fit{background:var(--done);border-color:var(--done);color:#fff;box-shadow:0 2px 8px -2px var(--done)}
+  .rd-btn.on.okay{background:var(--kraft);border-color:var(--kraft);color:#fff;box-shadow:0 2px 8px -2px var(--kraft)}
+  .rd-btn.on.platt{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 2px 8px -2px var(--accent)}
+  .rec-banner{margin-top:12px;padding:11px 13px;border-radius:var(--r-int);font-size:12.5px;line-height:1.5}
+  .rec-banner.fit{background:rgba(46,87,70,.08);color:var(--ink);border-left:3px solid var(--done)}
+  .rec-banner.okay{background:rgba(138,113,65,.10);color:var(--ink);border-left:3px solid var(--kraft)}
+  .rec-banner.platt{background:var(--accent-soft);color:var(--ink);border-left:3px solid var(--accent)}
+  .rec-banner strong{font-weight:700}
+  .rd-note{margin-top:8px;font-size:11.5px;color:var(--ink-soft);font-style:italic}
+  /* ——— RPE-Abgleich ——— */
+  .rpe-exp{font-weight:500;color:var(--ink-faint);text-transform:none;letter-spacing:0}
+  .rpe.exp{border-color:var(--done);border-width:1.5px}
+  .rpe-flag{margin-top:9px;padding:9px 11px;border-radius:var(--r-int);font-size:12px;line-height:1.5}
+  .rpe-flag.hoch{background:var(--accent-soft);color:var(--ink);border-left:3px solid var(--accent)}
+  .rpe-flag.leicht{background:rgba(138,113,65,.10);color:var(--ink);border-left:3px solid var(--kraft)}
   .cd-row{display:flex;justify-content:space-between;align-items:center}
   .cd-big{font-family:var(--cond);font-weight:700;font-size:52px;line-height:.9;color:var(--accent)}
   .cd-lbl{font-family:var(--cond);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#A9B0A4;margin-top:2px}
@@ -343,6 +364,7 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"17.06.2026",text:"RPE-Abgleich verfeinert: Lange Gravel-Ausfahrten haben keinen Erwartungswert mehr — ihre Anstrengung ist zu routenabhängig (flach vs. viele Höhenmeter vs. Race-Sim). RPE lässt sich weiter notieren, aber ohne Soll-Ist-Hinweis. Strukturierte Einheiten (Z2, Sweet Spot, Schwelle) behalten den Abgleich."},
  {date:"16.06.2026",text:"Übersicht: Traka-Countdown jetzt ganz oben. Indoor-Setup (Zwift Ride Frame + Kickr Core + Zwift-Abo) als vorhanden markiert — der offene To-do dazu ist erledigt."},
  {date:"16.06.2026",text:"Zwei neue Reiter: „Fortschritt“ (Gesamtbilanz, FTP-Kurve, Wochenumfang, Kraftverlauf, alle Wochenanalysen) und „Changelog“ (Änderungshistorie). Beide aus dem Plan-Reiter herausgelöst, der jetzt schlanker ist. Navigation jetzt 5 Reiter."},
  {date:"16.06.2026",text:"Strava-Abgleich W2: Mo 15.6. Z2+Sprints 87 min (Ø152 bpm, 135 W, Gegenwind), Di 16.6. Zwift-Mitteldistanz 117 min (Ø139 bpm, 139 W, 1-h-Power 146 W). Sehr kontrollierte aerobe Einheit — genau das Ziel. Beide Einheiten erfüllt."},
@@ -449,6 +471,27 @@ const store={
 let done=store.get();
 // Einheit gilt als erledigt, wenn manuell abgehakt ODER mit echten Strava-Ist-Daten belegt.
 function isDone(key){return !!done[key] || !!(typeof ACTUAL!=="undefined" && ACTUAL[key]);}
+// Erwartete RPE je Einheit (aus Typ + Titel-Schlüsselwörtern abgeleitet)
+function expectedRPE(d){
+ const t=(d.title+" "+(d.sub||"")).toLowerCase();
+ // Kein Abgleich für Ruhe, Kraft und lange Gravel-Ausfahrten (zu routenabhängig)
+ if(d.type==="ruhe"||d.type==="kraft"||d.type==="lang") return null;
+ if(/lange|gravel/.test(t)) return null;
+ if(/sprint/.test(t)) return [4,6];        // Z2 mit Sprints: Grundlast niedrig, Spitzen kurz
+ if(/sweet ?spot|\bss\b/.test(t)) return [5,6];
+ if(/schwelle|ftp|test|vo2|intervall/.test(t)) return [7,8];
+ if(d.type==="z2"||/z2|grundlage|mitteldistanz|recovery|locker/.test(t)) return [3,4];
+ return [4,5];
+}
+// Abgleich: liegt notierte RPE deutlich über dem Erwartungsfenster?
+function rpeFlag(d,key){
+ const nv=notes[key]; if(!nv||!nv.rpe) return null;
+ const exp=expectedRPE(d); if(!exp) return null;
+ const [lo,hi]=exp;
+ if(nv.rpe>=hi+2) return {level:"hoch",exp,got:nv.rpe};   // ≥2 über Obergrenze: deutlich
+ if(nv.rpe>hi) return {level:"leicht",exp,got:nv.rpe};    // knapp drüber
+ return null;
+}
 const NKEY="jan-training-notes";
 let notesMem={};
 const nstore={
@@ -460,6 +503,14 @@ const today=new Date().toISOString().slice(0,10);
 const currentWeek=Object.entries(WEEK_DATES).find(([,r])=>today>=r[0]&&today<=r[1]);
 let openWeeks={}; if(currentWeek) openWeeks[currentWeek[0]]=true;
 let openDay=null, showZones=false, showLog=false, showRules=false, showStats=false, showReview=false;
+
+// ——— Readiness-Check (täglich, lokal) ———
+const RKEY="jan-training-readiness";
+const rstore={
+ get(){try{return JSON.parse(localStorage.getItem(RKEY)||"{}")}catch(e){return {}}},
+ set(v){try{localStorage.setItem(RKEY,JSON.stringify(v))}catch(e){}}
+};
+let readiness=rstore.get(); // {"2026-06-17":"fit"|"okay"|"platt"}
 
 // ——— Routing (Master-Gerät, lokal) ———
 let route="overview"; // overview | plan | setup
@@ -582,7 +633,36 @@ function renderOverview(s,pct,hpct,wTraka){
  // 1) Traka-Countdown (ganz oben)
  const dTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/864e5));
  html+=`<div class="card countdown"><div class="cd-row"><div><div class="cd-big num">${wTraka}</div><div class="cd-lbl">Wochen bis The Traka</div></div><div class="cd-side num">${dTraka} Tage<br><span>Mai 2027 · Girona</span></div></div></div>`;
- // 2) AKTUELLE WOCHE + nächste Einheit
+ // 2) Readiness-Check
+ const cwR=currentWeek?WEEKS.find(w=>w.id===currentWeek[0]):WEEKS[0];
+ // nächste offene Einheit für die Empfehlung
+ let nextR=null;
+ for(const {d,oi} of orderedDays(cwR)){const k=cwR.id+"-"+oi;if(d.type!=="ruhe"&&!isDone(k)){nextR={d,k};break}}
+ const rToday=readiness[today];
+ const isPostCall=nextR&&/post-call|nachtdienst/i.test((nextR.d.shift||"")+(nextR.d.sub||""));
+ let recBanner="";
+ if(rToday){
+  const exp=nextR?expectedRPE(nextR.d):null;
+  const hard=exp&&exp[1]>=6; // intensive nächste Einheit
+  if(rToday==="platt"){
+   recBanner=`<div class="rec-banner platt">⚠ <strong>Reduziert drauf.</strong> ${nextR?(hard?`Heute steht „${esc(nextR.d.title)}“ an — Empfehlung: Intensität rausnehmen (ruhiges Z2 statt Intervalle) oder zum Ruhetag machen. Erholung schlägt Reiz, wenn der Körper leer ist.`:`Heute „${esc(nextR.d.title)}“ — wenn überhaupt, ganz unten in der Z2-Spanne bleiben (Puls < 145). Kürzer ist völlig okay.`):"Heute steht nichts Hartes an — hör auf den Körper, ein Ruhetag ist legitim."}</div>`;
+  } else if(rToday==="okay"){
+   recBanner=`<div class="rec-banner okay">ℹ <strong>Solide, nicht spritzig.</strong> ${nextR?`Für „${esc(nextR.d.title)}“: am unteren Ende der vorgesehenen Spanne fahren, Umfang wie geplant.`:"Lockerer Tag — passt."}</div>`;
+  } else {
+   recBanner=`<div class="rec-banner fit">✓ <strong>Gut drauf.</strong> ${nextR?`„${esc(nextR.d.title)}“ wie geplant durchziehen.`:"Plan wie vorgesehen."}</div>`;
+  }
+ }
+ html+=`<div class="card readiness">
+  <div class="rd-head"><span class="oh-eyebrow">Wie fühlst du dich heute?</span>${rToday?`<button class="rd-reset" data-a="readiness" data-v="">zurücksetzen</button>`:""}</div>
+  <div class="rd-btns">
+   <button class="rd-btn${rToday==="fit"?" on fit":""}" data-a="readiness" data-v="fit">😀 Fit</button>
+   <button class="rd-btn${rToday==="okay"?" on okay":""}" data-a="readiness" data-v="okay">😐 Okay</button>
+   <button class="rd-btn${rToday==="platt"?" on platt":""}" data-a="readiness" data-v="platt">😵 Platt</button>
+  </div>
+  ${recBanner}
+  ${isPostCall?`<div class="rd-note">Hinweis: Post-Call-Tag — bleibt Ruhetag, unabhängig vom Status.</div>`:""}
+ </div>`;
+ // 3) AKTUELLE WOCHE + nächste Einheit
  const cw=currentWeek?WEEKS.find(w=>w.id===currentWeek[0]):WEEKS[0];
  const cwS=weekStats(cw);
  const cwPct=cwS.rhPlan?Math.round(cwS.rhIst/cwS.rhPlan*100):0;
@@ -668,12 +748,15 @@ function renderPlan(){
      ${rest?"":`<button class="chk${chk?" on":""}" data-a="chk" data-k="${key}" aria-label="${esc(d.d)} abhaken">✓</button>`}</div>`;
     if(dOpen&&d.detail){
      const nv=notes[key]||{};
+     const exp=expectedRPE(d);
+     const flag=rpeFlag(d,key);
      let rpeBtns="";
-     for(let r=1;r<=10;r++){rpeBtns+=`<button class="rpe num${nv.rpe===r?" on":""}" data-a="rpe" data-k="${key}" data-r="${r}">${r}</button>`}
+     for(let r=1;r<=10;r++){const inExp=exp&&r>=exp[0]&&r<=exp[1];rpeBtns+=`<button class="rpe num${nv.rpe===r?" on":""}${inExp?" exp":""}" data-a="rpe" data-k="${key}" data-r="${r}">${r}</button>`}
      html+=`<div class="detail">${esc(d.detail)}
       <div class="notewrap">
-       <div class="rpelbl">Anstrengung (RPE)</div>
+       <div class="rpelbl">Anstrengung (RPE)${exp?` <span class="rpe-exp">· erwartet ${exp[0]}–${exp[1]}</span>`:""}</div>
        <div class="rperow">${rpeBtns}</div>
+       ${flag?`<div class="rpe-flag ${flag.level}">${flag.level==="hoch"?"⚠":"ℹ"} Deutlich anstrengender als erwartet (${flag.got} statt ${flag.exp[0]}–${flag.exp[1]}). ${flag.level==="hoch"?"Mögliche Ursachen: Ermüdung aus dem Dienst, oder FTP zu hoch angesetzt. Bei Muster → nächste Einheit lockerer oder FTP prüfen.":"Im Blick behalten, ob das öfter vorkommt."}</div>`:""}
        <div class="noterow"><input type="text" id="note-${key}" placeholder="Stichwort, z. B. Beine schwer nach Spätdienst" value="${esc(nv.n||"").replace(/"/g,"&quot;")}" maxlength="120"><button data-a="savenote" data-k="${key}">Speichern</button></div>
       </div></div>`;
     }
@@ -791,6 +874,7 @@ document.getElementById("app").addEventListener("click",e=>{
  else if(a==="stats")showStats=!showStats;
  else if(a==="review")showReview=!showReview;
  else if(a==="nav"){route=el.dataset.r;openDay=null;window.scrollTo(0,0)}
+ else if(a==="readiness"){const v=el.dataset.v;if(v){readiness[today]=v}else{delete readiness[today]}rstore.set(readiness)}
  else if(a==="reset"){if(confirm("Wirklich allen Fortschritt löschen?")){done={};store.set(done)}}
  render();
 });

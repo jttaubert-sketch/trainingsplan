@@ -102,6 +102,8 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"17.06.2026",text:"RPE-Abgleich verfeinert: Lange Gravel-Ausfahrten haben keinen Erwartungswert mehr — ihre Anstrengung ist zu routenabhängig (flach vs. viele Höhenmeter vs. Race-Sim). RPE lässt sich weiter notieren, aber ohne Soll-Ist-Hinweis. Strukturierte Einheiten (Z2, Sweet Spot, Schwelle) behalten den Abgleich."},
+ {date:"17.06.2026",text:"Zwei neue Features nach Join-Cycling-Analyse: (1) RPE-Soll-Ist-Abgleich — jede Einheit hat eine erwartete RPE (Z2 3–4, SS 5–6, Schwelle 7–8, lange Gravel 4–5, Sprints 4–6); liegt die notierte deutlich darüber, erscheint ein Hinweis (Ermüdung oder FTP zu hoch). (2) Readiness-Check in der Übersicht (Fit/Okay/Platt) — empfiehlt je nach Status, wie die nächste Einheit anzugehen ist. Beide nur empfehlend, Post-Call bleibt immer Ruhetag."},
  {date:"16.06.2026",text:"Übersicht: Traka-Countdown jetzt ganz oben. Indoor-Setup (Zwift Ride Frame + Kickr Core + Zwift-Abo) als vorhanden markiert."},
  {date:"16.06.2026",text:"Zwei neue Reiter: „Fortschritt“ (Gesamtbilanz, FTP-Kurve, Wochenumfang, Kraftverlauf, alle Wochenanalysen) und „Changelog“ (Änderungshistorie). Aus dem Plan herausgelöst. Navigation jetzt 5 Reiter."},
  {date:"16.06.2026",text:"Strava-Abgleich W2: Mo 15.6. Z2+Sprints 87 min (Ø152 bpm, 135 W), Di 16.6. Zwift-Mitteldistanz 117 min (Ø139 bpm, 1-h-Power 146 W) — sehr kontrolliert aerob. Beide erfüllt, W2 bei 124%."},
@@ -168,6 +170,7 @@ const TYPE_META = TYPE;
 const STORAGE_KEY = "jan-training-progress-v2";
 const NOTES_KEY = "jan-training-notes-v2";
 const ORDER_KEY = "jan-training-dayorder-v2";
+const READINESS_KEY = "jan-training-readiness-v2";
 const SETUP_TODOS = [
   { txt: "Spacer schrittweise raus (5–10 mm über Wochen) — gratis, größter Aero-Gewinn", when: "laufend", done: false },
   { txt: "Tire Inserts + Race-Dichtmilch einbauen", when: "bis Sa 25.7.", done: false },
@@ -192,6 +195,24 @@ const SETUP_BIKE = [
 ];
 const RIDE = ["z2", "lang", "intens"];
 const isDone = (done, key) => !!done[key] || !!ACTUAL[key];
+const expectedRPE = (d) => {
+  const t = (d.title + " " + (d.sub || "")).toLowerCase();
+  // Kein Abgleich für Ruhe, Kraft und lange Gravel-Ausfahrten (zu routenabhängig)
+  if (d.type === "ruhe" || d.type === "kraft" || d.type === "lang") return null;
+  if (/lange|gravel/.test(t)) return null;
+  if (/sprint/.test(t)) return [4, 6];
+  if (/sweet ?spot|\bss\b/.test(t)) return [5, 6];
+  if (/schwelle|ftp|test|vo2|intervall/.test(t)) return [7, 8];
+  if (d.type === "z2" || /z2|grundlage|mitteldistanz|recovery|locker/.test(t)) return [3, 4];
+  return [4, 5];
+};
+const rpeFlag = (d, nv) => {
+  if (!nv || !nv.rpe) return null;
+  const exp = expectedRPE(d); if (!exp) return null;
+  if (nv.rpe >= exp[1] + 2) return { level: "hoch", exp, got: nv.rpe };
+  if (nv.rpe > exp[1]) return { level: "leicht", exp, got: nv.rpe };
+  return null;
+};
 
 function weekStats(w, done) {
   let rh = 0, rd = 0, rt = 0, kt = 0, kd = 0, rhIst = 0, bonusH = 0;
@@ -289,14 +310,24 @@ export default function TrainingDashboard() {
   const [route, setRoute] = useState("overview");
   const [dayOrder, setDayOrder] = useState({});
   const [dragKey, setDragKey] = useState(null);
+  const [readiness, setReadiness] = useState({});
 
   useEffect(() => {
     (async () => {
       try { const r = await window.storage.get(STORAGE_KEY); if (r?.value) setDone(JSON.parse(r.value)); } catch (e) {}
       try { const r = await window.storage.get(NOTES_KEY); if (r?.value) setNotes(JSON.parse(r.value)); } catch (e) {}
       try { const r = await window.storage.get(ORDER_KEY); if (r?.value) setDayOrder(JSON.parse(r.value)); } catch (e) {}
+      try { const r = await window.storage.get(READINESS_KEY); if (r?.value) setReadiness(JSON.parse(r.value)); } catch (e) {}
     })();
   }, []);
+
+  const setReady = async (v) => {
+    const today = new Date().toISOString().slice(0, 10);
+    const next = { ...readiness };
+    if (v) next[today] = v; else delete next[today];
+    setReadiness(next);
+    try { await window.storage.set(READINESS_KEY, JSON.stringify(next)); } catch (e) {}
+  };
 
   // Tage einer Woche in gespeicherter Reihenfolge (mit Original-Index oi)
   const orderedDays = (w) => {
@@ -407,7 +438,38 @@ export default function TrainingDashboard() {
                 <div className="num" style={{ textAlign: "right", fontSize: 15, fontWeight: 700, lineHeight: 1.4 }}>{Math.max(0, Math.round((new Date("2027-05-01") - new Date()) / 864e5))} Tage<br /><span style={{ fontSize: 11, color: "#A9B0A4", fontWeight: 500 }}>Mai 2027 · Girona</span></div>
               </div>
             </div>
-            {/* 2) Aktuelle Woche */}
+            {/* 2) Readiness-Check */}
+            {(() => {
+              const today = new Date().toISOString().slice(0, 10);
+              const cwR = WEEKS.find((w) => { const [a, b] = WEEK_DATES[w.id]; return today >= a && today <= b; }) || WEEKS[0];
+              let nextR = null;
+              for (const { d, oi } of orderedDays(cwR)) { const k = cwR.id + "-" + oi; if (d.type !== "ruhe" && !isDone(done, k)) { nextR = { d, k }; break; } }
+              const rToday = readiness[today];
+              const isPostCall = nextR && /post-call|nachtdienst/i.test((nextR.d.shift || "") + (nextR.d.sub || ""));
+              const exp = nextR ? expectedRPE(nextR.d) : null;
+              const hard = exp && exp[1] >= 6;
+              let banner = null, bg = "", bc = "";
+              if (rToday === "platt") { bg = T.accentSoft; bc = T.accent; banner = <span>⚠ <strong>Reduziert drauf.</strong> {nextR ? (hard ? `Heute steht „${nextR.d.title}“ an — Empfehlung: Intensität rausnehmen (ruhiges Z2 statt Intervalle) oder zum Ruhetag machen.` : `Heute „${nextR.d.title}“ — wenn überhaupt, ganz unten in der Z2-Spanne bleiben (Puls < 145). Kürzer ist okay.`) : "Heute steht nichts Hartes an — ein Ruhetag ist legitim."}</span>; }
+              else if (rToday === "okay") { bg = "rgba(138,113,65,.10)"; bc = "#8A7141"; banner = <span>ℹ <strong>Solide, nicht spritzig.</strong> {nextR ? `Für „${nextR.d.title}“: am unteren Ende der Spanne fahren, Umfang wie geplant.` : "Lockerer Tag — passt."}</span>; }
+              else if (rToday === "fit") { bg = "rgba(46,87,70,.08)"; bc = T.done; banner = <span>✓ <strong>Gut drauf.</strong> {nextR ? `„${nextR.d.title}“ wie geplant durchziehen.` : "Plan wie vorgesehen."}</span>; }
+              const opts = [["fit", "😀 Fit", T.done], ["okay", "😐 Okay", "#8A7141"], ["platt", "😵 Platt", T.accent]];
+              return (
+                <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard, padding: 14 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span className="cond" style={{ fontWeight: 600, fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase", color: T.accent }}>Wie fühlst du dich heute?</span>
+                    {rToday && <button onClick={() => setReady("")} style={{ fontSize: 11, color: T.inkSoft, background: "transparent", border: "none", textDecoration: "underline", cursor: "pointer" }}>zurücksetzen</button>}
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {opts.map(([v, l, c]) => (
+                      <button key={v} onClick={() => setReady(v)} className="cond" style={{ flex: 1, fontWeight: 600, fontSize: 15, padding: "12px 6px", borderRadius: 9, border: `1px solid ${rToday === v ? c : T.line}`, background: rToday === v ? c : T.panel, color: rToday === v ? "#fff" : T.ink, cursor: "pointer", minHeight: 48 }}>{l}</button>
+                    ))}
+                  </div>
+                  {banner && <div style={{ marginTop: 12, padding: "11px 13px", borderRadius: 9, fontSize: 12.5, lineHeight: 1.5, background: bg, borderLeft: `3px solid ${bc}`, color: T.ink }}>{banner}</div>}
+                  {isPostCall && <div style={{ marginTop: 8, fontSize: 11.5, color: T.inkSoft, fontStyle: "italic" }}>Hinweis: Post-Call-Tag — bleibt Ruhetag, unabhängig vom Status.</div>}
+                </div>
+              );
+            })()}
+            {/* 3) Aktuelle Woche */}
             {(() => {
               const cw = WEEKS.find((w) => { const [a, b] = WEEK_DATES[w.id]; return today >= a && today <= b; }) || WEEKS[0];
               const cwS = weekStats(cw, done);
@@ -601,13 +663,16 @@ export default function TrainingDashboard() {
                           <div style={{ padding: "10px 14px 13px 78px", fontSize: 12.5, lineHeight: 1.55, color: T.inkSoft, background: T.panel2, borderTop: `1px dashed ${T.line}` }}>
                             {d.detail}
                             <div style={{ marginTop: 11, paddingTop: 10, borderTop: `1px dashed ${T.line}` }}>
-                              <div className="cond" style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Anstrengung (RPE)</div>
+                              {(() => { const exp = expectedRPE(d); const flag = rpeFlag(d, nv); return (<>
+                              <div className="cond" style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Anstrengung (RPE){exp ? <span style={{ fontWeight: 500, color: T.inkFaint, textTransform: "none", letterSpacing: 0 }}> · erwartet {exp[0]}–{exp[1]}</span> : null}</div>
                               <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                                {[1,2,3,4,5,6,7,8,9,10].map((r) => (
+                                {[1,2,3,4,5,6,7,8,9,10].map((r) => { const inExp = exp && r >= exp[0] && r <= exp[1]; return (
                                   <button key={r} onClick={(e) => { e.stopPropagation(); setNote(key, { rpe: nv.rpe === r ? undefined : r }); }}
-                                    className="num" style={{ width: 32, height: 32, borderRadius: 8, border: `1px solid ${nv.rpe === r ? T.accent : T.line}`, background: nv.rpe === r ? T.accent : T.panel, color: nv.rpe === r ? "#fff" : T.ink, fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>{r}</button>
-                                ))}
+                                    className="num" style={{ width: 32, height: 32, borderRadius: 8, border: `${inExp ? 1.5 : 1}px solid ${nv.rpe === r ? T.accent : inExp ? T.done : T.line}`, background: nv.rpe === r ? T.accent : T.panel, color: nv.rpe === r ? "#fff" : T.ink, fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}>{r}</button>
+                                ); })}
                               </div>
+                              {flag && <div style={{ marginTop: 9, padding: "9px 11px", borderRadius: 8, fontSize: 12, lineHeight: 1.5, background: flag.level === "hoch" ? T.accentSoft : "rgba(138,113,65,.10)", borderLeft: `3px solid ${flag.level === "hoch" ? T.accent : "#8A7141"}`, color: T.ink }}>{flag.level === "hoch" ? "⚠" : "ℹ"} Deutlich anstrengender als erwartet ({flag.got} statt {flag.exp[0]}–{flag.exp[1]}). {flag.level === "hoch" ? "Mögliche Ursachen: Ermüdung aus dem Dienst, oder FTP zu hoch. Bei Muster → nächste Einheit lockerer oder FTP prüfen." : "Im Blick behalten, ob das öfter vorkommt."}</div>}
+                              </>); })()}
                               <input defaultValue={nv.n || ""} placeholder="Stichwort, z. B. Beine schwer nach Spätdienst" maxLength={120}
                                 onClick={(e) => e.stopPropagation()}
                                 onBlur={(e) => setNote(key, { n: e.target.value.trim() || undefined })}
