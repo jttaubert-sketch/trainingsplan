@@ -343,6 +343,9 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"16.06.2026",text:"Übersicht: Traka-Countdown jetzt ganz oben. Indoor-Setup (Zwift Ride Frame + Kickr Core + Zwift-Abo) als vorhanden markiert — der offene To-do dazu ist erledigt."},
+ {date:"16.06.2026",text:"Zwei neue Reiter: „Fortschritt“ (Gesamtbilanz, FTP-Kurve, Wochenumfang, Kraftverlauf, alle Wochenanalysen) und „Changelog“ (Änderungshistorie). Beide aus dem Plan-Reiter herausgelöst, der jetzt schlanker ist. Navigation jetzt 5 Reiter."},
+ {date:"16.06.2026",text:"Strava-Abgleich W2: Mo 15.6. Z2+Sprints 87 min (Ø152 bpm, 135 W, Gegenwind), Di 16.6. Zwift-Mitteldistanz 117 min (Ø139 bpm, 139 W, 1-h-Power 146 W). Sehr kontrollierte aerobe Einheit — genau das Ziel. Beide Einheiten erfüllt."},
  {date:"14.06.2026",text:"Plan-Überarbeitung nach Strava-Komplettanalyse (5 Punkte): (1) FTP-Korrektur 226→~190 W als Priorität markiert, (2) Sprints in Phase 1 nur noch jede zweite Woche, (3) Kraft-Reduktions-Leitlinie über die Phasen, (4) zweite Werktags-Mitteldistanz (90–120′) pro Woche ausgebaut, (5) Laufen als Ausweich-Option. Ziel: aerobe Basis gezielt stärken (deine Hauptbaustelle)."},
  {date:"14.06.2026",text:"Soll-Berechnung: Bei Einheiten mit Zeitspanne zählt jetzt das Minimum als Soll (z. B. \"2,5–3 h\" → Soll 2,5 h). Betrifft W1 Sa, W4 Mo+Sa, W5 So, W7 So. Macht die Soll-Erfüllung realistisch erreichbar."},
  {date:"14.06.2026",text:"Legende repariert: Farbpunkte waren unsichtbar, weil die CSS-Farbvariablen fehlten — jetzt definiert (hell+dunkel), alle Farben im ganzen Dashboard (Legende, Tagesband, Einheiten-Streifen) sichtbar. Legende mit Titel und klar getrennten Items inkl. Zusatz/Bonus."},
@@ -380,7 +383,7 @@ const SETUP_TODOS=[
  {txt:"42–44T Kettenblatt prüfen (40×10 läuft bei ~55 km/h aus)",when:"optional",done:false},
  {txt:"Komfort-Sattelstütze für Langstrecke",when:"optional",done:false},
  {txt:"FTP-Retest → alle Wattbereiche neu rechnen",when:"Di 23.6.",done:false},
- {txt:"Zwift Ride Smart Frame kaufen (Bundle Black Friday)",when:"Sep/Okt",done:false},
+ {txt:"Indoor-Setup komplett: Zwift Ride Frame + Kickr Core + Zwift-Abo vorhanden",when:"erledigt",done:true},
 ];
 const SETUP_BIKE=[
  {k:"Rad",v:"Orbea Terra Race M21eLTD 1X"},
@@ -393,7 +396,7 @@ const SETUP_BIKE=[
  {k:"Sattel",v:"Selle San Marco Shortfit 2.0"},
  {k:"Pedale / Schuhe",v:"Shimano XTR M9200 / Lake MX30G"},
  {k:"Kette",v:"gewachst (Optimize Wax), frisch vor jedem Rennen"},
- {k:"Indoor",v:"Wahoo Kickr Core + Zwift Ride Frame (geplant)"},
+ {k:"Indoor",v:"Zwift Ride Frame + Wahoo Kickr Core + Zwift-Abo (vorhanden)"},
 ];
 
 
@@ -419,7 +422,9 @@ const ACTUAL={
  "W1-1":{min:85,sport:"WeightTraining",note:"Krafttraining"},
  "W1-2":{min:71,sport:"WeightTraining",note:"Krafttraining"},
  "W1-5":{min:123,hr:119,w:88,km:41,hm:207,sport:"Ride",note:"Z1–Z2, sauber ruhig"},
- "W1-6":{min:111,hr:159,w:166,km:42,hm:456,sport:"Ride",note:"Aubachtal-Trail statt Kraft, RPE ~7"}
+ "W1-6":{min:111,hr:159,w:166,km:42,hm:456,sport:"Ride",note:"Aubachtal-Trail statt Kraft, RPE ~7"},
+ "W2-0":{min:87,hr:152,w:135,km:36,hm:81,sport:"Ride",note:"Z2 + Sprints, viel Gegenwind"},
+ "W2-1":{min:117,hr:139,w:139,km:43,hm:578,sport:"VirtualRide",note:"Zwift Z2 Mitteldistanz — kontrolliert aerob"}
 };
 // BONUS: gefahren, aber nicht im Plan (z. B. Lauf, Schwimmen, Extra-Ausfahrt). Zählt als Ist-Bonus.
 const BONUS=[
@@ -555,7 +560,7 @@ function render(){
  const s=stats(), pct=s.t?Math.round(s.dc/s.t*100):0;
  const hpct=s.hpPlan?Math.round(s.hIst/s.hpPlan*100):0;
  const wTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/(7*864e5)));
- const tabs=[["overview","Übersicht"],["plan","Trainingsplan"],["setup","Setup"]];
+ const tabs=[["overview","Übersicht"],["plan","Plan"],["progress","Fortschritt"],["setup","Setup"],["log","Changelog"]];
  let html=`<header><div class="wrap">
   <div class="eyebrow">Phase 1 · Basis · ~${wTraka} Wochen bis The Traka</div>
   <div class="head-top"><h1>Jans Trainingscockpit</h1></div>
@@ -563,7 +568,9 @@ function render(){
  </div></header><main>`;
  if(route==="overview") html+=renderOverview(s,pct,hpct,wTraka);
  else if(route==="plan") html+=renderPlan();
+ else if(route==="progress") html+=renderProgress(s,hpct);
  else if(route==="setup") html+=renderSetup();
+ else if(route==="log") html+=renderLog();
  document.getElementById("app").innerHTML=html;
  return;
 }
@@ -572,7 +579,10 @@ function render(){
 function renderOverview(s,pct,hpct,wTraka){
  const maxRideH=Math.max(...WEEKS.map(w=>Math.max(weekStats(w).rhPlan,weekStats(w).rhIst)));
  let html="";
- // 1) AKTUELLE WOCHE + nächste Einheit
+ // 1) Traka-Countdown (ganz oben)
+ const dTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/864e5));
+ html+=`<div class="card countdown"><div class="cd-row"><div><div class="cd-big num">${wTraka}</div><div class="cd-lbl">Wochen bis The Traka</div></div><div class="cd-side num">${dTraka} Tage<br><span>Mai 2027 · Girona</span></div></div></div>`;
+ // 2) AKTUELLE WOCHE + nächste Einheit
  const cw=currentWeek?WEEKS.find(w=>w.id===currentWeek[0]):WEEKS[0];
  const cwS=weekStats(cw);
  const cwPct=cwS.rhPlan?Math.round(cwS.rhIst/cwS.rhPlan*100):0;
@@ -587,7 +597,7 @@ function renderOverview(s,pct,hpct,wTraka){
   ${next?`<div class="oh-next"><span class="oh-next-lbl">Nächste Einheit</span><span class="oh-next-day"><span class="stripe" style="background:${TYPE[next.d.type].c}"></span>${esc(next.d.d)} · ${esc(next.d.title)}</span></div>`:`<div class="oh-next"><span class="oh-next-lbl">Diese Woche erledigt ✓</span></div>`}
   <button class="oh-link" data-a="nav" data-r="plan">Zum Trainingsplan →</button>
  </div>`;
- // 2) FTP / Fortschrittskurve
+ // 3) FTP / Fortschrittskurve
  const ftpPts20=FTP_LOG.map((f,i)=>({x:i,y:f.p20}));
  const ftpPts60=FTP_LOG.map((f,i)=>({x:i,y:f.p60}));
  const allFtp=FTP_LOG.flatMap(f=>[f.p20,f.p60]);
@@ -597,13 +607,10 @@ function renderOverview(s,pct,hpct,wTraka){
   ${lineGraph([{pts:ftpPts20,color:"var(--intens)"},{pts:ftpPts60,color:"var(--z2)"}],{w:340,h:150,ymin:fmin,ymax:fmax,xlabels:FTP_LOG.map(f=>f.date),ylabels:[...new Set([fmin,(fmin+fmax)/2,fmax,226])].filter(v=>v>=fmin&&v<=fmax)})}
   <div class="gcap">Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
  </div></div>`;
- // 3) Material-Prio + To-dos
+ // 4) Material-Prio + To-dos
  html+=`<div class="card"><div class="oc-head">Material · nächste Schritte</div><div class="todo-list">`;
- SETUP_TODOS.slice(0,4).forEach(t=>{html+=`<div class="todo"><span class="todo-dot" style="background:${t.done?"var(--done)":"var(--accent)"}"></span><span class="todo-txt${t.done?" done":""}">${esc(t.txt)}</span>${t.when?`<span class="todo-when">${esc(t.when)}</span>`:""}</div>`});
+ SETUP_TODOS.filter(t=>!t.done).slice(0,4).forEach(t=>{html+=`<div class="todo"><span class="todo-dot" style="background:${t.done?"var(--done)":"var(--accent)"}"></span><span class="todo-txt${t.done?" done":""}">${esc(t.txt)}</span>${t.when?`<span class="todo-when">${esc(t.when)}</span>`:""}</div>`});
  html+=`</div><button class="oh-link" data-a="nav" data-r="setup">Zum Setup →</button></div>`;
- // 4) Traka-Countdown
- const dTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/864e5));
- html+=`<div class="card countdown"><div class="cd-row"><div><div class="cd-big num">${wTraka}</div><div class="cd-lbl">Wochen bis The Traka</div></div><div class="cd-side num">${dTraka} Tage<br><span>Mai 2027 · Girona</span></div></div></div>`;
  return html;
 }
 
@@ -685,31 +692,75 @@ function renderPlan(){
   }
   html+=`</div>`;
  });
- html+=`<div class="card dashed"><button class="sechead" data-a="log" aria-expanded="${showLog}"><span class="t">Updates &amp; Änderungen</span><span class="s num">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</span><span class="chev">${showLog?"▲":"▼"}</span></button>`;
- if(showLog){CHANGELOG.forEach(c=>{html+=`<div class="row"><span class="k num">${c.date}</span><span>${esc(c.text)}</span></div>`})}
+ html+=`<div class="card dashed"><button class="sechead" data-a="rules" aria-expanded="${showRules}"><span class="t">Regeln</span><span class="s">Dienstplan, Training, Material &amp; Bedienung</span><span class="chev">${showRules?"▲":"▼"}</span></button>`;
+ if(showRules){RULES.forEach(r=>{html+=`<div class="row"><span class="k ${r.cat.toLowerCase()}">${r.cat}</span><span>${esc(r.text)}</span></div>`})}
  html+=`</div>`;
- // Wochenanalyse
- html+=`<div class="card dashed"><button class="sechead" data-a="review" aria-expanded="${showReview}"><span class="t">Wochenanalyse</span><span class="s">Soll-Ist je Woche · ${REVIEWS.length} ${REVIEWS.length===1?"Eintrag":"Einträge"}</span><span class="chev">${showReview?"▲":"▼"}</span></button>`;
- if(showReview){
+ html+=`<p class="foot">ⓘ Master-Gerät: Häkchen, Notizen und verschobene Einheiten werden lokal auf diesem Gerät gespeichert (kein Geräte-Sync). Einheiten am ⠿-Griff per Drag&amp;Drop innerhalb der Woche verschieben.</p>
+ <button class="reset" data-a="reset">Fortschritt zurücksetzen</button>`;
+ return html;
+}
+
+// ════════ FORTSCHRITT ════════
+function renderProgress(s,hpct){
+ let html="";
+ // Gesamt-Bilanz über alle Wochen
+ html+=`<div class="card hero-card">
+  <div class="oh-row"><span class="oh-eyebrow">Gesamtbilanz · alle 8 Wochen</span></div>
+  <div class="oh-big num">${s.hIst.toFixed(1)}<span class="oh-unit">/ ${s.hpPlan.toFixed(0)} h Rad</span> <span class="oh-pct${hpct>=100?" over":""}">${hpct}%</span></div>
+  <div class="bar soll-ist"><div class="bar-soll" style="width:${Math.min(100,hpct)}%"></div>${hpct>100?`<div class="bar-extra" style="width:${Math.min(100,hpct-100)}%"></div>`:""}</div>
+  <div class="oh-sub num">🏋 ${s.kd}/${s.kt} Kraft${s.bonusH>0?` · <span style="color:var(--bonus)">+${s.bonusH.toFixed(1)} h Bonus</span>`:""}</div>
+ </div>`;
+ // FTP-Kurve
+ const ftpPts20=FTP_LOG.map((f,i)=>({x:i,y:f.p20}));
+ const ftpPts60=FTP_LOG.map((f,i)=>({x:i,y:f.p60}));
+ const allFtp=FTP_LOG.flatMap(f=>[f.p20,f.p60]);
+ const fmin=Math.min(...allFtp,140)-10, fmax=Math.max(...allFtp,210)+10;
+ html+=`<div class="card"><div class="oc-head">FTP-Entwicklung (W)</div><div style="padding:0 14px 14px">
+  <div class="glegend"><span><span class="gdot" style="background:var(--intens)"></span>20-min</span><span><span class="gdot" style="background:var(--z2)"></span>1-h (Traka-relevant)</span><span class="gnote">Ziel 226 W</span></div>
+  ${lineGraph([{pts:ftpPts20,color:"var(--intens)"},{pts:ftpPts60,color:"var(--z2)"}],{w:340,h:160,ymin:fmin,ymax:fmax,xlabels:FTP_LOG.map(f=>f.date),ylabels:[...new Set([fmin,(fmin+fmax)/2,fmax,226])].filter(v=>v>=fmin&&v<=fmax)})}
+  <div class="gcap">Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
+ </div></div>`;
+ // Wochenumfang-Balken (Plan vs Ist)
+ const planH=WEEKS.map(w=>weekStats(w).rhPlan);
+ const maxBar=Math.max(...planH,...WEEKS.map(w=>weekStats(w).rhIst),1)*1.1;
+ const bars=WEEKS.map((w,i)=>{const wv=weekStats(w);const hasIst=wv.rhIst>0;return {label:w.id,val:hasIst?wv.rhIst:planH[i],done:hasIst,big:w.tag==="Volumen"}});
+ html+=`<div class="card"><div class="oc-head">Rad-Wochenumfang (h)</div><div style="padding:0 14px 14px">
+  <div class="glegend"><span><span class="gdot" style="background:var(--z2);opacity:.4"></span>geplant</span><span><span class="gdot" style="background:var(--z2)"></span>Ist (Strava)</span><span><span class="gdot" style="background:var(--accent)"></span>Volumenwoche</span></div>
+  ${barGraph(bars,{w:340,h:150,ymax:maxBar})}
+  <div class="gcap">Kraft separat geführt, fließt nicht in die Rad-Stunden ein.</div>
+ </div></div>`;
+ // Kraft-Verlauf (Anzahl je Woche)
+ const kbars=WEEKS.map(w=>{const wv=weekStats(w);return {label:w.id,val:wv.kd,done:wv.kd>0,big:false}});
+ const maxK=Math.max(...WEEKS.map(w=>weekStats(w).kt),1);
+ html+=`<div class="card"><div class="oc-head">Krafteinheiten je Woche</div><div style="padding:0 14px 14px">
+  ${barGraph(kbars,{w:340,h:120,ymax:maxK+0.5})}
+  <div class="gcap">Erledigte Krafteinheiten pro Woche.</div>
+ </div></div>`;
+ // Wochenanalysen
+ html+=`<div class="card"><div class="oc-head">Wochenanalysen</div>`;
+ if(REVIEWS.length){
   [...REVIEWS].reverse().forEach(r=>{
    html+=`<div class="review">
     <div class="rev-head"><span class="rev-wk">${r.wk}</span>
-     <span class="rev-kpi">🚴 ${r.radH}</span>
+     <span class="rev-kpi">🚴 ${esc(r.radH)}</span>
      <span class="rev-kpi">${r.lang?"✓":"✗"} lange Ausfahrt</span>
-     <span class="rev-kpi">🏋 ${r.kraft}</span>
+     <span class="rev-kpi">🏋 ${esc(r.kraft)}</span>
      ${r.bonus?`<span class="rev-kpi" style="color:var(--bonus)">+ ${esc(r.bonus)}</span>`:""}
      <span class="rev-kpi">Z2: ${esc(r.z2)}</span></div>
     <div class="rev-txt"><strong>Fazit:</strong> ${esc(r.fazit)}</div>
     <div class="rev-txt"><strong>→ Folgewoche:</strong> ${esc(r.ableitung)}</div>
    </div>`;
   });
- }
+ } else { html+=`<div class="rev-txt" style="padding:11px 14px;color:var(--ink-soft)">Noch keine Analysen. Die erste folgt am Ende von W1.</div>`; }
  html+=`</div>`;
- html+=`<div class="card dashed"><button class="sechead" data-a="rules" aria-expanded="${showRules}"><span class="t">Regeln</span><span class="s">Dienstplan, Training, Material &amp; Bedienung</span><span class="chev">${showRules?"▲":"▼"}</span></button>`;
- if(showRules){RULES.forEach(r=>{html+=`<div class="row"><span class="k ${r.cat.toLowerCase()}">${r.cat}</span><span>${esc(r.text)}</span></div>`})}
+ return html;
+}
+
+// ════════ CHANGELOG ════════
+function renderLog(){
+ let html=`<div class="card"><div class="oc-head">Updates &amp; Änderungen</div><div class="s num" style="padding:0 14px 8px;color:var(--ink-soft)">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</div>`;
+ CHANGELOG.forEach(c=>{html+=`<div class="row"><span class="k num">${c.date}</span><span>${esc(c.text)}</span></div>`});
  html+=`</div>`;
- html+=`<p class="foot">ⓘ Master-Gerät: Häkchen, Notizen und verschobene Einheiten werden lokal auf diesem Gerät gespeichert (kein Geräte-Sync). Hell/Dunkel folgt der Systemeinstellung.</p>
- <button class="reset" data-a="reset">Fortschritt zurücksetzen</button>`;
  return html;
 }
 
