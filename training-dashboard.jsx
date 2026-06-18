@@ -29,8 +29,8 @@ const WEEKS=[
  {id:"W2",range:"15.–21. Jun",tag:"Basis",note:"2 Nachtdienste · Fortbildung Sa+So (lange Ausfahrt entfällt)",days:[
   {d:"Mo 15.",type:"z2",title:"Z2 75′ + Sprints",sub:"abends nach BMW-Abholung ~17:30",h:1.25,detail:"15′ einrollen → Hauptteil Z2 mit eingestreuten Sprints → 10′ ausrollen. "+Dsprint},
   {d:"Di 16.",type:"z2",title:"Z2 90–120′ vormittags",sub:"Mitteldistanz · Soll 90′",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: zweite längere aerobe Einheit der Woche. Spätestens 12 Uhr fertig."},
-  {d:"Mi 17.",type:"ruhe",title:"Post-Call · Ruhe",sub:"ausnahmslos",h:0,detail:"2–3 h Schlaf in der Nacht — heute zählt nur Regeneration: nachschlafen, essen, Spaziergang ok."},
-  {d:"Do 18.",type:"kraft",title:"Kraft 1 vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:1,detail:Dkraft1},
+  {d:"Mi 17.",type:"ruhe",actual:"kraft",title:"Post-Call · Ruhe → Kraft gemacht",sub:"Do-Kraft hierher vorgezogen, 56 min",h:0,detail:"Eigentlich Post-Call-Ruhetag. Abends die für Do geplante Kraft-Einheit vorgezogen (56 min) — die zählt beim Do-Soll als erfüllt."},
+  {d:"Do 18.",type:"kraft",actual:"z2",title:"Kraft 1 → Rad gefahren",sub:"Kraft auf Mi vorgezogen · Rad als Bonus · Dienst ab 14:45",shift:"Nachtdienst",h:0,detail:"Diese Kraft-Einheit wurde auf Mi 17. vorgezogen (dort erledigt). Am freien Vormittag stattdessen eine ruhige Z2-Ausfahrt gefahren (zählt als Bonus ins Ist, nicht ins Soll). "+Dkraft1},
   {d:"Fr 19.",type:"ruhe",title:"Post-Call · Ruhe",sub:"Fortbildung",h:0},
   {d:"Sa 20.",type:"ruhe",title:"Ruhe",sub:"Fortbildung ganztägig (Sa+So)",h:0},
   {d:"So 21.",type:"ruhe",title:"Ruhe",sub:"Fortbildung ganztägig — lange Ausfahrt entfällt, nicht nachholen",h:0}]},
@@ -102,6 +102,9 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"18.06.2026",text:"Bonus-Einheiten zählen jetzt ins Rad-Ist (nicht ins Soll) — die heutige Zusatz-Ausfahrt erscheint in der Ist-Radzeit. Zusätzlich farbkodierte Abweichungs-Markierung: Mi 17. (geplant Ruhe → Kraft gemacht) und Do 18. (geplant Kraft → Rad gefahren) zeigen die tatsächliche Einheit als Farbe + Hinweis."},
+ {date:"18.06.2026",text:"Korrektur W2: Do-Kraft wurde auf Mi 17. vorgezogen → zählt als erfüllte Kraft (1/1), kein zusätzliches Soll. Die heutige ruhige Rad-Ausfahrt (84 min) ist eine Zusatzeinheit → als Bonus erfasst, nicht im Rad-Soll. W2: Rad 3,4 h (124%), Kraft 1/1, +1,4 h Bonus."},
+ {date:"18.06.2026",text:"Strava-Abgleich: Do 18.6. „Ruhig vor dem Dienst“ 84 min Outdoor (Ø155 bpm, 129 W) statt der geplanten Kraft-Einheit eingetragen. Auffällig: Puls relativ hoch bei moderaten Watt — Outdoor-typisch (Wind, Rollwiderstand, Hitze) vs. Zwift."},
  {date:"17.06.2026",text:"Neue Fitness-/Form-Kurve im Fortschritt-Reiter (vereinfachtes PMC nach TrainingPeaks-Vorbild): Fitness (42-Tage-Trend), Ermüdung (7-Tage), Form (Differenz). Zeigt, ob du aufbaust ohne zu überlasten und ob du frisch ins Rennen gehst. Basis: Strava Relative Effort (FTP-unabhängig). Aktuell Form +6 — gut erholt nach dem Dolomiten-Block."},
  {date:"17.06.2026",text:"RPE-Abgleich verfeinert: Lange Gravel-Ausfahrten haben keinen Erwartungswert mehr — ihre Anstrengung ist zu routenabhängig (flach vs. viele Höhenmeter vs. Race-Sim). RPE lässt sich weiter notieren, aber ohne Soll-Ist-Hinweis. Strukturierte Einheiten (Z2, Sweet Spot, Schwelle) behalten den Abgleich."},
  {date:"17.06.2026",text:"Zwei neue Features nach Join-Cycling-Analyse: (1) RPE-Soll-Ist-Abgleich — jede Einheit hat eine erwartete RPE (Z2 3–4, SS 5–6, Schwelle 7–8, lange Gravel 4–5, Sprints 4–6); liegt die notierte deutlich darüber, erscheint ein Hinweis (Ermüdung oder FTP zu hoch). (2) Readiness-Check in der Übersicht (Fit/Okay/Platt) — empfiehlt je nach Status, wie die nächste Einheit anzugehen ist. Beide nur empfehlend, Post-Call bleibt immer Ruhetag."},
@@ -163,6 +166,7 @@ const ACTUAL = {
   "W1-6": { min: 111, hr: 159, w: 166, km: 42, hm: 456, sport: "Ride", note: "Aubachtal-Trail statt Kraft, RPE ~7" },
   "W2-0": { min: 87, hr: 152, w: 135, km: 36, hm: 81, sport: "Ride", note: "Z2 + Sprints, viel Gegenwind" },
   "W2-1": { min: 117, hr: 139, w: 139, km: 43, hm: 578, sport: "VirtualRide", note: "Zwift Z2 Mitteldistanz — kontrolliert aerob" },
+  "W2-3": { min: 56, sport: "WeightTraining", note: "Kraft auf Mi 17. vorgezogen, dort erledigt" },
 };
 const REVIEWS = [
   { wk: "W1", radH: "3,9 h (Soll ~3 h)", lang: true, z2: "sauber (Sa Ø119 bpm, max 158)", kraft: "3/3", bonus: "Lauf 36′ / 5,1 km",
@@ -172,6 +176,7 @@ const REVIEWS = [
 
 const BONUS = [
   { wk: "W1", dayKey: "W1-2", date: "10.06", sport: "Run", min: 36, km: 5.1, note: "Z2-Lauf morgens" },
+ { wk: "W2", dayKey: "W2-3", date: "18.06", sport: "Ride", min: 84, km: 35, note: "Ruhig vor dem Dienst (zusätzlich)" },
 ];
 
 const BONUS_COLOR = "#1F8A8A";
@@ -233,6 +238,7 @@ function weekStats(w, done) {
     if (dn) { rd++; rhIst += act ? act.min / 60 : d.h; }
   });
   BONUS.filter((b) => b.wk === w.id).forEach((b) => { bonusH += b.min / 60; });
+  rhIst += bonusH;
   return { rhPlan: rh, rd, rt, kt, kd, rhIst, bonusH };
 }
 
@@ -386,6 +392,7 @@ export default function TrainingDashboard() {
       });
       BONUS.filter((b) => b.wk === w.id).forEach((b) => { bonusH += b.min / 60; });
     });
+    hIst += bonusH;
     return { t, dc, hpPlan, hIst, kt, kd, bonusH };
   }, [done]);
   const hpct = s.hpPlan ? Math.round((s.hIst / s.hpPlan) * 100) : 0;
@@ -613,8 +620,9 @@ export default function TrainingDashboard() {
                 <span style={{ display: "flex", gap: 3, marginTop: 9, height: 7 }}>
                   {w.days.map((d, i) => {
                     const dn = isDone(done, w.id + "-" + i);
-                    const op = d.type === "ruhe" ? 0.15 : dn ? 1 : 0.32;
-                    return <span key={i} style={{ flex: 1, borderRadius: 2, background: TYPE_META[d.type].c, opacity: op }} />;
+                    const effType = d.actual || d.type;
+                    const op = effType === "ruhe" ? 0.15 : dn ? 1 : 0.32;
+                    return <span key={i} style={{ flex: 1, borderRadius: 2, background: TYPE_META[effType].c, opacity: d.actual ? 1 : op, boxShadow: d.actual ? `0 0 0 1.5px ${T.bg}, 0 0 0 2.5px ${T.inkFaint}` : "none" }} />;
                   })}
                 </span>
                 {(() => {
@@ -637,7 +645,7 @@ export default function TrainingDashboard() {
                 <div style={{ borderTop: `1px solid ${T.line}` }}>
                   {orderedDays(w).map(({ d, oi }) => {
                     const i = oi;
-                    const key = w.id + "-" + i, rest = d.type === "ruhe", chk = isDone(done, key), dOpen = openDay === key, nv = notes[key] || {};
+                    const key = w.id + "-" + i, rest = d.type === "ruhe" && !d.actual, chk = isDone(done, key), dOpen = openDay === key, nv = notes[key] || {};
                     return (
                       <div key={key}
                         draggable
@@ -654,10 +662,11 @@ export default function TrainingDashboard() {
                         style={{ opacity: dragKey === key ? 0.45 : 1 }}>
                         <div onClick={() => d.detail && setOpenDay(dOpen ? null : key)} style={{ display: "flex", alignItems: "center", gap: 9, padding: "11px 14px", borderTop: `1px solid ${T.line}`, opacity: rest ? 0.6 : 1, cursor: d.detail ? "pointer" : "default", minHeight: 48 }}>
                           <span style={{ cursor: "grab", color: T.inkFaint, fontSize: 15, lineHeight: 1, flexShrink: 0, userSelect: "none" }} title="Verschieben">⠿</span>
-                          <span style={{ width: 4, alignSelf: "stretch", borderRadius: 99, background: TYPE_META[d.type].c }} />
+                          <span style={{ width: 4, alignSelf: "stretch", borderRadius: 99, background: TYPE_META[d.actual || d.type].c, boxShadow: d.actual ? `0 0 0 1.5px ${T.panel}, 0 0 0 2.5px ${T.inkFaint}` : "none" }} />
                           <span className="cond" style={{ fontWeight: 600, fontSize: 15, minWidth: 50 }}>{d.d}</span>
                           <span style={{ flex: 1, minWidth: 0 }}>
                             <span style={{ fontWeight: chk ? 400 : 600, fontSize: 13.5, textDecoration: chk ? "line-through" : "none", color: chk ? T.inkSoft : T.ink }}>{d.title}</span>
+                            {d.actual && <span style={{ fontSize: 11.5, color: T.inkFaint, fontWeight: 600, fontStyle: "italic", display: "block", marginTop: 1 }}>↺ tatsächlich: {TYPE_META[d.actual].label} (geplant: {TYPE_META[d.type].label})</span>}
                             {d.sub && <span style={{ fontSize: 11.5, color: T.inkSoft, display: "block", marginTop: 1 }}>{d.sub}{d.detail ? " " + (dOpen ? "▲" : "▼") : ""}</span>}
                             {ACTUAL[key] ? <span style={{ fontSize: 11.5, color: T.done, fontWeight: 600, display: "block" }}>▸ {ACTUAL[key].min} min{ACTUAL[key].hr ? ` · ⌀${ACTUAL[key].hr} bpm` : ""}{ACTUAL[key].w ? ` · ${ACTUAL[key].w} W` : ""}{ACTUAL[key].km ? ` · ${ACTUAL[key].km} km` : ""}{ACTUAL[key].hm ? ` · ${ACTUAL[key].hm} hm` : ""}</span> : null}
                             {nv.rpe || nv.n ? <span style={{ fontSize: 11.5, color: "#8A7141", display: "block" }}>✎ RPE {nv.rpe || "–"}{nv.n ? " · " + nv.n : ""}</span> : null}
