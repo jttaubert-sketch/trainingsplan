@@ -37,10 +37,10 @@ const WEEKS=[
  {id:"W3",range:"22.–28. Jun",tag:"Entlastung",note:"Spätdienstwoche · Slot 9–11 Uhr · FTP-RETEST Di",days:[
   {d:"Mo 22.",type:"kraft",title:"Kraft 1 · 9–11 Uhr",sub:"",shift:"Spätdienst",h:1,detail:Dkraft1},
   {d:"Di 23.",type:"intens",title:"FTP-RETEST",sub:"vormittags, ausgeruht",shift:"Spätdienst",h:1,detail:Dretest},
-  {d:"Mi 24.",type:"ruhe",title:"Ruhe",sub:"",shift:"Spätdienst",h:0},
+  {d:"Mi 24.",type:"ruhe",actual:"lang",title:"Ruhe → große Ausfahrt",sub:"spontane 57-km-Tour (Bonus)",shift:"Spätdienst",h:0,detail:"Eigentlich Ruhetag in der Entlastungswoche. Stattdessen große Ausfahrt (146 min, 57 km, 515 hm) — zählt als Bonus ins Ist, nicht ins Soll."},
   {d:"Do 25.",type:"z2",title:"Z2 75′ · 9–11 Uhr",sub:"neue Zonen ab heute",shift:"Spätdienst",h:1.25,detail:"Erste Einheit mit den frischen Zonen aus dem Retest — bewusst ans untere Z2-Ende halten und Gefühl kalibrieren."},
-  {d:"Fr 26.",type:"kraft",title:"Kraft 2 oder Ruhe",sub:"nach Gefühl",shift:"Spätdienst",h:1,detail:Dkraft2},
-  {d:"Sa 27.",type:"z2",title:"Z2 90′ · vormittags",sub:"",shift:"Spätdienst",h:1.5,detail:Dz2},
+  {d:"Fr 26.",type:"kraft",title:"Kraft (vom Sa getauscht)",sub:"Z2 lief Fr, Kraft Sa — Positionen getauscht",shift:"Spätdienst",h:1,detail:"Fr/Sa getauscht: Die Z2-Einheit lief am Fr, die Kraft am Sa. In der Bilanz erfüllt der Tausch beide Soll-Positionen (Kraft hier, Z2 am Sa). "+Dkraft2},
+  {d:"Sa 27.",type:"z2",title:"Z2 90′ (vom Fr getauscht)",sub:"Z2 lief bereits Fr (61′ + Sprints)",shift:"Spätdienst",h:1.5,detail:"Fr/Sa getauscht: Die Z2 lief am Fr (61′, mustergültig kontrolliert, Ø140 bpm). "+Dz2},
   {d:"So 28.",type:"ruhe",title:"Ruhe",sub:"",shift:"Spätdienst",h:0}]},
  {id:"W4",range:"29. Jun – 5. Jul",tag:"Basis",note:"Mo frei · So Tagdienst 7:30–15:30",days:[
   {d:"Mo 29.",type:"z2",title:"Z2 105–120′ Mitteldistanz",sub:"freier Tag · Soll 105′",h:1.75,detail:"Längste Wocheneinheit unter der Woche — reine Z2-Dauer (keine Sprints diese Woche). "+Dz2},
@@ -89,6 +89,7 @@ const RULES=[
  {cat:"Dienste",text:"Vor einem Nachtdienst ist der Vormittag frei und trainierbar — aber nur max. Z2 + kurze Sprints, spätestens 12 Uhr fertig."},
  {cat:"Dienste",text:"1 blockierter Wochenendtag im Kalender = Tagdienst 7:30–15:30. 2 zusammenhängende Tage = Nachtdienst."},
  {cat:"Dienste",text:"Spätdienst 13:00–21:30 (oft bis 23 Uhr): Trainingsslot 9–11 Uhr, reduzierter Umfang. Spätdienstwochen zählen als Entlastung."},
+ {cat:"Dienste",text:"Spätdienst-Unsicherheit: An Spätdienst-Tagen ist morgens nicht absehbar, wie lang der Tag wird und ob die Folgetage trainierbar bleiben. Daher gilt — die sichere Einheit am freien Vormittag mitnehmen, auch wenn sie nicht ins geplante Tagesraster passt. Eine garantierte Einheit jetzt schlägt mehrere geplante, die der Dienst auffrisst. Chance ergreifen statt auf den perfekten Slot warten; die Mehrleistung wird als Bonus erfasst, nicht als Soll-Verfehlung an anderen Tagen."},
  {cat:"Dienste",text:"Reguläre Arbeitstage 6:45–16:30: Einheiten abends ab ~17 Uhr."},
  {cat:"Training",text:"Lange Ausfahrten nur an freien Wochenendtagen."},
  {cat:"Training",text:"Jede 4. Woche Entlastung (−30–40 % Umfang)."},
@@ -102,6 +103,13 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"29.06.2026",text:"W4 gestartet: Mo Z2+Sprints outdoor (103 min, Ø145 bpm, 5s-Spitze 820 W). Setup erweitert: Wahoo ELEMNT ACE, TRACKR Heart Rate, TRACKR Radar. Notiz für Phase 4: Normalized Power für lange/variable Fahrten ergänzen. Form +6."},
+ {date:"28.06.2026",text:"Sonntags-Abgleich W3: alle 5 Einheiten erfasst. Fr/Sa-Tausch sauber modelliert (Z2 lief Fr, Kraft Sa — beide Soll-Positionen erfüllt), Do-Z2 entfiel. Verteilung wetter-/dienstbedingt. Wochenanalyse geschrieben. Form wieder +12. FTP 205 W durch Lambi-Dauerwerte bestätigt."},
+ {date:"24.06.2026",text:"Neue feste Regel (Dienste): Bei Spätdienst-Unsicherheit die sichere Einheit am freien Vormittag mitnehmen, auch außerhalb des Rasters — eine garantierte Einheit schlägt mehrere geplante, die der Dienst auffrisst. Mehrleistung als Bonus. Bildet ab, wie die Lambi-Tour zustande kam."},
+ {date:"24.06.2026",text:"Strava-Abgleich: Mi 24. große Ausfahrt „Lambi alternativ“ (146 min, 57 km, 515 hm) statt Ruhetag → Bonus (ins Ist, nicht ins Soll), Tag als Rad markiert. Erste Dauerleistung nach Retest: 20-min 207 W, 1-h 172 W → bestätigt Planungs-FTP 205 W. Form -9 (Ermüdung). Entlastungswoche: Rest bewusst locker."},
+ {date:"23.06.2026",text:"Strava-Abgleich W3: Mo 22. Kraft (65 min) und Di 23. FTP-Ramp-Test (54 min, 32°C indoor) eingetragen. Test bestätigt das Profil: 5s 335 W / 1-min 320 W, Ramp-FTP 242 W. Form nach Test +13 (weiter frisch). Planungs-FTP bleibt 205 W."},
+ {date:"23.06.2026",text:"FTP-Retest (Zwift Ramp-Test am Kickr, frisch bei Form +22): 242 W. Für Planung & Zonen konservativ auf 205 W gesetzt — Ramp überschätzt bei Sprint-Profil die Schwelle, Dauerleistung (1-h 179 W) stützt den niedrigeren Wert. Alle Wattzonen neu (Z2 115–154 W). In Zwift bleiben 242 W."},
+ {date:"21.06.2026",text:"Sonntags-Abgleich W2 abgeschlossen: alle 4 Einheiten erfasst, Fr–So Pause. Wochenanalyse W2 geschrieben. Form-Kurve auf +22 (frisch) — optimal getimt vor dem FTP-Retest am Di 23.6."},
  {date:"18.06.2026",text:"Bonus-Einheiten zählen jetzt ins Rad-Ist (nicht ins Soll) — die heutige Zusatz-Ausfahrt erscheint in der Ist-Radzeit. Zusätzlich farbkodierte Abweichungs-Markierung: Mi 17. (geplant Ruhe → Kraft gemacht) und Do 18. (geplant Kraft → Rad gefahren) zeigen die tatsächliche Einheit als Farbe + Hinweis."},
  {date:"18.06.2026",text:"Korrektur W2: Do-Kraft wurde auf Mi 17. vorgezogen → zählt als erfüllte Kraft (1/1), kein zusätzliches Soll. Die heutige ruhige Rad-Ausfahrt (84 min) ist eine Zusatzeinheit → als Bonus erfasst, nicht im Rad-Soll. W2: Rad 3,4 h (124%), Kraft 1/1, +1,4 h Bonus."},
  {date:"18.06.2026",text:"Strava-Abgleich: Do 18.6. „Ruhig vor dem Dienst“ 84 min Outdoor (Ø155 bpm, 129 W) statt der geplanten Kraft-Einheit eingetragen. Auffällig: Puls relativ hoch bei moderaten Watt — Outdoor-typisch (Wind, Rollwiderstand, Hitze) vs. Zwift."},
@@ -136,12 +144,13 @@ const CHANGELOG=[
  {date:"11.06.2026",text:"Plan erstellt: Mikroplan W1–W8 (12.06.–02.08.), FTP-Retest Di 23.06., Volumenwoche W7, Entlastung W3 + W8. Offen: August-Dienstplan, Herbstrennen."}
 ];
 
-const ZONES=[["Z1 Regeneration","< 125 W","< 128"],["Z2 Grundlage","125–170 W","128–158"],["Z3 Tempo","171–203 W","159–174"],["Sweet Spot","199–210 W","165–175"],["Z4 Schwelle","204–237 W","175–189"],["Z5 VO2max","238–271 W","190+"]];
+const ZONES=[["Z1 Regeneration","< 113 W","< 128"],["Z2 Grundlage","115–154 W","128–158"],["Z3 Tempo","156–185 W","159–174"],["Sweet Spot","180–193 W","165–175"],["Z4 Schwelle","187–215 W","175–189"],["Z5 VO2max","217–246 W","190+"]];
 
 const FTP_LOG=[
  {date:"06.06",label:"Sella Ronda",p20:197,p60:179},
  {date:"14.06",label:"Aubachtal",p20:199,p60:147},
- // Nächster Punkt: FTP-Retest 23.06.
+ {date:"23.06",label:"Ramp-Test",p20:242,p60:205},
+ {date:"24.06",label:"Lambi (5h-Tour)",p20:207,p60:172},
 ];
 // Fitness/Ermüdung/Form (PMC) aus Strava Relative Effort. Fit=42-Tage, Müd=7-Tage, Form=Fit−Müd.
 const PMC_LOG=[
@@ -150,6 +159,11 @@ const PMC_LOG=[
  {date:"07.06",fit:52,mued:102,form:-51},
  {date:"14.06",fit:46,mued:45,form:0},
  {date:"17.06",fit:44,mued:39,form:6},
+ {date:"21.06",fit:38,mued:16,form:22},
+ {date:"23.06",fit:38,mued:25,form:13},
+ {date:"24.06",fit:42,mued:51,form:-9},
+ {date:"28.06",fit:37,mued:25,form:12},
+ {date:"29.06",fit:38,mued:31,form:6},
 ];
 // Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
 const RIDE_LOG=[
@@ -166,17 +180,30 @@ const ACTUAL = {
   "W1-6": { min: 111, hr: 159, w: 166, km: 42, hm: 456, sport: "Ride", note: "Aubachtal-Trail statt Kraft, RPE ~7" },
   "W2-0": { min: 87, hr: 152, w: 135, km: 36, hm: 81, sport: "Ride", note: "Z2 + Sprints, viel Gegenwind" },
   "W2-1": { min: 117, hr: 139, w: 139, km: 43, hm: 578, sport: "VirtualRide", note: "Zwift Z2 Mitteldistanz — kontrolliert aerob" },
+  "W3-0": { min: 65, sport: "WeightTraining", note: "Krafttraining am Morgen (Spätdienstwoche)" },
+  "W3-1": { min: 54, hr: 144, w: 122, km: 20, hm: 157, sport: "VirtualRide", note: "FTP-Ramp-Test (242 W) + lockeres Ausrollen, 32°C indoor — 1-min-Spitze 320 W, 5s 335 W" },
+  "W3-2": { min: 146, hr: 161, w: 152, km: 57, hm: 515, sport: "Ride", note: "Lambi alternativ (Bonus) — 20-min 207 W, 1-h 172 W nach Retest" },
+  "W3-4": { min: 55, sport: "WeightTraining", note: "Kraft (Fr/Sa-Tausch — erfüllt Kraft-Soll)" },
+  "W3-5": { min: 61, hr: 140, w: 142, km: 28, hm: 196, sport: "VirtualRide", note: "Z2 + 4×15s-Sprints, 35°C indoor — mustergültig kontrolliert (max 160 bpm), Sprints bis 512 W. Lief real Fr, erfüllt Sa-Z2-Soll." },
+  "W4-0": { min: 103, hr: 145, w: 135, km: 44, hm: 166, sport: "Ride", note: "Z2 + paar Sprints, outdoor — kontrolliert aerob (Ø145 bpm), 5s-Spitze 820 W" },
   "W2-3": { min: 56, sport: "WeightTraining", note: "Kraft auf Mi 17. vorgezogen, dort erledigt" },
 };
 const REVIEWS = [
   { wk: "W1", radH: "3,9 h (Soll ~3 h)", lang: true, z2: "sauber (Sa Ø119 bpm, max 158)", kraft: "3/3", bonus: "Lauf 36′ / 5,1 km",
     fazit: "Sehr solider Auftakt, mehr Volumen als geplant: 3× Kraft (82/85/71 min) + Lauf-Bonus + 2 Radtage, gesamt ~8,5 h. Samstag mustergültig ruhig (Z1–Z2, Ø119 bpm). Sonntag Aubachtal-Trail bewusst härter (Ø159 bpm, Z3, RPE ~7). Power-Profil bestätigt das Bild: kräftige Beine (5s 678 W), aerobe Dauerleistung noch die Baustelle (1h 94–147 W).",
     ableitung: "W2 ruhig angehen, Z2 strikt nach Puls (128–158). Fortbildung Sa+So streicht die lange Ausfahrt — bewusst keine Kompensation, W2 als leichtere Woche vor dem FTP-Retest (Di 23.6.) nehmen." },
+  { wk: "W2", radH: "4,8 h Ist (Soll 2,75 h · inkl. Bonus)", lang: false, z2: "sehr kontrolliert (Di Zwift Ø139 bpm bei 139 W)", kraft: "1/1", bonus: "Rad 84′ / 35 km (Do)",
+    fazit: "Trotz reduzierter Planwoche viel aerobe Qualität: Mo Z2+Sprints (87′, Ø152 bpm, Gegenwind), Di Zwift-Mitteldistanz (117′, sehr ruhig Ø139 bpm — die beste Z2-Kontrolle bisher). Do-Kraft auf Mi vorgezogen (Post-Call abends, 56′), am freien Do-Vormittag spontan eine ruhige Ausfahrt als Bonus (84′). Fr–So Fortbildung = komplett Pause, wie vorgesehen. Form-Kurve klettert auf +22 (frisch).",
+    ableitung: "Optimal getimt: Die ruhige Wochenmitte + Wochenend-Pause bringt dich frisch zum FTP-Retest am Di 23.6. Den Retest am Kickr fahren (wegen der Watt-Diskrepanz indoor/outdoor) und das Gerät notieren. Danach Zonen + FTP-Kurve aktualisieren. Auffällig fürs Protokoll: Watt-Puls-Verhältnis outdoor schlechter als auf Zwift — Powermeter-Kalibrierung beider Geräte steht an." },
+  { wk: "W3", radH: "4,4 h Ist (Soll 3,75 h · inkl. Bonus)", lang: false, z2: "mustergültig (Fr Ø140 bpm, max 160, 4 saubere Sprints)", kraft: "2/2", bonus: "Lambi-Tour 146′ / 57 km / 515 hm",
+    fazit: "Spätdienst-/Entlastungswoche, vom Wetter und Dienst stark geprägt — Verteilung war so nicht frei wählbar. Mo Kraft, Di FTP-Retest (242 W), Mi spontane große Lambi-Tour (Chance ergriffen, da Spätdienst-Folgetage unsicher), Fr/Sa Z2 und Kraft getauscht, Do-Z2 entfiel. Highlight: Die Fr-Z2 mit Sprints war mustergültig aerob kontrolliert (Ø140 bpm). Wichtigster Datenpunkt: erste Dauerleistung nach Retest (Lambi 20-min 207 W, 1-h 172 W) bestätigt Planungs-FTP 205 W eindeutig.",
+    ableitung: "FTP-Frage geklärt (205 W stimmt). Form trotz großer Tour wieder bei +12 — gut erholt. W4 (29.6.–5.7.) ist erste reguläre Aufbauwoche: zurück zur strukturierten Z2-Mitteldistanz, lange Ausfahrt am Sa wieder als Soll. Z2 weiter strikt nach Puls (jetzt mit validierter Wattspanne 115–154 als Gegencheck). August-Dienstplan nachreichen." },
 ];
 
 const BONUS = [
   { wk: "W1", dayKey: "W1-2", date: "10.06", sport: "Run", min: 36, km: 5.1, note: "Z2-Lauf morgens" },
  { wk: "W2", dayKey: "W2-3", date: "18.06", sport: "Ride", min: 84, km: 35, note: "Ruhig vor dem Dienst (zusätzlich)" },
+ { wk: "W3", dayKey: "W3-2", date: "24.06", sport: "Ride", min: 146, km: 57, note: "Lambi alternativ — große Tour, 515 hm" },
 ];
 
 const BONUS_COLOR = "#1F8A8A";
@@ -191,8 +218,9 @@ const SETUP_TODOS = [
   { txt: "50-mm-Frontreifen testen", when: "Sa 18.7.", done: false },
   { txt: "42–44T Kettenblatt prüfen", when: "optional", done: false },
   { txt: "Komfort-Sattelstütze für Langstrecke", when: "optional", done: false },
-  { txt: "FTP-Retest → alle Wattbereiche neu rechnen", when: "Di 23.6.", done: false },
-  { txt: "Indoor-Setup komplett: Zwift Ride Frame + Kickr Core + Zwift-Abo vorhanden", when: "erledigt", done: true },
+  { txt: "FTP-Retest → alle Wattbereiche neu rechnen (242 W Ramp, Plan 205 W)", when: "erledigt", done: true },
+  { txt: "Normalized Power für lange/variable Fahrten ergänzen (statt nur Ø-Watt) — sinnvoll für Race-Simulationen & echten TSS. NICHT für ruhige Z2 (da Ø-Watt ehrlicher).", when: "Phase 4 (ab März 2027)", done: false },
+ { txt: "Indoor-Setup komplett: Zwift Ride Frame + Kickr Core + Zwift-Abo vorhanden", when: "erledigt", done: true },
 ];
 const SETUP_BIKE = [
   { k: "Rad", v: "Orbea Terra Race M21eLTD 1X" },
@@ -206,6 +234,9 @@ const SETUP_BIKE = [
   { k: "Pedale / Schuhe", v: "Shimano XTR M9200 / Lake MX30G" },
   { k: "Kette", v: "gewachst (Optimize Wax), frisch vor jedem Rennen" },
   { k: "Indoor", v: "Zwift Ride Frame + Wahoo Kickr Core + Zwift-Abo (vorhanden)" },
+ { k: "Radcomputer", v: "Wahoo ELEMNT ACE (mit Luftwiderstands-/Windmessung)" },
+ { k: "Herzfrequenz", v: "Wahoo TRACKR Heart Rate" },
+ { k: "Sicherheit", v: "Wahoo TRACKR Radar (Rückfahr-Radar, warnt vor Fahrzeugen von hinten)" },
 ];
 const RIDE = ["z2", "lang", "intens"];
 const isDone = (done, key) => !!done[key] || !!ACTUAL[key];
@@ -519,9 +550,9 @@ export default function TrainingDashboard() {
                 <div style={{ display: "flex", gap: "6px 14px", flexWrap: "wrap", fontSize: 11, color: T.inkSoft, marginBottom: 8 }}>
                   <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#C2401C", marginRight: 5, verticalAlign: -1 }} />20-min</span>
                   <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#3E6F8E", marginRight: 5, verticalAlign: -1 }} />1-h (Traka-relevant)</span>
-                  <span style={{ marginLeft: "auto", fontStyle: "italic" }}>Ziel 226 W</span>
+                  <span style={{ marginLeft: "auto", fontStyle: "italic" }}>Ramp 242 · Plan 205 W</span>
                 </div>
-                <LineGraph series={[ftp20, ftp60]} ymin={fmin} ymax={fmax} xlabels={FTP_LOG.map((f) => f.date)} ylabels={[...new Set([fmin, (fmin + fmax) / 2, fmax, 226])].filter((v) => v >= fmin && v <= fmax)} />
+                <LineGraph series={[ftp20, ftp60]} ymin={fmin} ymax={fmax} xlabels={FTP_LOG.map((f) => f.date)} ylabels={[...new Set([fmin, (fmin + fmax) / 2, fmax, 242])].filter((v) => v >= fmin && v <= fmax)} />
                 <div style={{ fontSize: 11, color: T.inkSoft, lineHeight: 1.5, marginTop: 7 }}>Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
               </div>
             </div>
@@ -756,9 +787,9 @@ export default function TrainingDashboard() {
                 <div style={{ display: "flex", gap: "6px 14px", flexWrap: "wrap", fontSize: 11, color: T.inkSoft, marginBottom: 8 }}>
                   <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#C2401C", marginRight: 5, verticalAlign: -1 }} />20-min</span>
                   <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#3E6F8E", marginRight: 5, verticalAlign: -1 }} />1-h (Traka-relevant)</span>
-                  <span style={{ marginLeft: "auto", fontStyle: "italic" }}>Ziel 226 W</span>
+                  <span style={{ marginLeft: "auto", fontStyle: "italic" }}>Ramp 242 · Plan 205 W</span>
                 </div>
-                <LineGraph series={[ftp20, ftp60]} ymin={fmin} ymax={fmax} xlabels={FTP_LOG.map((f) => f.date)} ylabels={[...new Set([fmin, (fmin + fmax) / 2, fmax, 226])].filter((v) => v >= fmin && v <= fmax)} />
+                <LineGraph series={[ftp20, ftp60]} ymin={fmin} ymax={fmax} xlabels={FTP_LOG.map((f) => f.date)} ylabels={[...new Set([fmin, (fmin + fmax) / 2, fmax, 242])].filter((v) => v >= fmin && v <= fmax)} />
                 <div style={{ fontSize: 11, color: T.inkSoft, lineHeight: 1.5, marginTop: 7 }}>Steigende 1-h-Power = die aerobe Baustelle schließt sich.</div>
               </div>
             </div>
