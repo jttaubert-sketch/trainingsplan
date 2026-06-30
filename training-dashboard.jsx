@@ -15,7 +15,7 @@ const Dretest="Protokoll: 20′ einrollen mit 3×1′ zügig → 5′ locker →
 
 const TYPE={lang:{label:"Lange Gravel",c:"var(--lang)"},z2:{label:"Z2 Grundlage",c:"var(--z2)"},kraft:{label:"Kraft",c:"var(--kraft)"},intens:{label:"Test / Intensität",c:"var(--intens)"},ruhe:{label:"Ruhe",c:"var(--ruhe)"}};
 
-const WEEK_DATES={W1:["2026-06-12","2026-06-14"],W2:["2026-06-15","2026-06-21"],W3:["2026-06-22","2026-06-28"],W4:["2026-06-29","2026-07-05"],W5:["2026-07-06","2026-07-12"],W6:["2026-07-13","2026-07-19"],W7:["2026-07-20","2026-07-26"],W8:["2026-07-27","2026-08-02"]};
+const WEEK_DATES={W1:["2026-06-12","2026-06-14"],W2:["2026-06-15","2026-06-21"],W3:["2026-06-22","2026-06-28"],W4:["2026-06-29","2026-07-05"],W5:["2026-07-06","2026-07-12"],W6:["2026-07-13","2026-07-19"],W7:["2026-07-20","2026-07-26"],W8:["2026-07-27","2026-08-02"],W9:["2026-08-03","2026-08-09"],W10:["2026-08-10","2026-08-16"],W11:["2026-08-17","2026-08-23"],W12:["2026-08-24","2026-08-30"]};
 
 const WEEKS=[
  {id:"W1",range:"8.–14. Jun",tag:"Einstieg",note:"Auftaktwoche · Kraftblock + Wochenend-Ausfahrten",days:[
@@ -42,20 +42,20 @@ const WEEKS=[
   {d:"Fr 26.",type:"kraft",title:"Kraft (vom Sa getauscht)",sub:"Z2 lief Fr, Kraft Sa — Positionen getauscht",shift:"Spätdienst",h:1,detail:"Fr/Sa getauscht: Die Z2-Einheit lief am Fr, die Kraft am Sa. In der Bilanz erfüllt der Tausch beide Soll-Positionen (Kraft hier, Z2 am Sa). "+Dkraft2},
   {d:"Sa 27.",type:"z2",title:"Z2 90′ (vom Fr getauscht)",sub:"Z2 lief bereits Fr (61′ + Sprints)",shift:"Spätdienst",h:1.5,detail:"Fr/Sa getauscht: Die Z2 lief am Fr (61′, mustergültig kontrolliert, Ø140 bpm). "+Dz2},
   {d:"So 28.",type:"ruhe",title:"Ruhe",sub:"",shift:"Spätdienst",h:0}]},
- {id:"W4",range:"29. Jun – 5. Jul",tag:"Basis",note:"Mo frei · So Tagdienst 7:30–15:30",days:[
+ {id:"W4",range:"29. Jun – 5. Jul",tag:"Basis",note:"Nachtdienst Mi 1.→Do 2. · So Tagdienst · Sa lange Ausfahrt",days:[
   {d:"Mo 29.",type:"z2",title:"Z2 105–120′ Mitteldistanz",sub:"freier Tag · Soll 105′",h:1.75,detail:"Längste Wocheneinheit unter der Woche — reine Z2-Dauer (keine Sprints diese Woche). "+Dz2},
   {d:"Di 30.",type:"kraft",title:"Kraft 1",sub:"abends ab ~17 Uhr",h:1,detail:Dkraft1},
-  {d:"Mi 1.7.",type:"z2",title:"Z2 90′ vormittags",sub:"Mitteldistanz · Dienst ab 14:45",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: zweite längere aerobe Einheit der Woche."},
-  {d:"Do 2.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
-  {d:"Fr 3.",type:"z2",title:"Z2 60′ locker",sub:"abends",h:1,detail:Dz2+" Bewusst kurz und leicht — morgen ist die lange Ausfahrt."},
+  {d:"Mi 1.7.",type:"z2",title:"Z2 90′ vormittags",sub:"Mitteldistanz · Nachtdienst ab 14:45",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: zweite längere aerobe Einheit der Woche. Vormittags vor dem Nachtdienst."},
+  {d:"Do 2.",type:"ruhe",title:"Post-Call · Ruhe",sub:"nach Nachtdienst — ausnahmslos frei",shift:"Post-Call",h:0},
+  {d:"Fr 3.",type:"z2",title:"Z2 60′ locker",sub:"abends · normaler Arbeitstag",h:1,detail:Dz2+" Bewusst kurz und leicht — morgen ist die lange Ausfahrt."},
   {d:"Sa 4.",type:"lang",title:"Lange Gravel 3–3,5 h",sub:"Z2 · Soll 3 h",h:3,detail:Dz2+" "+DlangFuel},
   {d:"So 5.",type:"ruhe",title:"Ruhe",sub:"Tagdienst 7:30–15:30",shift:"Tagdienst",h:0}]},
- {id:"W5",range:"6.–12. Jul",tag:"Basis",note:"Nachtdienst Mi · Wochenende frei",days:[
+ {id:"W5",range:"6.–12. Jul",tag:"Basis",note:"Nachtdienst Mi 8.→Do 9. · Fr normaler Arbeitstag · WE frei",days:[
   {d:"Mo 6.",type:"z2",title:"Z2 75′",sub:"abends",h:1.25,detail:Dz2},
   {d:"Di 7.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
-  {d:"Mi 8.",type:"z2",title:"Z2 90′ vormittags",sub:"Mitteldistanz · Dienst ab 14:45",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: zweite längere aerobe Einheit der Woche."},
-  {d:"Do 9.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
-  {d:"Fr 10.",type:"z2",title:"Z2 60′ + Sprints",sub:"abends",h:1,detail:Dz2+" "+Dsprint},
+  {d:"Mi 8.",type:"z2",title:"Z2 90′ vormittags",sub:"Mitteldistanz · Nachtdienst ab 14:45",shift:"Nachtdienst",h:1.5,detail:Dz2+" MITTELDISTANZ: zweite längere aerobe Einheit der Woche. Vormittags vor dem Nachtdienst."},
+  {d:"Do 9.",type:"ruhe",title:"Post-Call · Ruhe",sub:"nach Nachtdienst — ausnahmslos frei",shift:"Post-Call",h:0},
+  {d:"Fr 10.",type:"z2",title:"Z2 60′ + Sprints",sub:"abends · normaler Arbeitstag",h:1,detail:Dz2+" "+Dsprint},
   {d:"Sa 11.",type:"lang",title:"Lange Gravel 4 h",sub:"erste 4-h-Ausfahrt",h:4,detail:"Sprung auf 4 h. "+DlangFuel+" Route mit Abkürzungsoption planen, falls die Beine nach 3 h zumachen."},
   {d:"So 12.",type:"z2",title:"Z2 60–75′ ganz locker",sub:"Recovery-Spin · Soll 60′",h:1,detail:"Unteres Z2 oder Z1, flache Runde. Optional kurz Kraft 2 dranhängen — oder komplett frei, wenn die Beine schwer sind."}]},
  {id:"W6",range:"13.–19. Jul",tag:"Basis",note:"dienstfreie Woche · freies Wochenende",days:[
@@ -66,28 +66,62 @@ const WEEKS=[
   {d:"Fr 17.",type:"kraft",title:"Kraft 2 kurz oder Ruhe",sub:"vor dem langen Samstag",h:1,detail:Dkraft2},
   {d:"Sa 18.",type:"lang",title:"Lange Gravel 4 h",sub:"Material-Test: 50-mm-Frontreifen",h:4,detail:Dz2+" "+DlangFuel+" MATERIAL-TEST: 50-mm-Frontreifen (G-One RS 50 oder Cinturato Gravel RC 50) vorher montieren, Druck vorne ~1,5–1,7 bar antesten und Fahrgefühl notieren."},
   {d:"So 19.",type:"z2",title:"Z2 60′ locker oder frei",sub:"",h:1,detail:"Reine Fettstoffwechsel-/Regenerationsfahrt am unteren Z2-Rand. Wenn müde: streichen, nicht quälen."}]},
- {id:"W7",range:"20.–26. Jul",tag:"Volumen",note:"dienstfrei — größte Woche der Phase (~9 h)",days:[
+ {id:"W7",range:"20.–26. Jul",tag:"Basis",note:"Nachtdienst Sa 25.→So 26. · WE fällt weg, lange Ausfahrt entfällt (Regel)",days:[
   {d:"Mo 20.",type:"z2",title:"Z2 90′",sub:"",h:1.5,detail:Dz2},
   {d:"Di 21.",type:"kraft",title:"Kraft 1",sub:"",h:1,detail:Dkraft1},
   {d:"Mi 22.",type:"z2",title:"Z2 90′ + Sprints",sub:"",h:1.5,detail:Dz2+" "+Dsprint},
   {d:"Do 23.",type:"z2",title:"Z2 60′ ganz locker",sub:"",h:1,detail:"Aktive Erholung mitten in der großen Woche — unteres Z2 oder Z1."},
   {d:"Fr 24.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
-  {d:"Sa 25.",type:"lang",title:"Lange Gravel 4 h",sub:"Race-Setup fahren",h:4,detail:"Komplettes Race-Setup testen: 50er-Front + Tire Inserts (Vittoria Air-Liner Light / Tannus) + Race-Sealant vorher montieren. Finale Reifendrücke v/h notieren, Taschen und Verpflegung am Rad wie im Rennen. "+DlangFuel},
-  {d:"So 26.",type:"z2",title:"Z2 90–120′ locker",sub:"Back-to-back · Soll 90′",h:1.5,detail:"Müde Beine sind hier Absicht — Vorgeschmack auf Phase 4. Tempo egal, Zeit im Sattel zählt."}]},
- {id:"W8",range:"27. Jul – 2. Aug",tag:"Entlastung",note:"Zahnarzt Mo · Nachtdienst Fr→Sa",days:[
-  {d:"Mo 27.",type:"ruhe",title:"Ruhe",sub:"Zahnarzt",h:0},
+  {d:"Sa 25.",type:"z2",title:"Z2 60–75′ vormittags",sub:"Nachtdienst ab 14:45 · nur vormittags",shift:"Nachtdienst",h:1.25,detail:"Nachtdienst-Tag: nur eine ruhige Z2-Einheit am Vormittag möglich. Die lange Ausfahrt entfällt diese Woche ersatzlos (Wochenende durch Nachtdienst belegt — nicht planbar, kein Nachholen). "+Dz2},
+  {d:"So 26.",type:"ruhe",title:"Post-Call · Ruhe",sub:"nach Nachtdienst — ausnahmslos frei",shift:"Post-Call",h:0,detail:"Nach dem Nachtdienst (2–3 h Schlaf): absoluter Ruhetag. Regenerieren, nachschlafen, essen."}]},
+ {id:"W8",range:"27. Jul – 2. Aug",tag:"Entlastung",note:"Zahnarzt Mo · Nachtdienst Do 30.→Fr 31.",days:[
+  {d:"Mo 27.",type:"z2",title:"Z2 60′ locker",sub:"Zahnarzt · abends",h:1,detail:Dz2+" Locker, falls der Zahnarzttermin es zulässt — sonst streichen."},
   {d:"Di 28.",type:"z2",title:"Z2 60′",sub:"abends",h:1,detail:Dz2},
-  {d:"Mi 29.",type:"kraft",title:"Kraft 1",sub:"abends",h:1,detail:Dkraft1},
-  {d:"Do 30.",type:"z2",title:"Z2 60′",sub:"abends",h:1,detail:Dz2+" Ohne Sprints (Entlastungswoche)."},
-  {d:"Fr 31.",type:"z2",title:"Z2 45–60′ vormittags",sub:"Dienst ab 14:45 · Vormittag frei",shift:"Nachtdienst",h:0.75,detail:"Entlastungswoche: ganz locker rollen, optional streichen."},
-  {d:"Sa 1.8.",type:"ruhe",title:"Post-Call · Ruhe",sub:"",h:0},
-  {d:"So 2.",type:"z2",title:"Z2 90′ locker",sub:"August-Plan folgt",h:1.5,detail:Dz2}]}
+  {d:"Mi 29.",type:"kraft",title:"Kraft 1",sub:"abends · normaler Arbeitstag",h:1,detail:Dkraft1},
+  {d:"Do 30.",type:"z2",title:"Z2 60′ vormittags",sub:"Nachtdienst ab 14:45 · nur vormittags",shift:"Nachtdienst",h:1,detail:Dz2+" Vormittags vor dem Nachtdienst. Ohne Sprints (Entlastungswoche)."},
+  {d:"Fr 31.",type:"ruhe",title:"Post-Call · Ruhe",sub:"nach Nachtdienst — ausnahmslos frei",shift:"Post-Call",h:0,detail:"Nach dem Nachtdienst: absoluter Ruhetag."},
+  {d:"Sa 1.8.",type:"z2",title:"Z2 90′",sub:"Wochenende frei",h:1.5,detail:Dz2+" Wochenende frei."},
+  {d:"So 2.",type:"z2",title:"Z2 90′ locker",sub:"August-Plan folgt",h:1.5,detail:Dz2}]},
+ {id:"W9",range:"3.–9. Aug",tag:"Basis",note:"dienstfrei · Volumen-Basiswoche",days:[
+  {d:"Mo 3.",type:"z2",title:"Z2 90′",sub:"Mitteldistanz",h:1.5,detail:Dz2+" MITTELDISTANZ."},
+  {d:"Di 4.",type:"kraft",title:"Kraft 1",sub:"",h:1,detail:Dkraft1},
+  {d:"Mi 5.",type:"z2",title:"Z2 90′ + Sprints",sub:"",h:1.5,detail:Dz2+" "+Dsprint},
+  {d:"Do 6.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
+  {d:"Fr 7.",type:"z2",title:"Z2 60′ locker",sub:"",h:1,detail:Dz2},
+  {d:"Sa 8.",type:"lang",title:"Lange Gravel 3,5 h",sub:"",h:3.5,detail:"Aerobe Langausfahrt. "+DlangFuel},
+  {d:"So 9.",type:"z2",title:"Z2 60′ Recovery",sub:"Soll 60′",h:1,detail:"Unteres Z2/Z1, locker."}]},
+ {id:"W10",range:"10.–16. Aug",tag:"Schwelle",note:"Phase-2-Einstieg: erste Sweet-Spot-Woche · Nachtdienst Sa 15.→So 16.",days:[
+  {d:"Mo 10.",type:"z2",title:"Z2 75′",sub:"",h:1.25,detail:Dz2},
+  {d:"Di 11.",type:"intens",title:"Sweet Spot 3×12′",sub:"erste SS-Einheit · 180–193 W / Puls ~165–175",h:1.25,detail:"Phase-2-Einstieg. 3×12 min Sweet Spot (88–94% FTP = 180–193 W) mit 4 min Pause. Nach 15 min Einrollen. Kontrolliert, nicht überpacen — Ziel ist wiederholbare Schwellennähe."},
+  {d:"Mi 12.",type:"z2",title:"Z2 90′",sub:"Mitteldistanz",h:1.5,detail:Dz2+" MITTELDISTANZ."},
+  {d:"Do 13.",type:"kraft",title:"Kraft 1",sub:"Maximalkraft",h:1,detail:Dkraft1+" Phase 2: Richtung Maximalkraft (schwerer, weniger Wdh.)."},
+  {d:"Fr 14.",type:"z2",title:"Z2 60′ locker",sub:"",h:1,detail:Dz2},
+  {d:"Sa 15.",type:"z2",title:"Z2 60–75′ vormittags",sub:"Nachtdienst ab 14:45 · Mariä Himmelfahrt",shift:"Nachtdienst",h:1.25,detail:"Nachtdienst-Tag: nur Z2 am Vormittag. Die lange Ausfahrt entfällt diese Woche (Wochenende durch Nachtdienst belegt). SS-Reiz kam schon Di. "+Dz2},
+  {d:"So 16.",type:"ruhe",title:"Post-Call · Ruhe",sub:"nach Nachtdienst — ausnahmslos frei",shift:"Post-Call",h:0,detail:"Nach dem Nachtdienst: absoluter Ruhetag."}]},
+ {id:"W11",range:"17.–23. Aug",tag:"Übergang",note:"Forschung Do 20. · Sylt-Anreise Sa 22.",days:[
+  {d:"Mo 17.",type:"z2",title:"Z2 75′ + Sprints",sub:"",h:1.25,detail:Dz2+" "+Dsprint},
+  {d:"Di 18.",type:"intens",title:"Sweet Spot 3×15′",sub:"180–193 W",h:1.25,detail:"Steigerung ggü. W10: 3×15 min Sweet Spot, 4 min Pause."},
+  {d:"Mi 19.",type:"kraft",title:"Kraft 1",sub:"",h:1,detail:Dkraft1},
+  {d:"Do 20.",type:"z2",title:"Z2 60′ locker",sub:"Forschung",h:1,detail:Dz2+" Forschungstag — locker halten."},
+  {d:"Fr 21.",type:"z2",title:"Z2 60′ locker",sub:"letzter Tag vor Urlaub",h:1,detail:Dz2+" Letzte Einheit vor der Abreise — locker."},
+  {d:"Sa 22.",type:"ruhe",title:"Anreise Sylt",sub:"Reisetag — keine Fahrt",h:0,detail:"Anreise nach Sylt — Reisetag, kein Training."},
+  {d:"So 23.",type:"z2",title:"Sylt: erste Ausfahrt nach Wetter",sub:"flexibel · wetterabhängig",h:1.5,detail:"Erste Urlaubsausfahrt, je nach Wetter und Wind (Sylt = oft windig). Z2, Landschaft genießen. Kein Druck."}]},
+ {id:"W12",range:"24.–30. Aug",tag:"Basis (Urlaub)",note:"Sylt-Urlaub · Basis, wetterabhängige Touren",days:[
+  {d:"Mo 24.",type:"z2",title:"Sylt: Z2 nach Wetter",sub:"flexibel",h:1.5,detail:"Wetterabhängige Z2-Ausfahrt. Insel-Runden, Wind einplanen."},
+  {d:"Di 25.",type:"z2",title:"Sylt: locker/Ruhe",sub:"flexibel",h:1,detail:"Nach Lust und Wetter — auch Pause ok, ist Urlaub."},
+  {d:"Mi 26.",type:"lang",title:"Sylt: längere Tour nach Wetter",sub:"flexibel · wenn Wetter passt",h:3,detail:"Wenn das Wetter mitspielt, die längere Urlaubstour. Sonst verschieben. "+DlangFuel},
+  {d:"Do 27.",type:"z2",title:"Sylt: locker/Ruhe",sub:"flexibel",h:1,detail:"Locker oder frei."},
+  {d:"Fr 28.",type:"z2",title:"Sylt: Z2 nach Wetter",sub:"flexibel",h:1.5,detail:"Z2-Ausfahrt nach Wetter."},
+  {d:"Sa 29.",type:"ruhe",title:"Sylt/Rückreise",sub:"flexibel",h:0,detail:"Je nach Abreise — optional kurze Runde."},
+  {d:"So 30.",type:"ruhe",title:"Rückreise / Puffer",sub:"",h:0,detail:"Reise/Erholung."}]}
 ];
 
 const RULES=[
+ {cat:"Dienste",text:"📖 KALENDER LESEN (Schritt für Schritt, immer in dieser Reihenfolge): (1) Ein farbiger Dienst-Balken, der sich über MEHRERE Tage zieht = NACHTDIENST. Der ERSTE Tag ist der Dienst-Tag (Dienstbeginn 14:45), der LETZTE Tag des Balkens ist der Post-Call-Ruhetag. Beispiel: Balken Do→Fr = Nachtdienst Do, Post-Call-Ruhe Fr. (2) Ein Dienst-Balken, der nur EINEN Tag belegt = TAGDIENST (7:30–15:30). Kein Post-Call danach. (3) JEDER Tag OHNE Dienst-Balken ist ein NORMALER ARBEITSTAG (werktags) bzw. FREIER TAG (Wochenende) — egal welcher Wochentag. NIE einen Dienst annehmen, der nicht im Kalender als Balken steht."},
+ {cat:"Dienste",text:"⚙️ WAS GEHT AN WELCHEM TAG (Konsequenz aus dem Kalender): NACHTDIENST-Tag → nur Z2 + kurze Sprints am Vormittag (bis 12 Uhr), KEINE lange Ausfahrt, KEINE Kraft am Abend. POST-CALL-Tag → IMMER Ruhetag, ausnahmslos, kein Training. TAGDIENST → nur Z2 am Vormittag, kein langer Block. NORMALER ARBEITSTAG → Training abends ab 17 Uhr (Z2, Kraft, Intervalle). FREIER WOCHENENDTAG → lange Ausfahrt möglich. WICHTIG: Lange Ausfahrt NUR an freien Wochenendtagen; fällt das Wochenende durch Dienst weg, entfällt die lange Ausfahrt ERSATZLOS (kein Nachholen, nicht planbar)."},
  {cat:"Dienste",text:"Nachtdienst 14:45 → ~9:00 Folgetag (2–3 h Schlaf). Post-Call = Ruhetag, ausnahmslos."},
- {cat:"Dienste",text:"Vor einem Nachtdienst ist der Vormittag frei und trainierbar — aber nur max. Z2 + kurze Sprints, spätestens 12 Uhr fertig."},
- {cat:"Dienste",text:"1 blockierter Wochenendtag im Kalender = Tagdienst 7:30–15:30. 2 zusammenhängende Tage = Nachtdienst."},
+ 
+ 
  {cat:"Dienste",text:"Spätdienst 13:00–21:30 (oft bis 23 Uhr): Trainingsslot 9–11 Uhr, reduzierter Umfang. Spätdienstwochen zählen als Entlastung."},
  {cat:"Dienste",text:"Spätdienst-Unsicherheit: An Spätdienst-Tagen ist morgens nicht absehbar, wie lang der Tag wird und ob die Folgetage trainierbar bleiben. Daher gilt — die sichere Einheit am freien Vormittag mitnehmen, auch wenn sie nicht ins geplante Tagesraster passt. Eine garantierte Einheit jetzt schlägt mehrere geplante, die der Dienst auffrisst. Chance ergreifen statt auf den perfekten Slot warten; die Mehrleistung wird als Bonus erfasst, nicht als Soll-Verfehlung an anderen Tagen."},
  {cat:"Dienste",text:"Reguläre Arbeitstage 6:45–16:30: Einheiten abends ab ~17 Uhr."},
@@ -103,6 +137,9 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"30.06.2026",text:"Dienst-Regeln überarbeitet für eindeutiges Kalender-Lesen: Leitregel mit Schritt-für-Schritt-Algorithmus (mehrtägiger Balken = Nachtdienst mit Post-Call am letzten Tag; eintägiger Balken = Tagdienst; KEIN Balken = normaler Arbeits-/Freitag) + Konsequenz-Regel pro Tagtyp. Verhindert künftige Lesefehler beim Dienstplan-Update."},
+ {date:"30.06.2026",text:"Kompletter Juli + August gegen den Dienstplan und alle Regeln geprüft: Nachtdienste lösen jetzt überall Post-Call-Ruhetage aus (W4 Do 2., W5 Do 9., W7 So 26., W8 Fr 31., W10 So 16.). Lange Ausfahrten an Dienst-Wochenenden ersatzlos gestrichen (W7 Sa 25., W10 Sa 15.) — bei Nachtdienst am WE nicht planbar, kein Nachholen. Normale Arbeitstage korrekt als solche markiert (Fr 3., Fr 10.). Sylt-Anreise auf Sa 22. korrigiert (keine Fahrt am Reisetag)."},
+ {date:"30.06.2026",text:"Dienstplan Juli+August eingearbeitet. W5 Dienst Mi–Fr korrigiert, W7 Dienst ab Sa 25. August neu (W9–W12): W9 Basis, W10 erste Schwellen-/Sweet-Spot-Woche (Phase-2-Einstieg), W11 Übergang + Sylt-Anreise, W12 Sylt-Urlaub (Basis, flexibel). Mikroplan reicht bis Ende August."},
  {date:"29.06.2026",text:"W4 gestartet: Mo Z2+Sprints outdoor (103 min, Ø145 bpm, 5s-Spitze 820 W). Setup erweitert: Wahoo ELEMNT ACE, TRACKR Heart Rate, TRACKR Radar. Notiz für Phase 4: Normalized Power für lange/variable Fahrten ergänzen. Form +6."},
  {date:"28.06.2026",text:"Sonntags-Abgleich W3: alle 5 Einheiten erfasst. Fr/Sa-Tausch sauber modelliert (Z2 lief Fr, Kraft Sa — beide Soll-Positionen erfüllt), Do-Z2 entfiel. Verteilung wetter-/dienstbedingt. Wochenanalyse geschrieben. Form wieder +12. FTP 205 W durch Lambi-Dauerwerte bestätigt."},
  {date:"24.06.2026",text:"Neue feste Regel (Dienste): Bei Spätdienst-Unsicherheit die sichere Einheit am freien Vormittag mitnehmen, auch außerhalb des Rasters — eine garantierte Einheit schlägt mehrere geplante, die der Dienst auffrisst. Mehrleistung als Bonus. Bildet ab, wie die Lambi-Tour zustande kam."},
