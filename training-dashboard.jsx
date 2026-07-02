@@ -138,6 +138,8 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"01.07.2026",text:"Strava-Abgleich: Mi 1.7. Z2 Zwift (75 min) vormittags vor Nachtdienst — mustergültig (Ø144 bpm, 1-h 155 W). Regelkonform. Form +5."},
+ {date:"30.06.2026",text:"Strava-Abgleich: Di 30.6. Krafttraining (82 min) als W4-Kraft eingetragen. Form +10. W4 planmäßig."},
  {date:"30.06.2026",text:"August-Soll gegengecheckt: Urlaubswoche W12 hatte paradoxerweise das höchste Soll (8h). Korrigiert auf ~4h Grund-Soll, Sylt-Einheiten Di/Do/Fr optional. W11-Anreisetag-Ausfahrt optional. August-Verlauf: W9 7,5h → W10 6,3h → W11 4,5h → W12 4h."},
  {date:"30.06.2026",text:"Regeln-Reiter ergänzt: alle festen Regeln nach Bereich gruppiert zum klaren Durchsehen."},
  {date:"30.06.2026",text:"Neue Regel: mindestens 1 echter Ruhetag pro Woche (fest, nicht optional). W9 hatte als einzige Woche keinen — Fr 7.8. ist jetzt Ruhetag (vor der langen Sa-Ausfahrt, für frische Beine). Alle 12 Wochen erfüllen die Regel."},
@@ -205,6 +207,8 @@ const PMC_LOG=[
  {date:"24.06",fit:42,mued:51,form:-9},
  {date:"28.06",fit:37,mued:25,form:12},
  {date:"29.06",fit:38,mued:31,form:6},
+ {date:"30.06",fit:37,mued:27,form:10},
+ {date:"01.07",fit:38,mued:32,form:5},
 ];
 // Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
 const RIDE_LOG=[
@@ -227,6 +231,8 @@ const ACTUAL = {
   "W3-4": { min: 55, sport: "WeightTraining", note: "Kraft (Fr/Sa-Tausch — erfüllt Kraft-Soll)" },
   "W3-5": { min: 61, hr: 140, w: 142, km: 28, hm: 196, sport: "VirtualRide", note: "Z2 + 4×15s-Sprints, 35°C indoor — mustergültig kontrolliert (max 160 bpm), Sprints bis 512 W. Lief real Fr, erfüllt Sa-Z2-Soll." },
   "W4-0": { min: 103, hr: 145, w: 135, km: 44, hm: 166, sport: "Ride", note: "Z2 + paar Sprints, outdoor — kontrolliert aerob (Ø145 bpm), 5s-Spitze 820 W" },
+  "W4-1": { min: 82, sport: "WeightTraining", note: "Krafttraining am Nachmittag" },
+  "W4-2": { min: 75, hr: 144, w: 148, km: 40, hm: 59, sport: "VirtualRide", note: "Z2 Zwift vormittags vor Nachtdienst — sehr kontrolliert (Ø144 bpm, max 159), 1-h 155 W" },
   "W2-3": { min: 56, sport: "WeightTraining", note: "Kraft auf Mi 17. vorgezogen, dort erledigt" },
 };
 const REVIEWS = [
