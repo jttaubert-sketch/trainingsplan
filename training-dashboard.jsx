@@ -87,7 +87,7 @@ const WEEKS=[
   {d:"Di 4.",type:"kraft",title:"Kraft 1",sub:"",h:1,detail:Dkraft1},
   {d:"Mi 5.",type:"z2",title:"Z2 90′ + Sprints",sub:"",h:1.5,detail:Dz2+" "+Dsprint},
   {d:"Do 6.",type:"kraft",title:"Kraft 2",sub:"",h:1,detail:Dkraft2},
-  {d:"Fr 7.",type:"z2",title:"Z2 60′ locker",sub:"",h:1,detail:Dz2},
+  {d:"Fr 7.",type:"ruhe",title:"Ruhetag",sub:"vor der langen Ausfahrt frisch",h:0,detail:"Fester wöchentlicher Ruhetag — bewusst vor dem langen Samstag, damit die Beine frisch sind."},
   {d:"Sa 8.",type:"lang",title:"Lange Gravel 3,5 h",sub:"",h:3.5,detail:"Aerobe Langausfahrt. "+DlangFuel},
   {d:"So 9.",type:"z2",title:"Z2 60′ Recovery",sub:"Soll 60′",h:1,detail:"Unteres Z2/Z1, locker."}]},
  {id:"W10",range:"10.–16. Aug",tag:"Schwelle",note:"Phase-2-Einstieg: erste Sweet-Spot-Woche · Nachtdienst Sa 15.→So 16.",days:[
@@ -105,13 +105,13 @@ const WEEKS=[
   {d:"Do 20.",type:"z2",title:"Z2 60′ locker",sub:"Forschung",h:1,detail:Dz2+" Forschungstag — locker halten."},
   {d:"Fr 21.",type:"z2",title:"Z2 60′ locker",sub:"letzter Tag vor Urlaub",h:1,detail:Dz2+" Letzte Einheit vor der Abreise — locker."},
   {d:"Sa 22.",type:"ruhe",title:"Anreise Sylt",sub:"Reisetag — keine Fahrt",h:0,detail:"Anreise nach Sylt — Reisetag, kein Training."},
-  {d:"So 23.",type:"z2",title:"Sylt: erste Ausfahrt nach Wetter",sub:"flexibel · wetterabhängig",h:1.5,detail:"Erste Urlaubsausfahrt, je nach Wetter und Wind (Sylt = oft windig). Z2, Landschaft genießen. Kein Druck."}]},
- {id:"W12",range:"24.–30. Aug",tag:"Basis (Urlaub)",note:"Sylt-Urlaub · Basis, wetterabhängige Touren",days:[
-  {d:"Mo 24.",type:"z2",title:"Sylt: Z2 nach Wetter",sub:"flexibel",h:1.5,detail:"Wetterabhängige Z2-Ausfahrt. Insel-Runden, Wind einplanen."},
-  {d:"Di 25.",type:"z2",title:"Sylt: locker/Ruhe",sub:"flexibel",h:1,detail:"Nach Lust und Wetter — auch Pause ok, ist Urlaub."},
+  {d:"So 23.",type:"z2",title:"Sylt: erste Ausfahrt nach Wetter",sub:"optional · wetterabhängig",h:1.5,opt:true,detail:"Optional (zählt nicht ins Soll). Erste Urlaubsausfahrt, je nach Wetter und Wind. Kein Druck — gerade erst angereist."}]},
+ {id:"W12",range:"24.–30. Aug",tag:"Basis (Urlaub)",note:"Sylt-Urlaub · kleines Grund-Soll (~4h), Rest optional · wetterabhängig",days:[
+  {d:"Mo 24.",type:"z2",title:"Sylt: Z2 nach Wetter",sub:"flexibel · Grund-Soll",h:1,detail:"Wetterabhängige Z2-Ausfahrt. Insel-Runden, Wind einplanen. Zählt zum kleinen Grund-Soll der Urlaubswoche."},
+  {d:"Di 25.",type:"z2",title:"Sylt: locker/Ruhe",sub:"optional · flexibel",h:1,opt:true,detail:"Optional (zählt nicht ins Soll). Nach Lust und Wetter — auch Pause ok, ist Urlaub."},
   {d:"Mi 26.",type:"lang",title:"Sylt: längere Tour nach Wetter",sub:"flexibel · wenn Wetter passt",h:3,detail:"Wenn das Wetter mitspielt, die längere Urlaubstour. Sonst verschieben. "+DlangFuel},
-  {d:"Do 27.",type:"z2",title:"Sylt: locker/Ruhe",sub:"flexibel",h:1,detail:"Locker oder frei."},
-  {d:"Fr 28.",type:"z2",title:"Sylt: Z2 nach Wetter",sub:"flexibel",h:1.5,detail:"Z2-Ausfahrt nach Wetter."},
+  {d:"Do 27.",type:"z2",title:"Sylt: locker/Ruhe",sub:"optional · flexibel",h:1,opt:true,detail:"Optional (zählt nicht ins Soll). Locker oder frei."},
+  {d:"Fr 28.",type:"z2",title:"Sylt: Z2 nach Wetter",sub:"optional · flexibel",h:1.5,opt:true,detail:"Optional (zählt nicht ins Soll). Z2-Ausfahrt nach Wetter."},
   {d:"Sa 29.",type:"ruhe",title:"Sylt/Rückreise",sub:"flexibel",h:0,detail:"Je nach Abreise — optional kurze Runde."},
   {d:"So 30.",type:"ruhe",title:"Rückreise / Puffer",sub:"",h:0,detail:"Reise/Erholung."}]}
 ];
@@ -126,6 +126,7 @@ const RULES=[
  {cat:"Dienste",text:"Spätdienst-Unsicherheit: An Spätdienst-Tagen ist morgens nicht absehbar, wie lang der Tag wird und ob die Folgetage trainierbar bleiben. Daher gilt — die sichere Einheit am freien Vormittag mitnehmen, auch wenn sie nicht ins geplante Tagesraster passt. Eine garantierte Einheit jetzt schlägt mehrere geplante, die der Dienst auffrisst. Chance ergreifen statt auf den perfekten Slot warten; die Mehrleistung wird als Bonus erfasst, nicht als Soll-Verfehlung an anderen Tagen."},
  {cat:"Dienste",text:"Reguläre Arbeitstage 6:45–16:30: Einheiten abends ab ~17 Uhr."},
  {cat:"Training",text:"Lange Ausfahrten nur an freien Wochenendtagen."},
+ {cat:"Training",text:"Mindestens 1 echter Ruhetag pro Woche (type ruhe) — fest eingeplant, nicht optional. Dient der Regeneration und ist Trainingslehre-Standard. Post-Call-Tage zählen als Ruhetag. In dienstfreien Volumenwochen bewusst einen Werktag (ideal vor der langen Ausfahrt) freihalten, damit nicht 7 Tage am Stück trainiert wird."},
  {cat:"Training",text:"Jede 4. Woche Entlastung (−30–40 % Umfang)."},
  {cat:"Training",text:"Wenn der Dienstplan eine Woche zerschießt: Einheiten streichen, nicht nachholen."},
  {cat:"Training",text:"Profil: kräftige Beine, aerobe Baustelle (starke Sprintwerte, schwächere Dauerleistung). Daher Z2 IMMER nach Puls steuern (128–158) — die Beine verleiten sonst zu zu hohen Watt und der Grundlagenreiz geht verloren. Aerobe Effizienz ist die Hauptbaustelle und am besten trainierbar."},
@@ -137,6 +138,9 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"30.06.2026",text:"August-Soll gegengecheckt: Urlaubswoche W12 hatte paradoxerweise das höchste Soll (8h). Korrigiert auf ~4h Grund-Soll, Sylt-Einheiten Di/Do/Fr optional. W11-Anreisetag-Ausfahrt optional. August-Verlauf: W9 7,5h → W10 6,3h → W11 4,5h → W12 4h."},
+ {date:"30.06.2026",text:"Regeln-Reiter ergänzt: alle festen Regeln nach Bereich gruppiert zum klaren Durchsehen."},
+ {date:"30.06.2026",text:"Neue Regel: mindestens 1 echter Ruhetag pro Woche (fest, nicht optional). W9 hatte als einzige Woche keinen — Fr 7.8. ist jetzt Ruhetag (vor der langen Sa-Ausfahrt, für frische Beine). Alle 12 Wochen erfüllen die Regel."},
  {date:"30.06.2026",text:"Dienst-Regeln überarbeitet für eindeutiges Kalender-Lesen: Leitregel mit Schritt-für-Schritt-Algorithmus (mehrtägiger Balken = Nachtdienst mit Post-Call am letzten Tag; eintägiger Balken = Tagdienst; KEIN Balken = normaler Arbeits-/Freitag) + Konsequenz-Regel pro Tagtyp. Verhindert künftige Lesefehler beim Dienstplan-Update."},
  {date:"30.06.2026",text:"Kompletter Juli + August gegen den Dienstplan und alle Regeln geprüft: Nachtdienste lösen jetzt überall Post-Call-Ruhetage aus (W4 Do 2., W5 Do 9., W7 So 26., W8 Fr 31., W10 So 16.). Lange Ausfahrten an Dienst-Wochenenden ersatzlos gestrichen (W7 Sa 25., W10 Sa 15.) — bei Nachtdienst am WE nicht planbar, kein Nachholen. Normale Arbeitstage korrekt als solche markiert (Fr 3., Fr 10.). Sylt-Anreise auf Sa 22. korrigiert (keine Fahrt am Reisetag)."},
  {date:"30.06.2026",text:"Dienstplan Juli+August eingearbeitet. W5 Dienst Mi–Fr korrigiert, W7 Dienst ab Sa 25. August neu (W9–W12): W9 Basis, W10 erste Schwellen-/Sweet-Spot-Woche (Phase-2-Einstieg), W11 Übergang + Sylt-Anreise, W12 Sylt-Urlaub (Basis, flexibel). Mikroplan reicht bis Ende August."},
@@ -502,7 +506,7 @@ export default function TrainingDashboard() {
           </div>
           <h1 className="cond" style={{ fontWeight: 700, fontSize: 34, margin: "4px 0 0", lineHeight: 0.95, textTransform: "uppercase" }}>Jans Trainingscockpit</h1>
           <nav style={{ display: "flex", gap: 4, marginTop: 16, background: "rgba(255,255,255,.07)", padding: 4, borderRadius: 12 }}>
-            {[["overview", "Übersicht"], ["plan", "Plan"], ["progress", "Fortschritt"], ["setup", "Setup"], ["log", "Changelog"]].map(([k, l]) => (
+            {[["overview", "Übersicht"], ["plan", "Plan"], ["progress", "Fortschritt"], ["rules", "Regeln"], ["setup", "Setup"], ["log", "Changelog"]].map(([k, l]) => (
               <button key={k} onClick={() => { setRoute(k); setOpenDay(null); }} className="cond" style={{ flex: 1, fontWeight: 600, fontSize: 12.5, letterSpacing: "0.02em", textTransform: "uppercase", color: route === k ? "#fff" : "#A9B0A4", background: route === k ? T.accent : "transparent", border: "none", padding: "9px 5px", borderRadius: 9, cursor: "pointer", minHeight: 40 }}>{l}</button>
             ))}
           </nav>
@@ -894,6 +898,28 @@ export default function TrainingDashboard() {
           </>
         )}
 
+        {route === "rules" && (
+          <div>
+            <div style={{ fontSize: 12.5, color: T.inkSoft, lineHeight: 1.5, marginBottom: 10, padding: "0 2px" }}>Alle festen Regeln des Trainingsplans, nach Bereich gruppiert. Diese steuern, wie Dienstplan und Training zusammengebracht werden — die Dienst-Regeln ganz oben sind beim Lesen jedes neuen Kalenders zuerst anzuwenden.</div>
+            {[["Dienste", "Dienstplan lesen & Tagtypen", T.dienst], ["Training", "Training & Steuerung", "#2E5746"], ["Kraft", "Krafttraining", "#8A7141"], ["Material", "Material & Setup", T.accent], ["Abgleich", "Wöchentlicher Abgleich", "#1F8A8A"], ["Bedienung", "Bedienung", T.inkFaint]].map(([cat, label, color]) => {
+              const rules = RULES.filter((r) => r.cat === cat);
+              if (!rules.length) return null;
+              return (
+                <div key={cat} style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard, overflow: "hidden" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 14px 10px", borderLeft: `3px solid ${color}` }}>
+                    <span style={{ width: 9, height: 9, borderRadius: 99, background: color, flexShrink: 0 }} />
+                    <span className="cond" style={{ fontWeight: 700, fontSize: 14, letterSpacing: "0.03em", textTransform: "uppercase", color: T.ink, flex: 1 }}>{label}</span>
+                    <span className="num" style={{ fontSize: 12, color: T.inkSoft }}>{rules.length}</span>
+                  </div>
+                  {rules.map((r, i) => (
+                    <div key={i} style={{ fontSize: 12.5, lineHeight: 1.55, color: T.ink, padding: "10px 14px", borderTop: `1px solid ${T.line}` }}>{r.text}</div>
+                  ))}
+                </div>
+              );
+            })}
+            <div style={{ fontSize: 11, color: T.inkFaint, lineHeight: 1.5, marginTop: 4, padding: "0 2px" }}>Regeln ändern: in der Datenstruktur RULES pflegen (cat + text).</div>
+          </div>
+        )}
         {route === "log" && (
           <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
             <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 2px" }}>Updates &amp; Änderungen</div>
