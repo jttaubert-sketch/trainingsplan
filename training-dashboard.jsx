@@ -138,6 +138,10 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"05.07.2026",text:"Sonntags-Abgleich W4: 5 Radtage, Rad-Ist 7,6 h (Soll 7,25), Kraft 1/1 — stärkste Basiswoche, komplett regelkonform. Wochenanalyse geschrieben. Form erholt sich (−15 → −4). 1-h-Power-Durchbruch auf 186 W."},
+ {date:"04.07.2026",text:"Strava-Abgleich: Fr 3.7. Feierabend-Z2+Sprints (77′, neue Sattelposition ~2 cm vor) und Sa 4.7. Lambi–Weinbiet (3,3 h, 875 hm). NEUE BESTWERTE: 1-h 186 W, 20-min 211 W. Form −15 (kräftiger Reiz). W4 fast komplett."},
+ {date:"01.07.2026",text:"Zwei neue Features: (1) Daten-Backup im Setup — alle lokalen Daten als JSON sichern/wiederherstellen. (2) Z2-Effizienz-Kurve im Fortschritt — Watt je Herzschlag (×100) pro Z2-Einheit, Indoor/Outdoor getrennt. Kernmetrik bis zur Traka. Indoor-Trend: 100 → 101 → 103."},
+ {date:"01.07.2026",text:"Navigation gestrafft: Regeln- und Changelog-Reiter zum gemeinsamen Reiter „Logbuch“ zusammengelegt — Regeln oben, darunter die Änderungshistorie. Navigation jetzt 5 Reiter."},
  {date:"01.07.2026",text:"Strava-Abgleich: Mi 1.7. Z2 Zwift (75 min) vormittags vor Nachtdienst — mustergültig (Ø144 bpm, 1-h 155 W). Regelkonform. Form +5."},
  {date:"30.06.2026",text:"Strava-Abgleich: Di 30.6. Krafttraining (82 min) als W4-Kraft eingetragen. Form +10. W4 planmäßig."},
  {date:"30.06.2026",text:"August-Soll gegengecheckt: Urlaubswoche W12 hatte paradoxerweise das höchste Soll (8h). Korrigiert auf ~4h Grund-Soll, Sylt-Einheiten Di/Do/Fr optional. W11-Anreisetag-Ausfahrt optional. August-Verlauf: W9 7,5h → W10 6,3h → W11 4,5h → W12 4h."},
@@ -194,6 +198,7 @@ const FTP_LOG=[
  {date:"14.06",label:"Aubachtal",p20:199,p60:147},
  {date:"23.06",label:"Ramp-Test",p20:242,p60:205},
  {date:"24.06",label:"Lambi (5h-Tour)",p20:207,p60:172},
+ {date:"04.07",label:"Lambi–Weinbiet",p20:211,p60:186},
 ];
 // Fitness/Ermüdung/Form (PMC) aus Strava Relative Effort. Fit=42-Tage, Müd=7-Tage, Form=Fit−Müd.
 const PMC_LOG=[
@@ -209,6 +214,10 @@ const PMC_LOG=[
  {date:"29.06",fit:38,mued:31,form:6},
  {date:"30.06",fit:37,mued:27,form:10},
  {date:"01.07",fit:38,mued:32,form:5},
+ {date:"02.07",fit:36,mued:24,form:12},
+ {date:"03.07",fit:37,mued:29,form:7},
+ {date:"04.07",fit:41,mued:57,form:-15},
+ {date:"05.07",fit:39,mued:43,form:-4},
 ];
 // Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
 const RIDE_LOG=[
@@ -233,6 +242,8 @@ const ACTUAL = {
   "W4-0": { min: 103, hr: 145, w: 135, km: 44, hm: 166, sport: "Ride", note: "Z2 + paar Sprints, outdoor — kontrolliert aerob (Ø145 bpm), 5s-Spitze 820 W" },
   "W4-1": { min: 82, sport: "WeightTraining", note: "Krafttraining am Nachmittag" },
   "W4-2": { min: 75, hr: 144, w: 148, km: 40, hm: 59, sport: "VirtualRide", note: "Z2 Zwift vormittags vor Nachtdienst — sehr kontrolliert (Ø144 bpm, max 159), 1-h 155 W" },
+  "W4-4": { min: 77, hr: 149, w: 141, km: 34, hm: 127, sport: "Ride", note: "Feierabend-Z2 + Sprints (5s 736 W) — neue Sattelposition, ~2 cm weiter vorn. Puls oberes Z2 (Ø149)." },
+  "W4-5": { min: 198, hr: 153, w: 151, km: 69, hm: 875, sport: "Ride", note: "Lambi–Weinbiet: 875 hm, Anstiege ~210 W bei Puls 165–173. NEUE BESTWERTE: 1-h 186 W (vorher 172), 20-min 211 W." },
   "W2-3": { min: 56, sport: "WeightTraining", note: "Kraft auf Mi 17. vorgezogen, dort erledigt" },
 };
 const REVIEWS = [
@@ -245,6 +256,9 @@ const REVIEWS = [
   { wk: "W3", radH: "4,4 h Ist (Soll 3,75 h · inkl. Bonus)", lang: false, z2: "mustergültig (Fr Ø140 bpm, max 160, 4 saubere Sprints)", kraft: "2/2", bonus: "Lambi-Tour 146′ / 57 km / 515 hm",
     fazit: "Spätdienst-/Entlastungswoche, vom Wetter und Dienst stark geprägt — Verteilung war so nicht frei wählbar. Mo Kraft, Di FTP-Retest (242 W), Mi spontane große Lambi-Tour (Chance ergriffen, da Spätdienst-Folgetage unsicher), Fr/Sa Z2 und Kraft getauscht, Do-Z2 entfiel. Highlight: Die Fr-Z2 mit Sprints war mustergültig aerob kontrolliert (Ø140 bpm). Wichtigster Datenpunkt: erste Dauerleistung nach Retest (Lambi 20-min 207 W, 1-h 172 W) bestätigt Planungs-FTP 205 W eindeutig.",
     ableitung: "FTP-Frage geklärt (205 W stimmt). Form trotz großer Tour wieder bei +12 — gut erholt. W4 (29.6.–5.7.) ist erste reguläre Aufbauwoche: zurück zur strukturierten Z2-Mitteldistanz, lange Ausfahrt am Sa wieder als Soll. Z2 weiter strikt nach Puls (jetzt mit validierter Wattspanne 115–154 als Gegencheck). August-Dienstplan nachreichen." },
+ { wk: "W4", radH: "7,6 h Ist (Soll 7,25 h)", lang: true, z2: "durchweg kontrolliert (Mi Ø144, Fr Ø149)", kraft: "1/1", bonus: "—",
+    fazit: "Die bisher stärkste Woche der Basisphase — 5 Radtage, alle regelkonform um den Dienstplan gelegt. Mo Z2+Sprints outdoor (103′, 5s 820 W), Di Kraft, Mi Z2 Zwift vormittags vor dem Nachtdienst (mustergültig Ø144), Do Post-Call sauber ausgeruht, Fr Feierabend-Z2 mit neuer Sattelposition (~2 cm vor), Sa die große Lambi–Weinbiet-Tour (69 km, 875 hm). So Tagdienst = Ruhe. Highlight: die Weinbiet-Anstiege konstant ~210 W bei Puls 165–173.",
+    ableitung: "Durchbruch bei der aeroben Dauerleistung: 1-h-Power von 172 auf 186 W gesprungen (+8 % in 10 Tagen), 20-min 211 W — die Basis greift sichtbar. Planungs-FTP 205 W bleibt korrekt (eher leicht konservativ). Form −4, gut auf dem Weg zurück. Nächste Woche W5 (6.–12.7.): Nachtdienst Mi 8.→Do 9. (Do Post-Call), sonst normale Aufbauwoche. Neue Sattelposition auf Komfort/Knie beobachten." },
 ];
 
 const BONUS = [
@@ -512,7 +526,7 @@ export default function TrainingDashboard() {
           </div>
           <h1 className="cond" style={{ fontWeight: 700, fontSize: 34, margin: "4px 0 0", lineHeight: 0.95, textTransform: "uppercase" }}>Jans Trainingscockpit</h1>
           <nav style={{ display: "flex", gap: 4, marginTop: 16, background: "rgba(255,255,255,.07)", padding: 4, borderRadius: 12 }}>
-            {[["overview", "Übersicht"], ["plan", "Plan"], ["progress", "Fortschritt"], ["rules", "Regeln"], ["setup", "Setup"], ["log", "Changelog"]].map(([k, l]) => (
+            {[["overview", "Übersicht"], ["plan", "Plan"], ["progress", "Fortschritt"], ["setup", "Setup"], ["logbook", "Logbuch"]].map(([k, l]) => (
               <button key={k} onClick={() => { setRoute(k); setOpenDay(null); }} className="cond" style={{ flex: 1, fontWeight: 600, fontSize: 12.5, letterSpacing: "0.02em", textTransform: "uppercase", color: route === k ? "#fff" : "#A9B0A4", background: route === k ? T.accent : "transparent", border: "none", padding: "9px 5px", borderRadius: 9, cursor: "pointer", minHeight: 40 }}>{l}</button>
             ))}
           </nav>
@@ -643,6 +657,36 @@ export default function TrainingDashboard() {
                     <span style={{ fontSize: 13, color: T.ink, lineHeight: 1.4 }}>{sb.v}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+              <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Daten sichern</div>
+              <div style={{ padding: "0 14px 14px" }}>
+                <div style={{ fontSize: 12.5, color: T.inkSoft, lineHeight: 1.5, marginBottom: 10 }}>Häkchen, RPE-Notizen, Readiness und Tagesreihenfolge liegen nur in diesem Browser-Speicher. Als Datei sichern schützt vor Datenverlust.</div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={() => {
+                    const data = { version: 1, exported: new Date().toISOString(), progress: done, notes: notes, readiness: readiness, dayorder: dayOrder };
+                    const blob = new Blob([JSON.stringify(data, null, 1)], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+                    const aEl = document.createElement("a"); aEl.href = url; aEl.download = "jan-training-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+                    document.body.appendChild(aEl); aEl.click(); aEl.remove(); URL.revokeObjectURL(url);
+                  }} style={{ flex: 1, fontFamily: "inherit", fontWeight: 600, fontSize: 13.5, padding: "11px 8px", borderRadius: 10, border: `1px solid ${T.line}`, background: T.panel2 || "#EFEDE3", color: T.ink, cursor: "pointer", minHeight: 44 }}>⬇ Sichern (JSON)</button>
+                  <button onClick={() => { const fi = document.getElementById("backup-file-art"); if (fi) fi.click(); }} style={{ flex: 1, fontFamily: "inherit", fontWeight: 600, fontSize: 13.5, padding: "11px 8px", borderRadius: 10, border: `1px solid ${T.line}`, background: T.panel2 || "#EFEDE3", color: T.ink, cursor: "pointer", minHeight: 44 }}>⬆ Wiederherstellen</button>
+                </div>
+                <input type="file" id="backup-file-art" accept=".json,application/json" style={{ display: "none" }} onChange={(ev) => {
+                  const f = ev.target.files && ev.target.files[0]; if (!f) return;
+                  const rd = new FileReader();
+                  rd.onload = () => { try {
+                    const data = JSON.parse(String(rd.result));
+                    if (!data || typeof data !== "object") throw new Error("Ungültiges Format");
+                    if (data.progress) { setDone(data.progress); window.storage.set(STORAGE_KEY, JSON.stringify(data.progress)); }
+                    if (data.notes) { setNotes(data.notes); window.storage.set(NOTES_KEY, JSON.stringify(data.notes)); }
+                    if (data.readiness) { setReadiness(data.readiness); window.storage.set(READINESS_KEY, JSON.stringify(data.readiness)); }
+                    if (data.dayorder) { setDayOrder(data.dayorder); window.storage.set(ORDER_KEY, JSON.stringify(data.dayorder)); }
+                    alert("Backup wiederhergestellt ✓");
+                  } catch (e) { alert("Import fehlgeschlagen: " + (e && e.message)); } };
+                  rd.readAsText(f); ev.target.value = "";
+                }} />
               </div>
             </div>
           </>
@@ -864,6 +908,40 @@ export default function TrainingDashboard() {
                 </div>
               );
             })()}
+            {/* Z2-Effizienz: Watt pro Herzschlag (×100) */}
+            {(() => {
+              const effAll = [];
+              WEEKS.forEach((w) => { w.days.forEach((d, i) => {
+                const act = ACTUAL[w.id + "-" + i];
+                if (!act || !act.hr || !act.w) return;
+                if (d.type !== "z2") return;
+                const ws_ = WEEK_DATES[w.id][0];
+                const dt = new Date(ws_ + "T12:00:00"); dt.setDate(dt.getDate() + i);
+                effAll.push({ t: dt.getTime(), label: dt.getDate() + "." + (dt.getMonth() + 1) + ".", ef: Math.round(act.w / act.hr * 100), indoor: act.sport === "VirtualRide" });
+              }); });
+              effAll.sort((a, b) => a.t - b.t);
+              if (effAll.length < 2) return null;
+              const inPts = effAll.map((p, i) => p.indoor ? { x: i, y: p.ef } : null).filter(Boolean);
+              const outPts = effAll.map((p, i) => !p.indoor ? { x: i, y: p.ef } : null).filter(Boolean);
+              const evs = effAll.map((p) => p.ef);
+              const emin = Math.min(...evs) - 6, emax = Math.max(...evs) + 6;
+              const effSeries = [];
+              if (inPts.length) effSeries.push({ pts: inPts, color: "#3E6F8E" });
+              if (outPts.length) effSeries.push({ pts: outPts, color: T.accent });
+              return (
+                <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+                  <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Z2-Effizienz (Watt je Herzschlag ×100)</div>
+                  <div style={{ padding: "0 14px 14px" }}>
+                    <div style={{ display: "flex", gap: "6px 14px", flexWrap: "wrap", fontSize: 11, color: T.inkSoft, marginBottom: 8 }}>
+                      <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: "#3E6F8E", marginRight: 5, verticalAlign: -1 }} />Indoor (Kickr)</span>
+                      <span><span style={{ display: "inline-block", width: 9, height: 9, borderRadius: 99, background: T.accent, marginRight: 5, verticalAlign: -1 }} />Outdoor (SRAM)</span>
+                    </div>
+                    <LineGraph series={effSeries} ymin={emin} ymax={emax} xlabels={effAll.map((p) => p.label)} ylabels={[...new Set([Math.round(emin), Math.round((emin + emax) / 2), Math.round(emax)])]} />
+                    <div style={{ fontSize: 11, color: T.inkSoft, lineHeight: 1.5, marginTop: 7 }}>Mehr Watt bei gleichem Z2-Puls = die aerobe Basis wächst — <strong>die Kernmetrik bis zur Traka</strong>. Indoor/Outdoor getrennt (zwei Powermeter, bekannte Diskrepanz). Nur strukturierte Z2-Einheiten; lange Gravel-Fahrten und Tests bleiben außen vor.</div>
+                  </div>
+                </div>
+              );
+            })()}
             {/* Wochenumfang */}
             <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
               <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 4px" }}>Rad-Wochenumfang (h)</div>
@@ -904,7 +982,7 @@ export default function TrainingDashboard() {
           </>
         )}
 
-        {route === "rules" && (
+        {route === "logbook" && (
           <div>
             <div style={{ fontSize: 12.5, color: T.inkSoft, lineHeight: 1.5, marginBottom: 10, padding: "0 2px" }}>Alle festen Regeln des Trainingsplans, nach Bereich gruppiert. Diese steuern, wie Dienstplan und Training zusammengebracht werden — die Dienst-Regeln ganz oben sind beim Lesen jedes neuen Kalenders zuerst anzuwenden.</div>
             {[["Dienste", "Dienstplan lesen & Tagtypen", T.dienst], ["Training", "Training & Steuerung", "#2E5746"], ["Kraft", "Krafttraining", "#8A7141"], ["Material", "Material & Setup", T.accent], ["Abgleich", "Wöchentlicher Abgleich", "#1F8A8A"], ["Bedienung", "Bedienung", T.inkFaint]].map(([cat, label, color]) => {
@@ -924,18 +1002,21 @@ export default function TrainingDashboard() {
               );
             })}
             <div style={{ fontSize: 11, color: T.inkFaint, lineHeight: 1.5, marginTop: 4, padding: "0 2px" }}>Regeln ändern: in der Datenstruktur RULES pflegen (cat + text).</div>
-          </div>
-        )}
-        {route === "log" && (
-          <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
-            <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 2px" }}>Updates &amp; Änderungen</div>
-            <div className="num" style={{ fontSize: 11, color: T.inkSoft, padding: "0 14px 8px" }}>{CHANGELOG.length} Einträge · zuletzt {CHANGELOG[0].date}</div>
-            {CHANGELOG.map((c, i) => (
-              <div key={i} style={{ display: "flex", gap: 10, padding: "10px 14px", borderTop: `1px solid ${T.line}`, fontSize: 12.5, lineHeight: 1.5 }}>
-                <span className="cond num" style={{ fontWeight: 600, minWidth: 74, flexShrink: 0, color: T.inkSoft }}>{c.date}</span>
-                <span>{c.text}</span>
-              </div>
-            ))}
+            <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "22px 2px 12px", color: T.inkFaint, fontSize: 12, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+              <span style={{ flex: 1, height: 1, background: T.line }} />
+              <span>Änderungshistorie</span>
+              <span style={{ flex: 1, height: 1, background: T.line }} />
+            </div>
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, marginBottom: 10, boxShadow: T.shadowCard }}>
+              <div className="cond" style={{ fontWeight: 700, fontSize: 16, letterSpacing: "0.04em", textTransform: "uppercase", color: T.ink, padding: "14px 14px 2px" }}>Updates &amp; Änderungen</div>
+              <div className="num" style={{ fontSize: 11, color: T.inkSoft, padding: "0 14px 8px" }}>{CHANGELOG.length} Einträge · zuletzt {CHANGELOG[0].date}</div>
+              {CHANGELOG.map((c, i) => (
+                <div key={i} style={{ display: "flex", gap: 10, padding: "10px 14px", borderTop: `1px solid ${T.line}`, fontSize: 12.5, lineHeight: 1.5 }}>
+                  <span className="cond num" style={{ fontWeight: 600, minWidth: 74, flexShrink: 0, color: T.inkSoft }}>{c.date}</span>
+                  <span>{c.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </main>

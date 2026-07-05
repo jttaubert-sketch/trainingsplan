@@ -205,6 +205,19 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bo
   .todo-txt.done{color:var(--ink-faint);text-decoration:line-through}
   .todo-when{font-size:11px;color:var(--ink-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
   .countdown{padding:16px;background:linear-gradient(135deg,#243024,#1A211B);color:#EFEDE3}
+  .bk-btn{flex:1;font-family:var(--cond);font-weight:600;font-size:13.5px;padding:11px 8px;border-radius:var(--r-int);border:1px solid var(--line);background:var(--panel2);color:var(--ink);cursor:pointer;min-height:44px}
+  .bk-btn:active{background:var(--line)}
+  .logbook-divider{display:flex;align-items:center;gap:12px;margin:22px 2px 12px;color:var(--ink-faint);font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+  .logbook-divider::before,.logbook-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+  .rules-intro{font-size:12.5px;line-height:1.55;color:var(--ink-soft);padding:2px 4px 14px}
+  .rules-cat{padding:0}
+  .rules-cat-head{display:flex;align-items:center;gap:8px;font-family:var(--cond);font-weight:700;font-size:14px;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);padding:12px 14px 10px;border-bottom:2px solid var(--line)}
+  .rules-cat-dot{width:10px;height:10px;border-radius:99px;flex:0 0 10px}
+  .rules-cat-count{margin-left:auto;font-size:11px;color:var(--ink-faint);background:var(--panel2);border-radius:99px;padding:2px 8px}
+  .rules-item{font-size:12.5px;line-height:1.55;color:var(--ink);padding:10px 14px;border-top:1px solid var(--line)}
+  .rules-item.first{border-top:none}
+  .rules-foot{font-size:11px;line-height:1.5;color:var(--ink-faint);padding:10px 6px 2px}
+  .rules-foot code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:10.5px}
   /* ——— Readiness ——— */
   .readiness{padding:14px}
   .rd-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -403,6 +416,10 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"05.07.2026",text:"Sonntags-Abgleich W4 abgeschlossen: 5 Radtage, Rad-Ist 7,6 h (Soll 7,25), Kraft 1/1 — stärkste Basiswoche, komplett regelkonform. Wochenanalyse geschrieben. So Tagdienst = Ruhe (nach Weinbiet-Tour ideal). Form erholt sich (−15 → −4). Fazit der Woche: 1-h-Power-Durchbruch auf 186 W."},
+ {date:"04.07.2026",text:"Strava-Abgleich: Fr 3.7. Feierabend-Z2+Sprints (77′, Ø149 bpm, neue Sattelposition ~2 cm vor) und Sa 4.7. Lambi–Weinbiet (3,3 h, 69 km, 875 hm). NEUE BESTWERTE: 1-h 186 W (vorher 172), 20-min 211 W — die Anstiege konstant ~210 W. Die aerobe Dauerleistung macht einen sichtbaren Sprung. Form −15 (kräftiger Reiz, morgen Tagdienst = Ruhe passt perfekt). W4 fast komplett: nur noch So."},
+ {date:"01.07.2026",text:"Zwei neue Features: (1) Daten-Backup im Setup — Häkchen, Notizen, Readiness und Tagesreihenfolge als JSON-Datei sichern und wiederherstellen (Schutz vor Cache-Reset/Gerätewechsel). (2) Z2-Effizienz-Kurve im Fortschritt — Watt je Herzschlag (×100) pro strukturierter Z2-Einheit, Indoor (Kickr) und Outdoor (SRAM) als getrennte Serien wegen der Powermeter-Diskrepanz. Die Kernmetrik bis zur Traka: mehr Watt bei gleichem Puls = aerobe Basis wächst. Aktueller Indoor-Trend: 100 → 101 → 103."},
+ {date:"01.07.2026",text:"Navigation gestrafft: Regeln- und Changelog-Reiter zum gemeinsamen Reiter „Logbuch“ zusammengelegt — Regeln oben (Regelwerk, beim Kalender-Lesen zuerst anwenden), darunter die Änderungshistorie. Navigation jetzt 5 Reiter."},
  {date:"01.07.2026",text:"Strava-Abgleich: Mi 1.7. Z2 Zwift (75 min) vormittags vor dem Nachtdienst — mustergültig kontrolliert (Ø144 bpm, 1-h 155 W, bestätigt weiter FTP 205 W). Regelkonform: Z2 vormittags am Nachtdienst-Tag. Form +5."},
  {date:"30.06.2026",text:"Strava-Abgleich: Di 30.6. Krafttraining (82 min) als W4-Kraft eingetragen. Form steigt auf +10 (gut erholt). W4 läuft planmäßig."},
  {date:"30.06.2026",text:"August-Soll gegengecheckt: Urlaubswoche W12 hatte paradoxerweise das höchste Soll (8h). Korrigiert auf kleines Grund-Soll ~4h (Mo Z2 + Mi längere Tour als Anker), Di/Do/Fr-Sylt-Einheiten optional (zählen nur ins Ist). Auch W11 So-Anreisetag-Ausfahrt optional → Urlaubsbeginn druckfrei. August-Verlauf jetzt: W9 7,5h → W10 6,3h → W11 4,5h → W12 4h (natürliches Auslaufen)."},
@@ -491,6 +508,7 @@ const FTP_LOG=[
  {date:"14.06",label:"Aubachtal",p20:199,p60:147},
  {date:"23.06",label:"Ramp-Test",p20:242,p60:205},
  {date:"24.06",label:"Lambi (5h-Tour)",p20:207,p60:172},
+ {date:"04.07",label:"Lambi–Weinbiet",p20:211,p60:186},
 ];
 // Fitness/Ermüdung/Form (PMC) aus Strava Relative Effort. Fit=42-Tage, Müd=7-Tage, Form=Fit−Müd.
 // Wird beim Sonntags-Abgleich fortgeschrieben. Basis konservativ, FTP-unabhängig (nutzt Relative Effort).
@@ -507,6 +525,10 @@ const PMC_LOG=[
  {date:"29.06",fit:38,mued:31,form:6},
  {date:"30.06",fit:37,mued:27,form:10},
  {date:"01.07",fit:38,mued:32,form:5},
+ {date:"02.07",fit:36,mued:24,form:12},
+ {date:"03.07",fit:37,mued:29,form:7},
+ {date:"04.07",fit:41,mued:57,form:-15},
+ {date:"05.07",fit:39,mued:43,form:-4},
 ];
 // Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
 const RIDE_LOG=[
@@ -534,6 +556,8 @@ const ACTUAL={
  "W4-0":{min:103,hr:145,w:135,km:44,hm:166,sport:"Ride",note:"Z2 + paar Sprints, outdoor — kontrolliert aerob (Ø145 bpm), 5s-Spitze 820 W"},
  "W4-1":{min:82,sport:"WeightTraining",note:"Krafttraining am Nachmittag"},
  "W4-2":{min:75,hr:144,w:148,km:40,hm:59,sport:"VirtualRide",note:"Z2 Zwift vormittags vor Nachtdienst — sehr kontrolliert (Ø144 bpm, max 159), 1-h 155 W"},
+ "W4-4":{min:77,hr:149,w:141,km:34,hm:127,sport:"Ride",note:"Feierabend-Z2 + Sprints (5s 736 W) — neue Sattelposition, ~2 cm weiter vorn. Puls oberes Z2 (Ø149)."},
+ "W4-5":{min:198,hr:153,w:151,km:69,hm:875,sport:"Ride",note:"Lambi–Weinbiet: 875 hm, Anstiege ~210 W bei Puls 165–173. NEUE BESTWERTE: 1-h 186 W (vorher 172), 20-min 211 W."},
  "W2-3":{min:56,sport:"WeightTraining",note:"Kraft auf Mi 17. vorgezogen, dort erledigt"}
 };
 // BONUS: gefahren, aber nicht im Plan (z. B. Lauf, Schwimmen, Extra-Ausfahrt). Zählt als Ist-Bonus.
@@ -554,7 +578,10 @@ const REVIEWS=[
   ableitung:"Optimal getimt: Die ruhige Wochenmitte + Wochenend-Pause bringt dich frisch zum FTP-Retest am Di 23.6. Den Retest am Kickr fahren (wegen der Watt-Diskrepanz indoor/outdoor) und das Gerät notieren. Danach Zonen + FTP-Kurve aktualisieren. Auffällig fürs Protokoll: Watt-Puls-Verhältnis outdoor schlechter als auf Zwift — Powermeter-Kalibrierung beider Geräte steht an."},
  {wk:"W3", radH:"4,4 h Ist (Soll 3,75 h · inkl. Bonus)", lang:false, z2:"mustergültig (Fr Ø140 bpm, max 160, 4 saubere Sprints)", kraft:"2/2", bonus:"Lambi-Tour 146′ / 57 km / 515 hm",
   fazit:"Spätdienst-/Entlastungswoche, vom Wetter und Dienst stark geprägt — Verteilung war so nicht frei wählbar. Mo Kraft, Di FTP-Retest (242 W), Mi spontane große Lambi-Tour (Chance ergriffen, da Spätdienst-Folgetage unsicher), Fr/Sa Z2 und Kraft getauscht, Do-Z2 entfiel. Highlight: Die Fr-Z2 mit Sprints war mustergültig aerob kontrolliert (Ø140 bpm). Wichtigster Datenpunkt: erste Dauerleistung nach Retest (Lambi 20-min 207 W, 1-h 172 W) bestätigt Planungs-FTP 205 W eindeutig.",
-  ableitung:"FTP-Frage geklärt (205 W stimmt). Form trotz großer Tour wieder bei +12 — gut erholt. W4 (29.6.–5.7.) ist erste reguläre Aufbauwoche der neuen Block: zurück zur strukturierten Z2-Mitteldistanz, lange Ausfahrt am Sa wieder als Soll. Z2 weiter strikt nach Puls (jetzt mit validierter Wattspanne 115–154 als Gegencheck). August-Dienstplan für die Folgeplanung nachreichen."}
+  ableitung:"FTP-Frage geklärt (205 W stimmt). Form trotz großer Tour wieder bei +12 — gut erholt. W4 (29.6.–5.7.) ist erste reguläre Aufbauwoche der neuen Block: zurück zur strukturierten Z2-Mitteldistanz, lange Ausfahrt am Sa wieder als Soll. Z2 weiter strikt nach Puls (jetzt mit validierter Wattspanne 115–154 als Gegencheck). August-Dienstplan für die Folgeplanung nachreichen."},
+ {wk:"W4", radH:"7,6 h Ist (Soll 7,25 h)", lang:true, z2:"durchweg kontrolliert (Mi Ø144, Fr Ø149)", kraft:"1/1", bonus:"—",
+  fazit:"Die bisher stärkste Woche der Basisphase — 5 Radtage, alle regelkonform um den Dienstplan gelegt. Mo Z2+Sprints outdoor (103′, 5s 820 W), Di Kraft, Mi Z2 Zwift vormittags vor dem Nachtdienst (mustergültig Ø144), Do Post-Call sauber ausgeruht, Fr Feierabend-Z2 mit neuer Sattelposition (~2 cm vor), Sa die große Lambi–Weinbiet-Tour (69 km, 875 hm). So Tagdienst = Ruhe. Highlight: die Weinbiet-Anstiege konstant ~210 W bei Puls 165–173.",
+  ableitung:"Durchbruch bei der aeroben Dauerleistung: 1-h-Power von 172 auf 186 W gesprungen (+8 % in 10 Tagen), 20-min 211 W — die Basis greift sichtbar. Planungs-FTP 205 W bleibt korrekt (eher leicht konservativ). Form −4, gut auf dem Weg zurück. Nächste Woche W5 (6.–12.7.): Nachtdienst Mi 8.→Do 9. (Do Post-Call), sonst normale Aufbauwoche. Neue Sattelposition in den nächsten Einheiten auf Komfort/Knie beobachten."}
 ];
 
 // ————— State & Speicher —————
@@ -709,7 +736,7 @@ function render(){
  const s=stats(), pct=s.t?Math.round(s.dc/s.t*100):0;
  const hpct=s.hpPlan?Math.round(s.hIst/s.hpPlan*100):0;
  const wTraka=Math.max(0,Math.round((new Date("2027-05-01")-new Date())/(7*864e5)));
- const tabs=[["overview","Übersicht"],["plan","Plan"],["progress","Fortschritt"],["rules","Regeln"],["setup","Setup"],["log","Changelog"]];
+ const tabs=[["overview","Übersicht"],["plan","Plan"],["progress","Fortschritt"],["setup","Setup"],["logbook","Logbuch"]];
  let html=`<header><div class="wrap">
   <div class="eyebrow">Phase 1 · Basis · ~${wTraka} Wochen bis The Traka</div>
   <div class="head-top"><h1>Jans Trainingscockpit</h1></div>
@@ -719,8 +746,7 @@ function render(){
  else if(route==="plan") html+=renderPlan();
  else if(route==="progress") html+=renderProgress(s,hpct);
  else if(route==="setup") html+=renderSetup();
- else if(route==="log") html+=renderLog();
- else if(route==="rules") html+=renderRules();
+ else if(route==="logbook") html+=renderLogbook();
  document.getElementById("app").innerHTML=html;
  return;
 }
@@ -878,7 +904,7 @@ function renderPlan(){
   }
   html+=`</div>`;
  });
- html+=`<button class="oh-link" data-a="nav" data-r="rules">Alle Regeln ansehen →</button>`;
+ html+=`<button class="oh-link" data-a="nav" data-r="logbook">Alle Regeln ansehen →</button>`;
  html+=`<p class="foot">ⓘ Master-Gerät: Häkchen, Notizen und verschobene Einheiten werden lokal auf diesem Gerät gespeichert (kein Geräte-Sync). Einheiten am ⠿-Griff per Drag&amp;Drop innerhalb der Woche verschieben.</p>
  <button class="reset" data-a="reset">Fortschritt zurücksetzen</button>`;
  return html;
@@ -917,6 +943,31 @@ function renderProgress(s,hpct){
   ${lineGraph([{pts:fitPts,color:"var(--z2)"},{pts:muedPts,color:"var(--intens)"},{pts:formPts,color:"var(--done)"}],{w:340,h:160,ymin:pmin,ymax:pmax,xlabels:PMC_LOG.map(p=>p.date),ylabels:[...new Set([pmin,0,pmax/2,pmax].map(Math.round))].filter(v=>v>=pmin&&v<=pmax)})}
   <div class="gcap">Aktuell: Form ${curForm>0?"+":""}${curForm} — <strong>${formLabel}</strong>. Form = Fitness − Ermüdung. Hoch + ausgeruht = bereit für harte Einheiten / Rennen; tief = Reiz, braucht Erholung. <em>Basis: Strava Relative Effort, FTP-unabhängig.</em></div>
  </div></div>`;
+ // Z2-Effizienz: Watt pro Herzschlag (×100) je Z2-Einheit — DER Basis-Fortschrittsindikator
+ const effAll=[];
+ WEEKS.forEach(w=>{w.days.forEach((d,i)=>{
+  const act=ACTUAL[w.id+"-"+i];
+  if(!act||!act.hr||!act.w)return;
+  if(d.type!=="z2")return; // nur strukturierte Z2 (lange Gravel & Tests zu variabel)
+  const ws_=WEEK_DATES[w.id][0];
+  const dt=new Date(ws_+"T12:00:00");dt.setDate(dt.getDate()+i);
+  effAll.push({t:dt.getTime(),label:dt.getDate()+"."+(dt.getMonth()+1)+".",ef:Math.round(act.w/act.hr*100),indoor:act.sport==="VirtualRide"});
+ })});
+ effAll.sort((a,b)=>a.t-b.t);
+ if(effAll.length>=2){
+  const inPts=effAll.map((p,i)=>p.indoor?{x:i,y:p.ef}:null).filter(Boolean);
+  const outPts=effAll.map((p,i)=>!p.indoor?{x:i,y:p.ef}:null).filter(Boolean);
+  const evs=effAll.map(p=>p.ef);
+  const emin=Math.min(...evs)-6, emax=Math.max(...evs)+6;
+  const effSeries=[];
+  if(inPts.length)effSeries.push({pts:inPts,color:"var(--z2)"});
+  if(outPts.length)effSeries.push({pts:outPts,color:"var(--accent)"});
+  html+=`<div class="card"><div class="oc-head">Z2-Effizienz (Watt je Herzschlag ×100)</div><div style="padding:0 14px 14px">
+   <div class="glegend"><span><span class="gdot" style="background:var(--z2)"></span>Indoor (Kickr)</span><span><span class="gdot" style="background:var(--accent)"></span>Outdoor (SRAM)</span></div>
+   ${lineGraph(effSeries,{w:340,h:150,ymin:emin,ymax:emax,xlabels:effAll.map(p=>p.label),ylabels:[...new Set([Math.round(emin),Math.round((emin+emax)/2),Math.round(emax)])]})}
+   <div class="gcap">Mehr Watt bei gleichem Z2-Puls = die aerobe Basis wächst — <strong>die Kernmetrik bis zur Traka</strong>. Indoor/Outdoor getrennt (zwei Powermeter, bekannte Diskrepanz). Nur strukturierte Z2-Einheiten; lange Gravel-Fahrten und Tests bleiben außen vor (zu variabel).</div>
+  </div></div>`;
+ }
  // Wochenumfang-Balken (Plan vs Ist)
  const planH=WEEKS.map(w=>weekStats(w).rhPlan);
  const maxBar=Math.max(...planH,...WEEKS.map(w=>weekStats(w).rhIst),1)*1.1;
@@ -977,8 +1028,13 @@ function renderRules(){
  return html;
 }
 
-function renderLog(){
- let html=`<div class="card"><div class="oc-head">Updates &amp; Änderungen</div><div class="s num" style="padding:0 14px 8px;color:var(--ink-soft)">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</div>`;
+function renderLogbook(){
+ // Teil 1: Regeln (oben, wichtiger)
+ let html=renderRules();
+ // Trenner
+ html+=`<div class="logbook-divider"><span>Änderungshistorie</span></div>`;
+ // Teil 2: Changelog
+ html+=`<div class="card"><div class="oc-head">Updates &amp; Änderungen</div><div class="s num" style="padding:0 14px 8px;color:var(--ink-soft)">${CHANGELOG.length} Einträge · zuletzt ${CHANGELOG[0].date}</div>`;
  CHANGELOG.forEach(c=>{html+=`<div class="row"><span class="k num">${c.date}</span><span>${esc(c.text)}</span></div>`});
  html+=`</div>`;
  return html;
@@ -993,6 +1049,15 @@ function renderSetup(){
  html+=`<div class="card"><div class="oc-head">Aktuelles Setup</div><div class="setup-list">`;
  SETUP_BIKE.forEach(s=>{html+=`<div class="srow"><span class="srow-k">${esc(s.k)}</span><span class="srow-v">${esc(s.v)}</span></div>`});
  html+=`</div></div>`;
+ // Daten-Backup
+ html+=`<div class="card"><div class="oc-head">Daten sichern</div><div style="padding:0 14px 14px">
+  <div class="s" style="color:var(--ink-soft);line-height:1.5;margin-bottom:10px">Häkchen, RPE-Notizen, Readiness und Tagesreihenfolge liegen nur auf diesem Gerät. Als Datei sichern schützt vor Datenverlust (Cache-Reset, Gerätewechsel).</div>
+  <div style="display:flex;gap:8px">
+   <button class="bk-btn" data-a="backup-export">⬇ Sichern (JSON)</button>
+   <button class="bk-btn" data-a="backup-import">⬆ Wiederherstellen</button>
+  </div>
+  <input type="file" id="backup-file" accept=".json,application/json" style="display:none">
+ </div></div>`;
  return html;
 }
 
@@ -1012,6 +1077,32 @@ document.getElementById("app").addEventListener("click",e=>{
  else if(a==="review")showReview=!showReview;
  else if(a==="nav"){route=el.dataset.r;openDay=null;window.scrollTo(0,0)}
  else if(a==="readiness"){const v=el.dataset.v;if(v){readiness[today]=v}else{delete readiness[today]}rstore.set(readiness)}
+ else if(a==="backup-export"){
+  const data={version:1,exported:new Date().toISOString(),progress:store.get(),notes:nstore.get(),readiness:rstore.get(),dayorder:ostore.get()};
+  const blob=new Blob([JSON.stringify(data,null,1)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const aEl=document.createElement("a");aEl.href=url;aEl.download="jan-training-backup-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(aEl);aEl.click();aEl.remove();URL.revokeObjectURL(url);
+  return; // kein re-render nötig
+ }
+ else if(a==="backup-import"){
+  const fi=document.getElementById("backup-file");
+  if(fi){fi.onchange=ev=>{
+   const f=ev.target.files[0];if(!f)return;
+   const rd=new FileReader();
+   rd.onload=()=>{try{
+    const data=JSON.parse(rd.result);
+    if(!data||typeof data!=="object")throw new Error("Ungültiges Format");
+    if(data.progress){done=data.progress;store.set(done)}
+    if(data.notes){notes=data.notes;nstore.set(notes)}
+    if(data.readiness){readiness=data.readiness;rstore.set(readiness)}
+    if(data.dayorder){dayOrder=data.dayorder;ostore.set(dayOrder)}
+    alert("Backup wiederhergestellt ✓");render();
+   }catch(e){alert("Import fehlgeschlagen: "+e.message)}};
+   rd.readAsText(f);fi.value="";
+  };fi.click()}
+  return;
+ }
  else if(a==="reset"){if(confirm("Wirklich allen Fortschritt löschen?")){done={};store.set(done)}}
  render();
 });
