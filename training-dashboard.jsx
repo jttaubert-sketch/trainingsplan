@@ -57,7 +57,7 @@ const WEEKS=[
   {d:"Do 9.",type:"ruhe",title:"Post-Call · Ruhe",sub:"nach Nachtdienst — ausnahmslos frei",shift:"Post-Call",h:0},
   {d:"Fr 10.",type:"z2",title:"Z2 60′ + Sprints",sub:"abends · normaler Arbeitstag",h:1,detail:Dz2+" "+Dsprint},
   {d:"Sa 11.",type:"lang",title:"Lange Gravel 4 h",sub:"erste 4-h-Ausfahrt",h:4,detail:"Sprung auf 4 h. "+DlangFuel+" Route mit Abkürzungsoption planen, falls die Beine nach 3 h zumachen."},
-  {d:"So 12.",type:"z2",title:"Z2 60–75′ ganz locker",sub:"Recovery-Spin · Soll 60′",h:1,detail:"Unteres Z2 oder Z1, flache Runde. Optional kurz Kraft 2 dranhängen — oder komplett frei, wenn die Beine schwer sind."}]},
+  {d:"So 12.",type:"intens",title:"Z2 geplant → intensiv gefahren",sub:"bewusst hart statt Recovery",h:1.17,detail:"Geplant war Recovery-Z2. Nach zwei ruhigen Tagen bewusst hart gefahren (Ø159 bpm, Z3/Z4). Legitime spontane Tempoeinheit — nicht als Z2 gewertet. Nachmittags zusätzlich Kraft (76 min) — zählt als Kraft-Bonus ins Ist (2/1)."}]},
  {id:"W6",range:"13.–19. Jul",tag:"Basis",note:"dienstfreie Woche · freies Wochenende",days:[
   {d:"Mo 13.",type:"ruhe",title:"Ruhetag",sub:"nach dem Wochenendblock",h:0,detail:"Kein Dienst mehr — bleibt trotzdem Ruhetag: Sa 4 h + So-Spin sind genug Reiz, Anpassung passiert in der Pause."},
   {d:"Di 14.",type:"z2",title:"Z2 90′",sub:"Mitteldistanz · abends",h:1.5,detail:Dz2+" Etwas länger, dafür ohne Sprints (jede zweite Woche)."},
@@ -138,6 +138,12 @@ const RULES=[
 ];
 
 const CHANGELOG=[
+ {date:"12.07.2026",text:"Detail-Ansicht verbessert: Beim Aufklappen wird neben der geplanten Beschreibung jetzt auch die tatsächlich gefahrene Einheit angezeigt (▸ Tatsächlich gefahren, aus Strava-Ist-Daten)."},
+ {date:"12.07.2026",text:"Nachtrag W5: zweite Kraft-Einheit am So-Nachmittag (76′). Neue KRAFT_BONUS-Logik — ungeplante Zusatz-Kraft zählt ins Kraft-Ist, nicht ins Soll. W5-Kraft jetzt 2/1."},
+ {date:"12.07.2026",text:"Sonntags-Abgleich W5: 6 Radtage, Rad-Ist 8,8 h (Soll 8,9), Kraft 1/1. So Recovery-Z2 bewusst hart gefahren → als intensiv gewertet, viele Bestwerte (20-min 177, 1-h 165, 5s 961 W). Wochenanalyse geschrieben. Form −19."},
+ {date:"11.07.2026",text:"Strava-Abgleich: Fr 10.7. Low-Z2 (83′, Ø126 bpm) und Sa 11.7. Schwarzwaldtour (3,4 h, 58 km, 1129 hm = Höhenrekord). Do 9. Post-Call Ruhe, Commutes ignoriert. Form −16. W5 fast komplett."},
+ {date:"08.07.2026",text:"Strava-Abgleich: Mi 8.7. Z2 Zwift (91′) vormittags vor Nachtdienst. Maues Morgengefühl, Einheit lief gut — hohe Trittfrequenz (Ø87 rpm), Effizienz 105. RPE/Kommentare kommen ab jetzt über den Chat."},
+ {date:"07.07.2026",text:"Strava-Abgleich W5: Mo Z2 Zwift (76′, Ø138 bpm, Effizienz 107 = neuer Bestwert) und Di Kraft (80′). Pendelfahrten (Commute) werden ignoriert — physiologisch kaum Reiz, anderes Rad ohne Powermeter. Form +2."},
  {date:"05.07.2026",text:"Sonntags-Abgleich W4: 5 Radtage, Rad-Ist 7,6 h (Soll 7,25), Kraft 1/1 — stärkste Basiswoche, komplett regelkonform. Wochenanalyse geschrieben. Form erholt sich (−15 → −4). 1-h-Power-Durchbruch auf 186 W."},
  {date:"04.07.2026",text:"Strava-Abgleich: Fr 3.7. Feierabend-Z2+Sprints (77′, neue Sattelposition ~2 cm vor) und Sa 4.7. Lambi–Weinbiet (3,3 h, 875 hm). NEUE BESTWERTE: 1-h 186 W, 20-min 211 W. Form −15 (kräftiger Reiz). W4 fast komplett."},
  {date:"01.07.2026",text:"Zwei neue Features: (1) Daten-Backup im Setup — alle lokalen Daten als JSON sichern/wiederherstellen. (2) Z2-Effizienz-Kurve im Fortschritt — Watt je Herzschlag (×100) pro Z2-Einheit, Indoor/Outdoor getrennt. Kernmetrik bis zur Traka. Indoor-Trend: 100 → 101 → 103."},
@@ -218,6 +224,13 @@ const PMC_LOG=[
  {date:"03.07",fit:37,mued:29,form:7},
  {date:"04.07",fit:41,mued:57,form:-15},
  {date:"05.07",fit:39,mued:43,form:-4},
+ {date:"06.07",fit:39,mued:44,form:-5},
+ {date:"07.07",fit:38,mued:37,form:2},
+ {date:"08.07",fit:39,mued:42,form:-3},
+ {date:"09.07",fit:37,mued:32,form:6},
+ {date:"10.07",fit:37,mued:34,form:4},
+ {date:"11.07",fit:42,mued:58,form:-16},
+ {date:"12.07",fit:44,mued:62,form:-19},
 ];
 // Wöchentliche Rad-Stunden Ist (aus Strava). Wird beim Abgleich ergänzt.
 const RIDE_LOG=[
@@ -244,6 +257,12 @@ const ACTUAL = {
   "W4-2": { min: 75, hr: 144, w: 148, km: 40, hm: 59, sport: "VirtualRide", note: "Z2 Zwift vormittags vor Nachtdienst — sehr kontrolliert (Ø144 bpm, max 159), 1-h 155 W" },
   "W4-4": { min: 77, hr: 149, w: 141, km: 34, hm: 127, sport: "Ride", note: "Feierabend-Z2 + Sprints (5s 736 W) — neue Sattelposition, ~2 cm weiter vorn. Puls oberes Z2 (Ø149)." },
   "W4-5": { min: 198, hr: 153, w: 151, km: 69, hm: 875, sport: "Ride", note: "Lambi–Weinbiet: 875 hm, Anstiege ~210 W bei Puls 165–173. NEUE BESTWERTE: 1-h 186 W (vorher 172), 20-min 211 W." },
+  "W5-0": { min: 76, hr: 138, w: 148, km: 40, hm: 59, sport: "VirtualRide", note: "Feierabend-Z2 Zwift — mustergültig kontrolliert (Ø138 bpm, max 154), gleichmäßig ~150 W. Effizienz 107, neuer Bestwert." },
+  "W5-1": { min: 80, sport: "WeightTraining", note: "Krafttraining am Nachmittag" },
+  "W5-2": { min: 91, hr: 142, w: 149, km: 43, hm: 164, sport: "VirtualRide", note: "Z2 vormittags vor Nachtdienst. Morgens nicht gut gefühlt, Einheit lief dann aber gut. Bewusst konstant hohe Trittfrequenz (Ø87 rpm, vs ~71 outdoor). Puls sauber im Z2 (Ø142, max 157), Effizienz 105." },
+  "W5-4": { min: 83, hr: 126, w: 106, km: 32, hm: 93, sport: "Ride", note: "Low Z2 outdoor, bewusst ruhig (Ø126 bpm, unteres Z2). Normaler Arbeitstag abends." },
+  "W5-5": { min: 206, hr: 136, w: 118, km: 58, hm: 1129, sport: "Ride", note: "Schwarzwaldtour, bewusst entspannt gefahren — 1129 hm (persönl. Höhenrekord!). Trotz zurückhaltender Fahrweise Ø135 bpm über 3,4 h; die Anstiege brauchten 178–212 W, aber nicht forciert. Gute aerobe Kontrolle am Berg." },
+  "W5-6": { min: 70, hr: 159, w: 166, km: 32, hm: 93, sport: "Ride", note: "„Intensive recovery“ — bewusst hart gefahren nach zwei ruhigen Tagen. Ø159 bpm (Z3/Z4), 33 Segment-PRs. NEUE BESTWERTE: 20-min 177 W, 30-min 173, 1-h 165, 5s-Sprint 961 W (!). Spontaner Tempoblock, kein Z2." },
   "W2-3": { min: 56, sport: "WeightTraining", note: "Kraft auf Mi 17. vorgezogen, dort erledigt" },
 };
 const REVIEWS = [
@@ -259,12 +278,19 @@ const REVIEWS = [
  { wk: "W4", radH: "7,6 h Ist (Soll 7,25 h)", lang: true, z2: "durchweg kontrolliert (Mi Ø144, Fr Ø149)", kraft: "1/1", bonus: "—",
     fazit: "Die bisher stärkste Woche der Basisphase — 5 Radtage, alle regelkonform um den Dienstplan gelegt. Mo Z2+Sprints outdoor (103′, 5s 820 W), Di Kraft, Mi Z2 Zwift vormittags vor dem Nachtdienst (mustergültig Ø144), Do Post-Call sauber ausgeruht, Fr Feierabend-Z2 mit neuer Sattelposition (~2 cm vor), Sa die große Lambi–Weinbiet-Tour (69 km, 875 hm). So Tagdienst = Ruhe. Highlight: die Weinbiet-Anstiege konstant ~210 W bei Puls 165–173.",
     ableitung: "Durchbruch bei der aeroben Dauerleistung: 1-h-Power von 172 auf 186 W gesprungen (+8 % in 10 Tagen), 20-min 211 W — die Basis greift sichtbar. Planungs-FTP 205 W bleibt korrekt (eher leicht konservativ). Form −4, gut auf dem Weg zurück. Nächste Woche W5 (6.–12.7.): Nachtdienst Mi 8.→Do 9. (Do Post-Call), sonst normale Aufbauwoche. Neue Sattelposition auf Komfort/Knie beobachten." },
+ { wk: "W5", radH: "8,8 h Ist (Soll 8,9 h)", lang: true, z2: "Indoor stark (Mo Ø138/EF107, Mi Ø142/EF105), Fr bewusst Low-Z2", kraft: "2/1 (eine über Plan)", bonus: "Zusatz-Kraft So (76′)",
+    fazit: "Sehr umfangreiche, gut gesteuerte Woche mit klarer Intensitätsverteilung. Nachtdienst Mi→Do sauber gehandhabt (Mi Z2 vormittags, Do Post-Call-Ruhe). Zwei Indoor-Z2 mit hoher Trittfrequenz (Ø87 rpm) und Bestwert-Effizienz (107). Fr bewusst Low-Z2, Sa Schwarzwald-Höhenrekord (1129 hm) bewusst entspannt, So dann bewusst hart gefahren — spontaner Tempoblock mit vielen neuen Bestwerten: 20-min 177 W, 1-h 165 W outdoor, 5s-Sprint 961 W. Am selben Nachmittag zusätzlich noch Kraft (76′) — ein sehr voller Sonntag.",
+    ableitung: "Die aerobe Basis wächst weiter sichtbar (Effizienz-Indoor-Trend 100→107). Die eigenständige Intensitätssteuerung ist gut: ruhig wenn ruhig geplant, hart wenn die Beine frisch sind — genau dieses Gefühl braucht es fürs Renn-Pacing. Achtung: zwei große Reize (Weinbiet, Schwarzwald) plus harter So in kurzer Folge → Form −19. W6 (13.–19.7.) ist dienstfrei; Mo ohnehin Ruhetag, guter Zeitpunkt zum Auftanken. Auf Erholungssignale achten." },
 ];
 
 const BONUS = [
   { wk: "W1", dayKey: "W1-2", date: "10.06", sport: "Run", min: 36, km: 5.1, note: "Z2-Lauf morgens" },
  { wk: "W2", dayKey: "W2-3", date: "18.06", sport: "Ride", min: 84, km: 35, note: "Ruhig vor dem Dienst (zusätzlich)" },
  { wk: "W3", dayKey: "W3-2", date: "24.06", sport: "Ride", min: 146, km: 57, note: "Lambi alternativ — große Tour, 515 hm" },
+];
+
+const KRAFT_BONUS = [
+  { wk: "W5", dayKey: "W5-6", date: "12.07", min: 76, note: "Zusätzliche Kraft am Nachmittag (nach der intensiven Vormittagsrunde)" },
 ];
 
 const BONUS_COLOR = "#1F8A8A";
@@ -330,6 +356,7 @@ function weekStats(w, done) {
     if (dn) { rd++; rhIst += act ? act.min / 60 : d.h; }
   });
   BONUS.filter((b) => b.wk === w.id).forEach((b) => { bonusH += b.min / 60; });
+  KRAFT_BONUS.filter((b) => b.wk === w.id).forEach(() => { kd++; });
   rhIst += bonusH;
   return { rhPlan: rh, rd, rt, kt, kd, rhIst, bonusH };
 }
@@ -484,6 +511,7 @@ export default function TrainingDashboard() {
       });
       BONUS.filter((b) => b.wk === w.id).forEach((b) => { bonusH += b.min / 60; });
     });
+    KRAFT_BONUS.forEach(() => { kd++; });
     hIst += bonusH;
     return { t, dc, hpPlan, hIst, kt, kd, bonusH };
   }, [done]);
@@ -802,6 +830,11 @@ export default function TrainingDashboard() {
                         {dOpen && d.detail && (
                           <div style={{ padding: "10px 14px 13px 78px", fontSize: 12.5, lineHeight: 1.55, color: T.inkSoft, background: T.panel2, borderTop: `1px dashed ${T.line}` }}>
                             {d.detail}
+                            {ACTUAL[key] && ACTUAL[key].note ? (
+                              <div style={{ marginTop: 9, padding: "8px 11px", background: T.panel, borderRadius: 8, borderLeft: `3px solid ${T.accent}`, color: T.ink, fontSize: 12.5, lineHeight: 1.5 }}>
+                                <span style={{ fontWeight: 700, color: T.accent }}>▸ Tatsächlich gefahren:</span> {ACTUAL[key].note}
+                              </div>
+                            ) : null}
                             <div style={{ marginTop: 11, paddingTop: 10, borderTop: `1px dashed ${T.line}` }}>
                               {(() => { const exp = expectedRPE(d); const flag = rpeFlag(d, nv); return (<>
                               <div className="cond" style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>Anstrengung (RPE){exp ? <span style={{ fontWeight: 500, color: T.inkFaint, textTransform: "none", letterSpacing: 0 }}> · erwartet {exp[0]}–{exp[1]}</span> : null}</div>
